@@ -40,6 +40,9 @@ function TukuiDB.PP(p, obj)
 	elseif p == 12 then
 		obj:SetHeight(TukuiBrokerLeft:GetHeight())
 		obj:SetPoint("RIGHT", TukuiBrokerLeft, 0, -30)
+	elseif p == 13 then
+		obj:SetHeight(TukuiBrokerLeft:GetHeight())
+		obj:SetPoint("RIGHT", TukuiInfoLeft, 0, 30)
 	end
 end
 

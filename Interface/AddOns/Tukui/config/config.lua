@@ -86,7 +86,7 @@ TukuiDB["nameplate"] = {
 }
 
 TukuiDB["bags"] = {
-	["enable"] = true, -- enable an all in one bag mod that fit tukui perfectly
+	["enable"] = false, -- enable an all in one bag mod that fit tukui perfectly
 }
 
 TukuiDB["map"] = {
@@ -136,10 +136,10 @@ TukuiDB["broker"] = {
 		["position"] = 12,
 		["display"] = "icon",
 	},
-	ArkInventory_Money = {
+	ArkInventory_Pet = {
 		["enable"] = true,
-		["position"] = 11,
-		["display"] = "text",
+		["position"] = 13,
+		["display"] = "icon",
 	},
 }
 
