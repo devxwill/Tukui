@@ -32,6 +32,15 @@ function TukuiDB.PP(p, obj)
 			obj:SetPoint("CENTER", TukuiMinimapStatsRight, 0, 1)
 		end
 	end
+	
+	-- Mankar - LDB Bar Positions
+	if p == 11 then
+		obj:SetHeight(TukuiBrokerLeft:GetHeight())
+		obj:SetPoint("LEFT", TukuiBrokerLeft, 0, 0.5)
+	elseif p == 12 then
+		obj:SetHeight(TukuiBrokerLeft:GetHeight())
+		obj:SetPoint("RIGHT", TukuiBrokerLeft, 0, -30)
+	end
 end
 
 --------------------------------------------------------------------

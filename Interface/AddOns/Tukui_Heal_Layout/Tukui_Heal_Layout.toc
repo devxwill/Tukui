@@ -6,10 +6,7 @@
 ## X-Category: UnitFrame
 ## RequiredDeps: Tukui
 
-oUF_hTukz_Party.lua
-oUF_hTukz_Raid10.lua
-oUF_hTukz_Raid15.lua
+## oUF_hTukz_Party.lua -- Mankar - Removed All but the GRiD!
+## oUF_hTukz_Raid10.lua
+## oUF_hTukz_Raid15.lua
 oUF_hTukz_Raid40.lua
-
-
-

@@ -363,13 +363,27 @@ oUF:SetActiveStyle('hRaid40')
 local raid = {}
 for i = 1, TukuiDB["unitframes"].gridmaxgroup do
 	local raidgroup = oUF:Spawn('header', 'oUF_Group'..i)
-	raidgroup:SetManyAttributes('groupFilter', tostring(i), 'showRaid', true, 'xOffset', TukuiDB:Scale(4*TukuiDB["unitframes"].gridscale), "point", "LEFT")
+	local numraid = GetNumRaidMembers()
+	local numparty = GetNumPartyMembers()
+	if numparty >= 1 or numraid < 11 then
+		raidgroup:SetManyAttributes('groupFilter', tostring(i), 'showRaid', true, 'xOffset', TukuiDB:Scale(4*TukuiDB["unitframes"].gridscale), "point", "LEFT")
+	else
+		raidgroup:SetManyAttributes('groupFilter', tostring(i), 'showRaid', true, 'yOffset', -TukuiDB:Scale(4*TukuiDB["unitframes"].gridscale), "point", "TOP")
+	end
 	raidgroup:SetFrameStrata('BACKGROUND')	
 	table.insert(raid, raidgroup)
 	if(i == 1) then
 		raidgroup:SetPoint(TukuiDB["unitframes"].gridposZ, UIParent, TukuiDB["unitframes"].gridposZ, TukuiDB["unitframes"].gridposX, TukuiDB["unitframes"].gridposY*TukuiDB.raidscale)
+		
+		if GetNumPartyMembers() >= 1 then
+			raidgroup:SetManyAttributes('showPlayer', TukuiDB["unitframes"].showplayerinparty, 'showParty', true)
+		end
 	else
-		raidgroup:SetPoint('TOPLEFT', raid[i-1], 'BOTTOMLEFT', 0, -4)
+		if numparty >= 1 or numraid < 11 then
+			raidgroup:SetPoint('TOPLEFT', raid[i-1], 'BOTTOMLEFT', 0, -4)
+		else
+			raidgroup:SetPoint('RIGHT', raid[i-1], 'LEFT', 0, 0)
+		end
 	end
 	local raidToggle = CreateFrame("Frame")
 	raidToggle:RegisterEvent("PLAYER_LOGIN")
@@ -382,14 +396,11 @@ for i = 1, TukuiDB["unitframes"].gridmaxgroup do
 	else
 		self:UnregisterEvent("PLAYER_REGEN_ENABLED")
 		local numraid = GetNumRaidMembers()
-		if TukuiDB["unitframes"].gridonly == true then
-			if numraid < 6 then
-				raidgroup:Hide()
-			else
-				raidgroup:Show()
-			end
+		local numparty = GetNumPartyMembers()
+		if TukuiDB["unitframes"].gridonly == true then			
+			raidgroup:Show() -- Mankar - Always show the grid when in a raid or party!
 		else
-			if numraid < 16 then --16
+			if numraid < 16 then
 				raidgroup:Hide()
 			else
 				raidgroup:Show()

@@ -14,7 +14,7 @@ if TukuiDB.lowversion == true then
 		barbg:SetHeight(TukuiDB.buttonsize + (TukuiDB.buttonspacing * 2))
 	end
 else
-	barbg:SetWidth((TukuiDB.buttonsize * 22) + (TukuiDB.buttonspacing * 23))
+	barbg:SetWidth((TukuiDB.buttonsize * 24) + (TukuiDB.buttonspacing * 25)) -- Mankar - Adjusted to expand for 24 buttons
 	if TukuiDB["actionbar"].bottomrows == 2 then
 		barbg:SetHeight((TukuiDB.buttonsize * 2) + (TukuiDB.buttonspacing * 3))
 	else
@@ -56,6 +56,18 @@ ltoabr:SetPoint("BOTTOMRIGHT", irightlv, "BOTTOMRIGHT", 0, 0)
 local ileft = CreateFrame("Frame", "TukuiInfoLeft", barbg)
 TukuiDB:CreatePanel(ileft, TukuiDB["panels"].tinfowidth, 23, "LEFT", ltoabl, "LEFT", TukuiDB:Scale(14), 0)
 ileft:SetFrameLevel(2)
+
+-- Mankar - BROKER LEFT (FOR LDB)
+if TukuiDB["broker"].enable == true then
+	local bleft = CreateFrame("Frame", "TukuiBrokerLeft", barbg)
+	TukuiDB:CreatePanel(bleft, TukuiDB["panels"].tinfowidth, 23, "TOPLEFT", ileftlv, "TOPRIGHT", TukuiDB:Scale(12), 0)
+	bleft:SetFrameLevel(2)
+	
+	local ltobl = CreateFrame("Frame", "TukuiLineToBrokerLeft", barbg)
+	TukuiDB:CreatePanel(ltobl, TukuiDB:Scale(12), 2, "RIGHT", TukuiBrokerLeft, "LEFT", 0, 0)
+	
+	ileftlv:SetHeight(ileftlv:GetHeight() + bleft:GetHeight() + TukuiDB:Scale(25))
+end
 
 -- INFO RIGHT (FOR STATS)
 local iright = CreateFrame("Frame", "TukuiInfoRight", barbg)

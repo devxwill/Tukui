@@ -7,6 +7,12 @@
 ## SavedVariablesPerCharacter: TukuiInstallv1030, TukuiUFpos
 ## X-oUF: oUF
 
+#@no-lib-strip@
 libs\oUF\oUF.xml
-Tukui.xml
 
+libs\LibStub\LibStub.lua
+libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
+libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
+#@end-no-lib-strip@
+
+Tukui.xml

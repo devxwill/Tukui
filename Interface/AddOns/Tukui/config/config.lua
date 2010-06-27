@@ -9,7 +9,7 @@ TukuiDB["unitframes"] = {
 	-- general options
 	["enable"] = true, -- -- can i really need to explain this?
 	["unitcastbar"] = true, -- enable tukui castbar
-	["cblatency"] = false, -- enable castbar latency
+	["cblatency"] = true, -- enable castbar latency
 	["cbicons"] = true, -- enable icons on castbar
 	["auratimer"] = true, -- enable timers on buffs/debuffs
 	["auraspiral"] = true, -- enable spiral timer on auras.
@@ -21,7 +21,7 @@ TukuiDB["unitframes"] = {
 	["targetpowerpvponly"] = true, -- enable power text on pvp target only
 	["totdebuffs"] = false, -- enable tot debuffs (high reso only)
 	["focusdebuffs"] = false, -- enable focus debuffs 
-	["playerdebuffsonly"] = false, -- enable our debuff only on our current target
+	["playerdebuffsonly"] = true, -- enable our debuff only on our current target
 	["showfocustarget"] = false, -- show focus target
 	["showtotalhpmp"] = false, -- change the display of info text on player and target with XXXX/Total.
 	["showsmooth"] = true, -- enable smooth bar
@@ -37,16 +37,16 @@ TukuiDB["unitframes"] = {
 	-- raid layout
 	["showrange"] = true, -- show range opacity on raidframes
 	["raidalphaoor"] = 0.3, -- alpha of unitframes when unit is out of range
-	["gridposX"] = 18, -- horizontal position starting from left
+	["gridposX"] = 35, -- horizontal position starting from left
 	["gridposY"] = -250, -- vertical position starting from top
-	["gridposZ"] = "TOPLEFT", -- if we want to change the starting position zone
-	["gridonly"] = false, -- enable grid only mode for all healer mode raid layout.
+	["gridposZ"] = "CENTER", -- if we want to change the starting position zone
+	["gridonly"] = true, -- enable grid only mode for all healer mode raid layout.
 	["showsymbols"] = true,	-- show symbol.
 	["aggro"] = true, -- show aggro on all raids layouts
-	["raidunitdebuffwatch"] = false, -- track important spell to watch in pve for healing mode.
+	["raidunitdebuffwatch"] = true, -- track important spell to watch in pve for healing mode.
 	["gridhealthvertical"] = true, -- enable vertical grow on health bar
-	["showplayerinparty"] = false, -- show my player frame in party
-	["gridscale"] = 1, -- set the healing grid scaling
+	["showplayerinparty"] = true, -- show my player frame in party
+	["gridscale"] = .9, -- set the healing grid scaling
 	["gridmaxgroup"] = 8, -- max # of group you want to show on grid layout, between 1 and 8
 
 	-- priest only plugin
@@ -72,12 +72,12 @@ TukuiDB["arena"] = {
 
 TukuiDB["actionbar"] = {
 	["enable"] = true, -- enable tukz action bars
-	["hotkey"] = false, -- enable hotkey display because it was a lot requested
+	["hotkey"] = true, -- enable hotkey display because it was a lot requested
 	["rightbarmouseover"] = false, -- enable right bars on mouse over
 	["shapeshiftmouseover"] = false, -- enable shapeshift or totembar on mouseover
 	["hideshapeshift"] = false, -- hide shapeshift or totembar because it was a lot requested.
 	["bottomrows"] = 1, -- numbers of row you want to show at the bottom (select between 1 and 2 only)
-	["rightbars"] = 0, -- numbers of right bar you want
+	["rightbars"] = 1, -- numbers of right bar you want
 	["showgrid"] = true, -- show grid on empty button
 }
 
@@ -123,16 +123,30 @@ TukuiDB["datatext"] = {
 	["armor"] = 0, -- show your armor value against the level mob you are currently targeting
 
 	["battleground"] = true, -- enable 3 stats in battleground only that replace stat1,stat2,stat3.
-	["time24"] = true, -- set time to 24h format.
+	["time24"] = false, -- set time to 24h format.
 	["localtime"] = false, -- set time to local time instead of server time.
 	["font"] = [[fonts\ARIALN.ttf]], -- font used for panels.
 	["fontsize"] = 12, -- font size for panels.
 }
 
+TukuiDB["broker"] = {
+	["enable"] = true, -- Enable the LDB Display?
+	ArkInventory_Mount = {
+		["enable"] = true,
+		["position"] = 12,
+		["display"] = "icon",
+	},
+	ArkInventory_Money = {
+		["enable"] = true,
+		["position"] = 11,
+		["display"] = "text",
+	},
+}
+
 TukuiDB["chat"] = {
 	["enable"] = true, -- blah
 	["font"] = [[fonts\ARIALN.ttf]], -- font for chat
-	["fontsize"] = 12, -- font size for chat
+	["fontsize"] = 14, -- font size for chat
 }
 
 TukuiDB["panels"] = { 
@@ -157,9 +171,11 @@ TukuiDB["merchant"] = {
 }
 
 TukuiDB["error"] = {
-	["enable"] = true, -- true to enable this mod, false to disable
+	["enable"] = false, -- true to enable this mod, false to disable
 	filter = { -- what messages to not hide
 		["Inventory is full."] = true, -- inventory is full will not be hidden by default
+		["Out of range."] = true,
+		["Interrupted"] = true,
 	},
 }
 
@@ -173,5 +189,5 @@ TukuiDB["watchframe"] = {
 
 TukuiDB["buffreminder"] = {
 	["enable"] = true, -- this is now the new innerfire warning script for all armor/aspect class.
-	["sound"] = true, -- enable warning sound notification for reminder.
+	["sound"] = false, -- enable warning sound notification for reminder.
 }
