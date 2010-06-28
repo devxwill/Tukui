@@ -1,3 +1,7 @@
+----------------------------------------------------------------------------
+-- General Config
+----------------------------------------------------------------------------
+
 TukuiDB["general"] = {
 	["autoscale"] = true, -- mainly enabled for users that don't want to mess with the config file
 	["uiscale"] = 0.71, -- set your value (between 0.64 and 1) of your uiscale if autoscale is off
@@ -193,3 +197,21 @@ TukuiDB["buffreminder"] = {
 }
 
 TukuiDB["skins"] = {}
+
+----------------------------------------------------------------------------
+-- Per Class Config (overwrite general)
+-- Class need to be UPPERCASE
+----------------------------------------------------------------------------
+
+if TukuiDB.myclass == "PRIEST" then
+	-- do some config!
+end
+
+----------------------------------------------------------------------------
+-- Per Character Name Config (overwrite general and class)
+-- Name need to be case sensitive
+----------------------------------------------------------------------------
+
+if TukuiDB.myname == "Tukz" then
+	TukuiDB["buffreminder"].enable = true
+end
