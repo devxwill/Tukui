@@ -191,3 +191,5 @@ TukuiDB["buffreminder"] = {
 	["enable"] = true, -- this is now the new innerfire warning script for all armor/aspect class.
 	["sound"] = false, -- enable warning sound notification for reminder.
 }
+
+TukuiDB["skins"] = {}

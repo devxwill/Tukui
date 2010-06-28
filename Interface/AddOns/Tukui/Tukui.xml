@@ -72,4 +72,6 @@
 	
 	<Script file="class\priest.lua"/>
 	<Script file="class\hunter.lua"/>
+	
+	<Script file="skins\clique.lua"/>
 </Ui>
