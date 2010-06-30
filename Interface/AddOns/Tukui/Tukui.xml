@@ -32,6 +32,7 @@
 	<Script file="modules\merchant.lua"/>
 	<Script file="modules\error.lua"/>
 	<Script file="modules\bind.lua"/>
+	<Script file="modules\skin.lua"/>
 		
 	<Script file="scripts\minimap.lua"/>
 	<Script file="scripts\buffs.lua"/>
@@ -74,4 +75,5 @@
 	<Script file="class\hunter.lua"/>
 	
 	<Script file="skins\clique.lua"/>
+	<Script file="skins\skada.lua"/>
 </Ui>
