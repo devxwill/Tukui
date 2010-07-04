@@ -14,7 +14,6 @@ InterfaceOptionsSocialPanelConversationMode:Hide()
 
 -- disable some chat functions
 FCF_MinimizeFrame = TukuiDB.dummy
-FCF_RestorePositionAndDimensions = TukuiDB.dummy
 
 local replaceschan = {
 	['Гильдия'] = '[Г]',
@@ -86,26 +85,30 @@ GeneralDockManagerOverflowButton:SetScript("OnShow", GeneralDockManagerOverflowB
 GeneralDockManagerOverflowButton:Hide()
 
 -- Player entering the world
-function TukuiDB.SetupChat()
+function TukuiDB.SetupChat(self, event, addon)
+	if addon ~= "Tukui" then return end
 	ChatFrameMenuButton:Hide()
 	ChatFrameMenuButton:SetScript("OnShow", function(self) self:Hide() end)
 				
 	for i = 1, NUM_CHAT_WINDOWS do
+		local chatFrameId = _G["ChatFrame"..i]:GetID()
+		local chatName = FCF_GetChatWindowInfo(chatFrameId)
+		
+		-- yeah baby
 		_G["ChatFrame"..i]:SetClampRectInsets(0,0,0,0)
-			
-		-- Hide chat buttons
+		
+		-- Hide or move chat buttons
 		_G["ChatFrame"..i.."ButtonFrameUpButton"]:Hide()
 		_G["ChatFrame"..i.."ButtonFrameDownButton"]:Hide()
 		_G["ChatFrame"..i.."ButtonFrameBottomButton"]:Hide()
 		_G["ChatFrame"..i.."ButtonFrameMinimizeButton"]:Hide()
-		_G["ChatFrame"..i.."ResizeButton"]:Hide()
+		_G["ChatFrame"..i.."ResizeButton"]:SetPoint("BOTTOMRIGHT",2,-3)
 		_G["ChatFrame"..i.."ButtonFrame"]:Hide()
 
 		_G["ChatFrame"..i.."ButtonFrameUpButton"]:SetScript("OnShow", function(self) self:Hide() end)
 		_G["ChatFrame"..i.."ButtonFrameDownButton"]:SetScript("OnShow", function(self) self:Hide() end)
 		_G["ChatFrame"..i.."ButtonFrameBottomButton"]:SetScript("OnShow", function(self) self:Hide() end)
 		_G["ChatFrame"..i.."ButtonFrameMinimizeButton"]:SetScript("OnShow", function(self) self:Hide() end)
-		_G["ChatFrame"..i.."ResizeButton"]:SetScript("OnShow", function(self) self:Hide() end)
 		_G["ChatFrame"..i.."ButtonFrame"]:SetScript("OnShow", function(self) self:Hide() end)
 		
 		-- Hide chat textures backdrop
@@ -116,12 +119,8 @@ function TukuiDB.SetupChat()
 		-- Stop the chat frame from fading out
 		_G["ChatFrame"..i]:SetFading(false)
 		
-		-- Change the chat frame font 
-		_G["ChatFrame"..i]:SetFont(TukuiDB["chat"].font, TukuiDB["chat"].fontsize)
-		
+		-- set strata to low
 		_G["ChatFrame"..i]:SetFrameStrata("LOW")
-		_G["ChatFrame"..i]:SetMovable(true)
-		_G["ChatFrame"..i]:SetUserPlaced(true)
 		
 		-- Texture and align the chat edit box
 		local editbox = _G["ChatFrame"..i.."EditBox"]
@@ -130,6 +129,12 @@ function TukuiDB.SetupChat()
 		editbox:ClearAllPoints();
 		editbox:SetPoint("TOPLEFT", TukuiInfoLeft, TukuiDB:Scale(2), TukuiDB:Scale(-2))
 		editbox:SetPoint("BOTTOMRIGHT", TukuiInfoLeft, TukuiDB:Scale(-2), TukuiDB:Scale(2))
+		
+		-- set align to right if a any chatframe is found at right of your screen.
+		local point = GetChatWindowSavedPosition(chatFrameId)
+		if point == "BOTTOMRIGHT" or point == "RIGHT" or point == "TOPRIGHT" then 
+			_G["ChatFrame"..i]:SetJustifyH("RIGHT") 
+		end
 		
 		-- Disable alt key usage
 		editbox:SetAltArrowKeyMode(false)		
@@ -141,24 +146,9 @@ function TukuiDB.SetupChat()
 	ChatTypeInfo.OFFICER.sticky = 1
 	ChatTypeInfo.RAID_WARNING.sticky = 1
 	ChatTypeInfo.CHANNEL.sticky = 1
-				
-	-- Position the general chat frame
-	ChatFrame1:ClearAllPoints()
-	ChatFrame1:SetPoint("BOTTOMLEFT", TukuiInfoLeft, "TOPLEFT", TukuiDB:Scale(-1), TukuiDB:Scale(6))
-	ChatFrame1:SetWidth(TukuiDB:Scale(TukuiDB["panels"].tinfowidth + 1))
-	ChatFrame1:SetHeight(TukuiDB:Scale(111))
-		
-	-- Position the chatframe 4
-	ChatFrame4:ClearAllPoints()
-	ChatFrame4:SetPoint("BOTTOMRIGHT", TukuiInfoRight, "TOPRIGHT", 0, TukuiDB:Scale(6))
-	ChatFrame4:SetWidth(TukuiDB:Scale(TukuiDB["panels"].tinfowidth + 1))
-	ChatFrame4:SetHeight(TukuiDB:Scale(111))
-	
-	-- Align the text to the right on cf4
-	ChatFrame4:SetJustifyH("RIGHT")
 end
-AddOn:RegisterEvent("PLAYER_ENTERING_WORLD")
-AddOn["PLAYER_ENTERING_WORLD"] = TukuiDB.SetupChat
+AddOn:RegisterEvent("ADDON_LOADED")
+AddOn["ADDON_LOADED"] = TukuiDB.SetupChat
 
 -- Get colors for player classes
 local function ClassColors(class)
@@ -222,6 +212,9 @@ local function AddMessageHook(frame, text, ...)
 		text = text:gsub('|h%['..k..'%]|h', '|h'..v..'|h')
 	end
 	text = replace(text, "has come online.", "is now |cff298F00online|r !")
+	text = replace(text, "has gone offline.", "is now |cffff0000offline|r !")
+	text = replace(text, "ist jetzt online.", "ist jetzt |cff298F00online|r !")
+	text = replace(text, "ist jetzt offline.", "ist jetzt |cffff0000offline|r !")
 	text = replace(text, "|Hplayer:(.+)|h%[(.+)%]|h has earned", "|Hplayer:%1|h%2|h has earned")
 	text = replace(text, "|Hplayer:(.+):(.+)|h%[(.+)%]|h whispers:", "From [|Hplayer:%1:%2|h%3|h]:")
 	text = replace(text, "|Hplayer:(.+):(.+)|h%[(.+)%]|h says:", "[|Hplayer:%1:%2|h%3|h]:")	
@@ -450,7 +443,7 @@ function TukuiDB.ChatCopyButtons()
 	for i = 1, NUM_CHAT_WINDOWS do
 		local cf = _G[format("ChatFrame%d",  i)]
 		local button = CreateFrame("Button", format("ButtonCF%d", i), cf)
-		button:SetPoint("BOTTOMRIGHT", 0, 0)
+		button:SetPoint("TOPRIGHT", 0, 0)
 		button:SetHeight(TukuiDB:Scale(20))
 		button:SetWidth(TukuiDB:Scale(20))
 		button:SetAlpha(0)

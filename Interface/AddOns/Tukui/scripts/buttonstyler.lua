@@ -3,7 +3,7 @@ if not TukuiDB["actionbar"].enable == true then return end
 local _G = _G
 local media = TukuiDB["media"]
 local securehandler = CreateFrame("Frame", nil, nil, "SecureHandlerBaseTemplate")
-RANGE_INDICATOR = "" -- fix "?" range indicator when hotkey are enabled.
+local replace = string.gsub
 
 local function style(self)  
 	local name = self:GetName()
@@ -162,6 +162,26 @@ local function onupdate(self, elapsed)
 	end
 end
 
+local function updatehotkey(self, actionButtonType)
+	local hotkey = _G[self:GetName() .. 'HotKey']
+	local text = hotkey:GetText()
+	text = replace(text, '(s%-)', 'S')
+	text = replace(text, '(a%-)', 'A')
+	text = replace(text, '(c%-)', 'C')
+	text = replace(text, '(Mouse Button )', 'M')
+	text = replace(text, '(Middle Mouse)', 'M3')
+	text = replace(text, '(Num Pad )', 'N')
+	text = replace(text, '(Page Up)', 'PU')
+	text = replace(text, '(Page Down)', 'PD')
+	text = replace(text, '(Spacebar)', 'SpB')
+	
+	if hotkey:GetText() == _G['RANGE_INDICATOR'] then
+		hotkey:SetText('')
+	else
+		hotkey:SetText(text)
+	end
+end
+
 hooksecurefunc("ActionButton_OnUpdate", onupdate)
 hooksecurefunc("ActionButton_Update", style)
 hooksecurefunc("ActionButton_UpdateUsable", usable)
@@ -169,3 +189,4 @@ hooksecurefunc("PetActionBar_Update", stylepet)
 hooksecurefunc("ShapeshiftBar_OnLoad", styleshift)
 hooksecurefunc("ShapeshiftBar_Update", styleshift)
 hooksecurefunc("ShapeshiftBar_UpdateState", styleshift)
+hooksecurefunc("ActionButton_UpdateHotkeys", updatehotkey)

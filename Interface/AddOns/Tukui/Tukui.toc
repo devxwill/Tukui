@@ -1,10 +1,10 @@
 ## Interface: 30300
 ## Author: Tukz
-## Version: 10.52
+## Version: 10.65
 ## Title: |cffC495DDTukui|r
 ## Notes: UI of awesomeness!
 ## SavedVariables: TukuiData, TukuiArena
-## SavedVariablesPerCharacter: TukuiInstallv1030, TukuiUFpos
+## SavedVariablesPerCharacter: TukuiInstallv1060, TukuiUFpos
 ## X-oUF: oUF
 
 #@no-lib-strip@

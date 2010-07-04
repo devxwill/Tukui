@@ -150,7 +150,6 @@ TukuiDB["broker"] = {
 TukuiDB["chat"] = {
 	["enable"] = true, -- blah
 	["font"] = [[fonts\ARIALN.ttf]], -- font for chat
-	["fontsize"] = 14, -- font size for chat
 }
 
 TukuiDB["panels"] = { 

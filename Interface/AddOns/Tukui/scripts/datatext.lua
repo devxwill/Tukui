@@ -39,10 +39,10 @@ function TukuiDB.PP(p, obj)
 		obj:SetPoint("LEFT", TukuiBrokerLeft, 0, 0.5)
 	elseif p == 12 then
 		obj:SetHeight(TukuiBrokerLeft:GetHeight())
-		obj:SetPoint("RIGHT", TukuiBrokerLeft, 0, -30)
+		obj:SetPoint("RIGHT", TukuiBrokerLeft, 25, -30)
 	elseif p == 13 then
 		obj:SetHeight(TukuiBrokerLeft:GetHeight())
-		obj:SetPoint("RIGHT", TukuiInfoLeft, 0, 30)
+		obj:SetPoint("RIGHT", TukuiInfoLeft, 25, 30)
 	end
 end
 
