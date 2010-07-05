@@ -1,3 +1,5 @@
+-- Full Credit goes to Darth Android with edits by Mankar
+
 -- Set Defaults
 if TukuiDB["skins"].Skada == nil then
 	TukuiDB["skins"].Skada = {}

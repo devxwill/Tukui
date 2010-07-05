@@ -180,6 +180,8 @@ TukuiDB["error"] = {
 		["Inventory is full."] = true, -- inventory is full will not be hidden by default
 		["Out of range."] = true,
 		["Interrupted"] = true,
+		["You have no target."]  = true,
+		["Spell is not ready yet."] = true,
 	},
 }
 

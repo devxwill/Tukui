@@ -1440,7 +1440,7 @@ if TukuiDB["unitframes"].t_mt == true then
 	assist:Show()
 end
 
-if not IsAddOnLoaded("DXE") then
+if not IsAddOnLoaded("DXE_Loader") then -- Mankar -- Updated to not load bossframes with DXE is around
 	for i = 1,MAX_BOSS_FRAMES do
 	   local t_boss = _G["Boss"..i.."TargetFrame"]
 	   t_boss:UnregisterAllEvents()

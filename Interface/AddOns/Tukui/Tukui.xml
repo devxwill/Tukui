@@ -77,4 +77,5 @@
 	
 	<Script file="skins\clique.lua"/>
 	<Script file="skins\skada.lua"/>
+	<Script file="skins\quartz.lua"/>
 </Ui>
