@@ -85,8 +85,7 @@ GeneralDockManagerOverflowButton:SetScript("OnShow", GeneralDockManagerOverflowB
 GeneralDockManagerOverflowButton:Hide()
 
 -- Player entering the world
-function TukuiDB.SetupChat(self, event, addon)
-	if addon ~= "Tukui" then return end
+function TukuiDB.SetupChat()
 	ChatFrameMenuButton:Hide()
 	ChatFrameMenuButton:SetScript("OnShow", function(self) self:Hide() end)
 				
@@ -96,6 +95,9 @@ function TukuiDB.SetupChat(self, event, addon)
 		
 		-- yeah baby
 		_G["ChatFrame"..i]:SetClampRectInsets(0,0,0,0)
+		
+		-- Removes crap from the bottom of the chatbox so it can go to the bottom of the screen.
+		_G["ChatFrame"..i]:SetClampedToScreen(false)
 		
 		-- Hide or move chat buttons
 		_G["ChatFrame"..i.."ButtonFrameUpButton"]:Hide()
@@ -147,8 +149,8 @@ function TukuiDB.SetupChat(self, event, addon)
 	ChatTypeInfo.RAID_WARNING.sticky = 1
 	ChatTypeInfo.CHANNEL.sticky = 1
 end
-AddOn:RegisterEvent("ADDON_LOADED")
-AddOn["ADDON_LOADED"] = TukuiDB.SetupChat
+AddOn:RegisterEvent("PLAYER_ENTERING_WORLD")
+AddOn["PLAYER_ENTERING_WORLD"] = TukuiDB.SetupChat
 
 -- Get colors for player classes
 local function ClassColors(class)
