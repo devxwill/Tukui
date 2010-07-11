@@ -58,16 +58,14 @@ TukuiDB:CreatePanel(ileft, TukuiDB["panels"].tinfowidth, 23, "LEFT", ltoabl, "LE
 ileft:SetFrameLevel(2)
 
 -- Mankar - BROKER LEFT (FOR LDB)
-if TukuiDB["broker"].enable == true then
-	local bleft = CreateFrame("Frame", "TukuiBrokerLeft", barbg)
-	TukuiDB:CreatePanel(bleft, TukuiDB["panels"].tinfowidth, 23, "TOPLEFT", ileftlv, "TOPRIGHT", TukuiDB:Scale(12), 0)
-	bleft:SetFrameLevel(2)
+local bleft = CreateFrame("Frame", "TukuiBrokerLeft", barbg)
+TukuiDB:CreatePanel(bleft, TukuiDB["panels"].tinfowidth, 23, "TOPLEFT", ileftlv, "TOPRIGHT", TukuiDB:Scale(12), 0)
+bleft:SetFrameLevel(2)
 	
-	local ltobl = CreateFrame("Frame", "TukuiLineToBrokerLeft", barbg)
-	TukuiDB:CreatePanel(ltobl, TukuiDB:Scale(12), 2, "RIGHT", TukuiBrokerLeft, "LEFT", 0, 0)
-	
-	ileftlv:SetHeight(ileftlv:GetHeight() + bleft:GetHeight() + TukuiDB:Scale(25))
-end
+local ltobl = CreateFrame("Frame", "TukuiLineToBrokerLeft", barbg)
+TukuiDB:CreatePanel(ltobl, TukuiDB:Scale(12), 2, "RIGHT", TukuiBrokerLeft, "LEFT", 0, 0)
+
+ileftlv:SetHeight(ileftlv:GetHeight() + bleft:GetHeight() + TukuiDB:Scale(25))
 
 -- INFO RIGHT (FOR STATS)
 local iright = CreateFrame("Frame", "TukuiInfoRight", barbg)

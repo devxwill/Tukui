@@ -133,17 +133,14 @@ TukuiDB["datatext"] = {
 	["fontsize"] = 12, -- font size for panels.
 }
 
-TukuiDB["broker"] = {
-	["enable"] = true, -- Enable the LDB Display?
+TukuiDB["databroker"] = {
 	ArkInventory_Mount = {
-		["enable"] = true,
 		["position"] = 12,
-		["display"] = "icon",
+		["displayIcon"] = true,
 	},
 	ArkInventory_Pet = {
-		["enable"] = true,
 		["position"] = 13,
-		["display"] = "icon",
+		["displayIcon"] = true,
 	},
 }
 
