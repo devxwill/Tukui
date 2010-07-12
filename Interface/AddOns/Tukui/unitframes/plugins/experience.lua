@@ -1,5 +1,5 @@
 if not TukuiDB["unitframes"].enable == true then return end
-
+if not oUF then return end
 --[[
 
 	Elements handled:

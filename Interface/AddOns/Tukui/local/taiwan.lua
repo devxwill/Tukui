@@ -1,4 +1,6 @@
 if TukuiDB.client == "zhTW" then
+	tukuilocal.disband = "Disbanding group."
+
 	tukuilocal.datatext_guild = "公會"
 	tukuilocal.datatext_noguild = "沒有公會"
 	tukuilocal.datatext_bags = "背包: "
@@ -79,7 +81,7 @@ if TukuiDB.client == "zhTW" then
 	}
 
 	tukuilocal.popup_disableui = "Tukui並不支援此解析度, 你想要停用Tukui嗎? (若果您想要嘗試其他解析度, 請按取消)"
-	tukuilocal.popup_install = "這個角色首次使用Tukui V10.60+, 您必需先重載介面以完成設定"
+	tukuilocal.popup_install = "這個角色首次使用Tukui V11 BETA, 您必需先重載介面以完成設定"
 
 	tukuilocal.merchant_repairnomoney = "您沒有足夠的金錢來修理!"
 	tukuilocal.merchant_repaircost = "您的裝備已修理, 花費了"
@@ -126,6 +128,7 @@ if TukuiDB.client == "zhTW" then
 	tukuilocal.bags_nothingsort= "不需要分類"
 	tukuilocal.bags_bids = "使用背包: "
 	tukuilocal.bags_stackend = "重新堆疊完成"
+	tukuilocal.bags_rightclick_search = "Right-click to search."
 
 	tukuilocal.chat_invalidtarget = "無效的目標"
 

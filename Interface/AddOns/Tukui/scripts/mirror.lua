@@ -5,8 +5,8 @@
 local _, settings = ...
 
 local _DEFAULTS = {
-	width = TukuiDB:Scale(220),
-	height = TukuiDB:Scale(18),
+	width = TukuiDB.Scale(220),
+	height = TukuiDB.Scale(18),
 	texture = TukuiDB["media"].blank,
 
 	position = {
@@ -40,7 +40,7 @@ do
 		local pos = settings.position[self.type]
 		local p1, frame, p2, x, y = strsplit("#", pos)
 
-		return self:SetPoint(p1, frame, p2, TukuiDB:Scale(x), TukuiDB:Scale(y))
+		return self:SetPoint(p1, frame, p2, TukuiDB.Scale(x), TukuiDB.Scale(y))
 	end
 
 	local OnUpdate = function(self, elapsed)
@@ -78,9 +78,9 @@ do
 		bg:SetVertexColor(r * .5, g * .5, b * .5)
 		
 		local border = CreateFrame("Frame", nil, frame)
-		border:SetPoint("TOPLEFT", frame, TukuiDB:Scale(-2), TukuiDB:Scale(2))
-		border:SetPoint("BOTTOMRIGHT", frame, TukuiDB:Scale(2), TukuiDB:Scale(-2))
-		TukuiDB:SetTemplate(border)
+		border:SetPoint("TOPLEFT", frame, TukuiDB.Scale(-2), TukuiDB.Scale(2))
+		border:SetPoint("BOTTOMRIGHT", frame, TukuiDB.Scale(2), TukuiDB.Scale(-2))
+		TukuiDB.SetTemplate(border)
 		border:SetFrameLevel(0)
 
 		local text = frame:CreateFontString(nil, 'OVERLAY')
@@ -93,7 +93,7 @@ do
 
 		text:SetPoint('LEFT', frame)
 		text:SetPoint('RIGHT', frame)
-		text:SetPoint('TOP', frame, 0, TukuiDB:Scale(2))
+		text:SetPoint('TOP', frame, 0, TukuiDB.Scale(2))
 		text:SetPoint('BOTTOM', frame)
 
 		frame:SetSize(settings.width, settings.height)

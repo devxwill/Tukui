@@ -7,12 +7,12 @@ tNamePlates:SetScript("OnEvent", function(self, event, ...) self[event](self, ..
 
 local barTexture = TukuiDB["media"].normTex
 local overlayTexture = [=[Interface\Tooltips\Nameplate-Border]=]
-local font, fontSize, fontOutline = [=[Fonts\ARIALN.ttf]=], 10, "OUTLINE"
+local font, fontSize, fontOutline = TukuiDB["media"].font, 10, "OUTLINE"
 local glowTexture = TukuiDB["media"].glowTex
 
 local backdrop = {
-	edgeFile = glowTexture, edgeSize = TukuiDB:Scale(3),
-	insets = {left = TukuiDB:Scale(3), right = TukuiDB:Scale(3), top = TukuiDB:Scale(3), bottom = TukuiDB:Scale(3)}
+	edgeFile = glowTexture, edgeSize = TukuiDB.Scale(3),
+	insets = {left = TukuiDB.Scale(3), right = TukuiDB.Scale(3), top = TukuiDB.Scale(3), bottom = TukuiDB.Scale(3)}
 }
 
 local select = select
@@ -84,15 +84,15 @@ local updatePlate = function(self)
 
 	self.healthBar:ClearAllPoints()
 	self.healthBar:SetPoint("CENTER", self.healthBar:GetParent())
-	self.healthBar:SetHeight(TukuiDB:Scale(7))
-	self.healthBar:SetWidth(TukuiDB:Scale(110))
+	self.healthBar:SetHeight(TukuiDB.Scale(7))
+	self.healthBar:SetWidth(TukuiDB.Scale(110))
 
 	self.healthBar.hpBackground:SetVertexColor(self.r * 0.20, self.g * 0.20, self.b * 0.20)
 
 	self.castBar:ClearAllPoints()
-	self.castBar:SetPoint("TOP", self.healthBar, "BOTTOM", 0, TukuiDB:Scale(-4))
-	self.castBar:SetHeight(TukuiDB:Scale(5))
-	self.castBar:SetWidth(TukuiDB:Scale(110))
+	self.castBar:SetPoint("TOP", self.healthBar, "BOTTOM", 0, TukuiDB.Scale(-4))
+	self.castBar:SetHeight(TukuiDB.Scale(5))
+	self.castBar:SetWidth(TukuiDB.Scale(110))
 
 	self.highlight:ClearAllPoints()
 	self.highlight:SetAllPoints(self.healthBar)
@@ -106,7 +106,7 @@ local updatePlate = function(self)
 
 	local level, elite, mylevel = tonumber(self.level:GetText()), self.elite:IsShown(), UnitLevel("player")
 	self.level:ClearAllPoints()
-	self.level:SetPoint("RIGHT", self.healthBar, "LEFT", TukuiDB:Scale(-2), 0)
+	self.level:SetPoint("RIGHT", self.healthBar, "LEFT", TukuiDB.Scale(-2), 0)
 	if self.boss:IsShown() then
 		self.level:SetText("B")
 		self.level:SetTextColor(0.8, 0.05, 0)
@@ -121,9 +121,9 @@ end
 local fixCastbar = function(self)
 	self.castbarOverlay:Hide()
 
-	self:SetHeight(TukuiDB:Scale(5))
+	self:SetHeight(TukuiDB.Scale(5))
 	self:ClearAllPoints()
-	self:SetPoint("TOP", self.healthBar, "BOTTOM", 0, TukuiDB:Scale(-4))
+	self:SetPoint("TOP", self.healthBar, "BOTTOM", 0, TukuiDB.Scale(-4))
 end
 
 local colorCastBar = function(self, shielded)
@@ -183,7 +183,7 @@ local createPlate = function(frame)
 	nameTextRegion:Hide()
 
 	local newNameRegion = frame:CreateFontString()
-	newNameRegion:SetPoint("BOTTOM", healthBar, "TOP", 0, TukuiDB:Scale(3))
+	newNameRegion:SetPoint("BOTTOM", healthBar, "TOP", 0, TukuiDB.Scale(3))
 	newNameRegion:SetFont(font, fontSize, fontOutline)
 	newNameRegion:SetTextColor(0.84, 0.75, 0.65)
 	newNameRegion:SetShadowOffset(TukuiDB.mult, -TukuiDB.mult)
@@ -202,8 +202,8 @@ local createPlate = function(frame)
 
 	healthBar.hpGlow = CreateFrame("Frame", nil, healthBar)
 	healthBar.hpGlow:SetFrameLevel(healthBar:GetFrameLevel() -1 > 0 and healthBar:GetFrameLevel() -1 or 0)
-	healthBar.hpGlow:SetPoint("TOPLEFT", healthBar, "TOPLEFT", TukuiDB:Scale(-3), TukuiDB:Scale(3))
-	healthBar.hpGlow:SetPoint("BOTTOMRIGHT", healthBar, "BOTTOMRIGHT", TukuiDB:Scale(3), TukuiDB:Scale(-3))
+	healthBar.hpGlow:SetPoint("TOPLEFT", healthBar, "TOPLEFT", TukuiDB.Scale(-3), TukuiDB.Scale(3))
+	healthBar.hpGlow:SetPoint("BOTTOMRIGHT", healthBar, "BOTTOMRIGHT", TukuiDB.Scale(3), TukuiDB.Scale(-3))
 	healthBar.hpGlow:SetBackdrop(backdrop)
 	healthBar.hpGlow:SetBackdropColor(0, 0, 0)
 	healthBar.hpGlow:SetBackdropBorderColor(0, 0, 0)
@@ -221,7 +221,7 @@ local createPlate = function(frame)
 	castBar:RegisterEvent("UNIT_SPELLCAST_NOT_INTERRUPTIBLE")
 
 	castBar.time = castBar:CreateFontString(nil, "ARTWORK")
-	castBar.time:SetPoint("RIGHT", castBar, "LEFT", TukuiDB:Scale(-2), 0)
+	castBar.time:SetPoint("RIGHT", castBar, "LEFT", TukuiDB.Scale(-2), 0)
 	castBar.time:SetFont(font, fontSize, fontOutline)
 	castBar.time:SetTextColor(0.84, 0.75, 0.65)
 	castBar.time:SetShadowOffset(TukuiDB.mult, -TukuiDB.mult)
@@ -233,8 +233,8 @@ local createPlate = function(frame)
 
 	castBar.cbGlow = CreateFrame("Frame", nil, castBar)
 	castBar.cbGlow:SetFrameLevel(castBar:GetFrameLevel() -1 > 0 and castBar:GetFrameLevel() -1 or 0)
-	castBar.cbGlow:SetPoint("TOPLEFT", castBar, "TOPLEFT", TukuiDB:Scale(-3), TukuiDB:Scale(3))
-	castBar.cbGlow:SetPoint("BOTTOMRIGHT", castBar, "BOTTOMRIGHT", TukuiDB:Scale(3), TukuiDB:Scale(-3))
+	castBar.cbGlow:SetPoint("TOPLEFT", castBar, "TOPLEFT", TukuiDB.Scale(-3), TukuiDB.Scale(3))
+	castBar.cbGlow:SetPoint("BOTTOMRIGHT", castBar, "BOTTOMRIGHT", TukuiDB.Scale(3), TukuiDB.Scale(-3))
 	castBar.cbGlow:SetBackdrop(backdrop)
 	castBar.cbGlow:SetBackdropColor(0.25, 0.25, 0.25, 0)
 	castBar.cbGlow:SetBackdropBorderColor(0, 0, 0)
@@ -247,11 +247,11 @@ local createPlate = function(frame)
 	spellIconRegion:SetParent(castBar)
 	spellIconRegion:SetTexCoord(.08, .92, .08, .92)
 	spellIconRegion:SetPoint("BOTTOMLEFT", castBar, "BOTTOMRIGHT", 5, 0.25)
-	spellIconRegion:SetSize(TukuiDB:Scale(15), TukuiDB:Scale(15))
+	spellIconRegion:SetSize(TukuiDB.Scale(15), TukuiDB.Scale(15))
 
 	spellIconRegion.IconBackdrop = CreateFrame("Frame", nil, castBar)
-	spellIconRegion.IconBackdrop:SetPoint("TOPLEFT", spellIconRegion, "TOPLEFT", TukuiDB:Scale(-3), TukuiDB:Scale(3))
-	spellIconRegion.IconBackdrop:SetPoint("BOTTOMRIGHT", spellIconRegion, "BOTTOMRIGHT", TukuiDB:Scale(3), TukuiDB:Scale(-3))
+	spellIconRegion.IconBackdrop:SetPoint("TOPLEFT", spellIconRegion, "TOPLEFT", TukuiDB.Scale(-3), TukuiDB.Scale(3))
+	spellIconRegion.IconBackdrop:SetPoint("BOTTOMRIGHT", spellIconRegion, "BOTTOMRIGHT", TukuiDB.Scale(3), TukuiDB.Scale(-3))
 	spellIconRegion.IconBackdrop:SetBackdrop(backdrop)
 	spellIconRegion.IconBackdrop:SetBackdropColor(0, 0, 0)
 	spellIconRegion.IconBackdrop:SetBackdropBorderColor(0, 0, 0)
@@ -261,8 +261,8 @@ local createPlate = function(frame)
 	frame.highlight = highlightRegion
 
 	raidIconRegion:ClearAllPoints()
-	raidIconRegion:SetPoint("LEFT", healthBar, "RIGHT", TukuiDB:Scale(2), 0)
-	raidIconRegion:SetSize(TukuiDB:Scale(15), TukuiDB:Scale(15))
+	raidIconRegion:SetPoint("LEFT", healthBar, "RIGHT", TukuiDB.Scale(2), 0)
+	raidIconRegion:SetSize(TukuiDB.Scale(15), TukuiDB.Scale(15))
 
 	frame.oldglow = glowRegion
 	frame.elite = stateIconRegion

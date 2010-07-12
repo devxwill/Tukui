@@ -21,35 +21,41 @@ local function style(self)
 
 	Button:SetPushedTexture(media.buttonhover)
 	Button:SetNormalTexture("")
+	
+	Border:Hide()
+	Border = TukuiDB.dummy
 
 	Count:ClearAllPoints()
-	Count:SetPoint("BOTTOMRIGHT", 0, TukuiDB:Scale(2))
+	Count:SetPoint("BOTTOMRIGHT", 0, TukuiDB.Scale(2))
 	Count:SetFont(TukuiDB["media"].font, 12, "OUTLINE")
 	
 	HotKey:ClearAllPoints()
-	HotKey:SetPoint("TOPRIGHT", 0, TukuiDB:Scale(-2))
+	HotKey:SetPoint("TOPRIGHT", 0, TukuiDB.Scale(-2))
 	HotKey:SetFont(TukuiDB["media"].font, 12, "OUTLINE")
+	
 	if not TukuiDB["actionbar"].hotkey == true then
 		HotKey:SetText("")
 		HotKey:Hide()
-		HotKey.Show = function() end
+		HotKey.Show = TukuiDB.dummy
 	end
+
 	Btname:SetText("")
 	Btname:Hide()
-	Btname.Show = function() end
-	Border:Hide()
+	Btname.Show = TukuiDB.dummy
 	
 	if not _G[name.."Panel"] then
 		self:SetWidth(TukuiDB.buttonsize)
 		self:SetHeight(TukuiDB.buttonsize)
 		
 		local panel = CreateFrame("Frame", name.."Panel", self)
-		TukuiDB:CreatePanel(panel, TukuiDB.buttonsize, TukuiDB.buttonsize, "CENTER", self, "CENTER", 0, 0)
+		TukuiDB.CreatePanel(panel, TukuiDB.buttonsize, TukuiDB.buttonsize, "CENTER", self, "CENTER", 0, 0)
 		panel:SetBackdropColor(0, 0, 0, 0)
+		panel:SetFrameStrata(self:GetFrameStrata())
+		panel:SetFrameLevel(self:GetFrameLevel() - 1)
 
 		Icon:SetTexCoord(.08, .92, .08, .92)
-		Icon:SetPoint("TOPLEFT", Button, TukuiDB:Scale(2), TukuiDB:Scale(-2))
-		Icon:SetPoint("BOTTOMRIGHT", Button, TukuiDB:Scale(-2), TukuiDB:Scale(2))
+		Icon:SetPoint("TOPLEFT", Button, TukuiDB.Scale(2), TukuiDB.Scale(-2))
+		Icon:SetPoint("BOTTOMRIGHT", Button, TukuiDB.Scale(-2), TukuiDB.Scale(2))
 	end
 	
 	normal:ClearAllPoints()
@@ -61,6 +67,7 @@ local function stylesmallbutton(normal, button, icon, name, pet)
 	local Flash	 = _G[name.."Flash"]
 	button:SetPushedTexture(media.buttonhover)
 	button:SetNormalTexture("")
+	button:SetCheckedTexture("") -- TO DO, SET A TEXTURE HERE
 	Flash:SetTexture("")
 	
 	if not _G[name.."Panel"] then
@@ -68,22 +75,24 @@ local function stylesmallbutton(normal, button, icon, name, pet)
 		button:SetHeight(TukuiDB.petbuttonsize)
 		
 		local panel = CreateFrame("Frame", name.."Panel", button)
-		TukuiDB:CreatePanel(panel, TukuiDB.petbuttonsize, TukuiDB.petbuttonsize, "CENTER", button, "CENTER", 0, 0)
+		TukuiDB.CreatePanel(panel, TukuiDB.petbuttonsize, TukuiDB.petbuttonsize, "CENTER", button, "CENTER", 0, 0)
 		panel:SetBackdropColor(unpack(media.backdropcolor))
+		panel:SetFrameStrata(button:GetFrameStrata())
+		panel:SetFrameLevel(button:GetFrameLevel() - 1)
 
 		icon:SetTexCoord(.08, .92, .08, .92)
 		icon:ClearAllPoints()
 		if pet then
 			local autocast = _G[name.."AutoCastable"]
-			autocast:SetWidth(TukuiDB:Scale(41))
-			autocast:SetHeight(TukuiDB:Scale(40))
+			autocast:SetWidth(TukuiDB.Scale(41))
+			autocast:SetHeight(TukuiDB.Scale(40))
 			autocast:ClearAllPoints()
 			autocast:SetPoint("CENTER", button, 0, 0)
-			icon:SetPoint("TOPLEFT", button, TukuiDB:Scale(2), TukuiDB:Scale(-2))
-			icon:SetPoint("BOTTOMRIGHT", button, TukuiDB:Scale(-2), TukuiDB:Scale(2))
+			icon:SetPoint("TOPLEFT", button, TukuiDB.Scale(2), TukuiDB.Scale(-2))
+			icon:SetPoint("BOTTOMRIGHT", button, TukuiDB.Scale(-2), TukuiDB.Scale(2))
 		else
-			icon:SetPoint("TOPLEFT", button, TukuiDB:Scale(2), TukuiDB:Scale(-2))
-			icon:SetPoint("BOTTOMRIGHT", button, TukuiDB:Scale(-2), TukuiDB:Scale(2))
+			icon:SetPoint("TOPLEFT", button, TukuiDB.Scale(2), TukuiDB.Scale(-2))
+			icon:SetPoint("BOTTOMRIGHT", button, TukuiDB.Scale(-2), TukuiDB.Scale(2))
 		end
 	end
 	
@@ -165,6 +174,7 @@ end
 local function updatehotkey(self, actionButtonType)
 	local hotkey = _G[self:GetName() .. 'HotKey']
 	local text = hotkey:GetText()
+	
 	text = replace(text, '(s%-)', 'S')
 	text = replace(text, '(a%-)', 'A')
 	text = replace(text, '(c%-)', 'C')
@@ -174,6 +184,7 @@ local function updatehotkey(self, actionButtonType)
 	text = replace(text, '(Page Up)', 'PU')
 	text = replace(text, '(Page Down)', 'PD')
 	text = replace(text, '(Spacebar)', 'SpB')
+	text = replace(text, '(Insert)', 'Ins')
 	
 	if hotkey:GetText() == _G['RANGE_INDICATOR'] then
 		hotkey:SetText('')
@@ -184,7 +195,6 @@ end
 
 hooksecurefunc("ActionButton_OnUpdate", onupdate)
 hooksecurefunc("ActionButton_Update", style)
-hooksecurefunc("ActionButton_UpdateUsable", usable)
 hooksecurefunc("PetActionBar_Update", stylepet)
 hooksecurefunc("ShapeshiftBar_OnLoad", styleshift)
 hooksecurefunc("ShapeshiftBar_Update", styleshift)

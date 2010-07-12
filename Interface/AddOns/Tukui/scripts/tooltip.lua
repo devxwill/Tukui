@@ -16,7 +16,7 @@ local tooltips = {
 }
 
 for _, tt in pairs(tooltips) do
-	TukuiDB:SetTemplate(tt)
+	TukuiDB.SetTemplate(tt)
 	tt:HookScript("OnShow", function(self)
 		self:SetBackdropColor(unpack(TukuiDB["media"].backdropcolor))
 		self:SetBackdropBorderColor(unpack(TukuiDB["media"].bordercolor))
@@ -28,17 +28,17 @@ PVP_ENABLED = ""
 
 -- Statusbar
 GameTooltipStatusBar:SetStatusBarTexture(TukuiDB["media"].normTex)
-GameTooltipStatusBar:SetHeight(TukuiDB:Scale(5))
+GameTooltipStatusBar:SetHeight(TukuiDB.Scale(5))
 GameTooltipStatusBar:ClearAllPoints()
-GameTooltipStatusBar:SetPoint("BOTTOMLEFT", GameTooltip, "TOPLEFT", TukuiDB:Scale(2), TukuiDB:Scale(5))
-GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -TukuiDB:Scale(2), TukuiDB:Scale(5))
+GameTooltipStatusBar:SetPoint("BOTTOMLEFT", GameTooltip, "TOPLEFT", TukuiDB.Scale(2), TukuiDB.Scale(5))
+GameTooltipStatusBar:SetPoint("BOTTOMRIGHT", GameTooltip, "TOPRIGHT", -TukuiDB.Scale(2), TukuiDB.Scale(5))
 
 -- Statusbar background
 local StatusBarBG = CreateFrame("Frame", "StatusBarBG", GameTooltipStatusBar)
 StatusBarBG:SetFrameLevel(GameTooltipStatusBar:GetFrameLevel() - 1)
-StatusBarBG:SetPoint("TOPLEFT", -TukuiDB:Scale(2), TukuiDB:Scale(2))
-StatusBarBG:SetPoint("BOTTOMRIGHT", TukuiDB:Scale(2), -TukuiDB:Scale(2))
-TukuiDB:SetTemplate(StatusBarBG)
+StatusBarBG:SetPoint("TOPLEFT", -TukuiDB.Scale(2), TukuiDB.Scale(2))
+StatusBarBG:SetPoint("BOTTOMRIGHT", TukuiDB.Scale(2), -TukuiDB.Scale(2))
+TukuiDB.SetTemplate(StatusBarBG)
 
 -- Position default anchor
 local function defaultPosition(tt, parent)
@@ -48,7 +48,7 @@ local function defaultPosition(tt, parent)
 	else
 		tt:ClearAllPoints()
 		tt:SetOwner(parent, "ANCHOR_NONE")
-		tt:SetPoint("BOTTOMRIGHT", TukuiInfoRight, "TOPRIGHT", 0, TukuiDB:Scale(5))
+		tt:SetPoint("BOTTOMRIGHT", TukuiInfoRight, "TOPRIGHT", 0, TukuiDB.Scale(5))
 	end
 end
 hooksecurefunc("GameTooltip_SetDefaultAnchor", defaultPosition)
@@ -61,10 +61,10 @@ local function OnUpdate(self, ...)
 			self:SetAlpha(1)
 			if TukuiDB["bags"].enable == true and StuffingFrameBags:IsShown() then
 				self:ClearAllPoints()
-				self:SetPoint("BOTTOMRIGHT", StuffingFrameBags, "TOPRIGHT", 0, TukuiDB:Scale(4))
+				self:SetPoint("BOTTOMRIGHT", StuffingFrameBags, "TOPRIGHT", 0, TukuiDB.Scale(4))
 			else
 				self:ClearAllPoints()
-				self:SetPoint("BOTTOMRIGHT", TukuiInfoRight, "TOPRIGHT", 0, TukuiDB:Scale(5))
+				self:SetPoint("BOTTOMRIGHT", TukuiInfoRight, "TOPRIGHT", 0, TukuiDB.Scale(5))
 			end
 		end
 	end
@@ -151,10 +151,20 @@ GameTooltip_UnitColor = function(unit)
 	if tapped and not tappedplayer or not connected or dead or ghost then
 		r, g, b = 0.55, 0.57, 0.61
 	elseif player then
-		local _, class = UnitClass(unit)
-		r, g, b = RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b
-	elseif reaction then
-		r, g, b = FACTION_BAR_COLORS[reaction].r, FACTION_BAR_COLORS[reaction].g, FACTION_BAR_COLORS[reaction].b
+		local class = select(2, UnitClass(unit))
+		if TukuiDB.unitframes.enable == true then
+			local c = TukuiDB.oUF_colors.class[class]
+			r, g, b = c[1], c[2], c[3]
+		else
+			r, g, b = RAID_CLASS_COLORS[class].r, RAID_CLASS_COLORS[class].g, RAID_CLASS_COLORS[class].b
+		end
+	elseif reaction and not player then
+		if TukuiDB.unitframes.enable == true then
+			local c = TukuiDB.oUF_colors.reaction[reaction]
+			r, g, b = c[1], c[2], c[3]
+		else
+			r, g, b = FACTION_BAR_COLORS[reaction].r, FACTION_BAR_COLORS[reaction].g, FACTION_BAR_COLORS[reaction].b
+		end
 	else
 		r, g, b = UnitSelectionColor(unit)
 	end
@@ -164,61 +174,69 @@ end
 
 -- function to short-display HP value on StatusBar
 local function ShortValue(value)
-        if value >= 1e7 then
-                return ('%.1fm'):format(value / 1e6):gsub('%.?0+([km])$', '%1')
-        elseif value >= 1e6 then
-                return ('%.2fm'):format(value / 1e6):gsub('%.?0+([km])$', '%1')
-        elseif value >= 1e5 then
-                return ('%.0fk'):format(value / 1e3)
-        elseif value >= 1e3 then
-                return ('%.1fk'):format(value / 1e3):gsub('%.?0+([km])$', '%1')
-        else
-                return value
-        end
+	if value >= 1e7 then
+		return ('%.1fm'):format(value / 1e6):gsub('%.?0+([km])$', '%1')
+	elseif value >= 1e6 then
+		return ('%.2fm'):format(value / 1e6):gsub('%.?0+([km])$', '%1')
+	elseif value >= 1e5 then
+		return ('%.0fk'):format(value / 1e3)
+	elseif value >= 1e3 then
+		return ('%.1fk'):format(value / 1e3):gsub('%.?0+([km])$', '%1')
+	else
+		return value
+	end
 end
 
 -- update HP value on status bar
 GameTooltipStatusBar:SetScript("OnValueChanged", function(self, value)
-        if not value then
-                return
-        end
-        local min, max = self:GetMinMaxValues()
-        if (value < min) or (value > max) then
-                return
-        end
-		local _, unit = GameTooltip:GetUnit()
-		
-		-- fix target of target returning nil
-		if (not unit) then
-			local ToT = GetMouseFocus()
-			unit = ToT and ToT:GetAttribute("unit")
-		end
-		
-		-- fix mage mirror sometime returning nil
-		if (not unit) and (UnitExists("mouseover")) then
-			unit = "mouseover"
-		end
+	if not value then
+		return
+	end
+	local min, max = self:GetMinMaxValues()
+	if (value < min) or (value > max) then
+			return
+	end
+	local _, unit = GameTooltip:GetUnit()
+	
+	-- fix target of target returning nil
+	if (not unit) then
+		local ToT = GetMouseFocus()
+		unit = ToT and ToT:GetAttribute("unit")
+	end
+	
+	-- fix mage mirror sometime returning nil
+	if (not unit) and (UnitExists("mouseover")) then
+		unit = "mouseover"
+	end
 
-		if not self.text then
-			self.text = self:CreateFontString(nil, "OVERLAY")
-			self.text:SetPoint("CENTER", GameTooltipStatusBar, 0, TukuiDB:Scale(6))
-			self.text:SetFont(TukuiDB["media"].font, 12, "THINOUTLINE")
+	if not self.text then
+		self.text = self:CreateFontString(nil, "OVERLAY")
+		self.text:SetPoint("CENTER", GameTooltipStatusBar, 0, TukuiDB.Scale(6))
+		self.text:SetFont(TukuiDB["media"].font, 12, "THINOUTLINE")
+		self.text:Show()
+		if unit then
+			min, max = UnitHealth(unit), UnitHealthMax(unit)
+			local hp = ShortValue(min).." / "..ShortValue(max)
+			if min == 0 then
+				self.text:SetText(tukuilocal.unitframes_ouf_dead)
+			else
+				self.text:SetText(hp)
+			end
+		end
+	else
+		if unit then
+			min, max = UnitHealth(unit), UnitHealthMax(unit)
 			self.text:Show()
-			if unit then
-				min, max = UnitHealth(unit), UnitHealthMax(unit)
-				local hp = ShortValue(min).." / "..ShortValue(max)
+			local hp = ShortValue(min).." / "..ShortValue(max)
+			if min == 0 then
+				self.text:SetText(tukuilocal.unitframes_ouf_dead)
+			else
 				self.text:SetText(hp)
 			end
 		else
-			if unit then
-				min, max = UnitHealth(unit), UnitHealthMax(unit)
-				self.text:Show()
-				local hp = ShortValue(min).." / "..ShortValue(max)
-				self.text:SetText(hp)
-			else
-				self.text:Hide()
-			end
+			self.text:Hide()
 		end
+	end
 end)
 
 -- This will clean up border/background color to default when we aren't showing a unit
@@ -259,10 +277,10 @@ GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
 GameTooltip:HookScript("OnUpdate", OnUpdate)
 
 -- Reskin and reposition battle.net popup
-TukuiDB:SetTemplate(BNToastFrame)
+TukuiDB.SetTemplate(BNToastFrame)
 BNToastFrame:HookScript("OnShow", function(self)
 	self:ClearAllPoints()
-	self:SetPoint("BOTTOMLEFT", TukuiInfoLeft, "TOPLEFT", 0, TukuiDB:Scale(5))
+	self:SetPoint("BOTTOMLEFT", TukuiInfoLeft, "TOPLEFT", 0, TukuiDB.Scale(5))
 	self:SetBackdropColor(unpack(TukuiDB["media"].backdropcolor))
 	self:SetBackdropBorderColor(unpack(TukuiDB["media"].bordercolor))
 end)
@@ -279,3 +297,14 @@ if db.hidebuttons == true then
 	hooksecurefunc(GameTooltip, "SetPetAction", CombatHideActionButtonsTooltip)
 	hooksecurefunc(GameTooltip, "SetShapeshift", CombatHideActionButtonsTooltip)
 end
+
+-- Seriously, I sooooooo fucking hate comparison ...
+GameTooltip_ShowCompareItem = TukuiDB.dummy -- shut the fuck up
+
+-- Reskin Consolidated Buffs Tooltip to be pixel perfect
+-- Creating a frame because original scale > 1
+local SkinCBT = CreateFrame("Frame", nil, ConsolidatedBuffsTooltip)
+SkinCBT:SetFrameLevel(ConsolidatedBuffs:GetFrameLevel() + 1)
+SkinCBT:SetAllPoints()
+SkinCBT:SetScale(0.70)
+TukuiDB.SetTemplate(SkinCBT)

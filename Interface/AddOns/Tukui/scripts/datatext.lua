@@ -32,18 +32,6 @@ function TukuiDB.PP(p, obj)
 			obj:SetPoint("CENTER", TukuiMinimapStatsRight, 0, 1)
 		end
 	end
-	
-	-- Mankar - LDB Bar Positions
-	if p == 11 then
-		obj:SetHeight(TukuiBrokerLeft:GetHeight())
-		obj:SetPoint("LEFT", TukuiBrokerLeft, 0, 0.5)
-	elseif p == 12 then
-		obj:SetHeight(TukuiBrokerLeft:GetHeight())
-		obj:SetPoint("RIGHT", TukuiBrokerLeft, 25, -30)
-	elseif p == 13 then
-		obj:SetHeight(TukuiBrokerLeft:GetHeight())
-		obj:SetPoint("RIGHT", TukuiInfoLeft, 25, 30)
-	end
 end
 
 --------------------------------------------------------------------
@@ -131,7 +119,7 @@ if db.mem and db.mem > 0 then
 		self:SetAllPoints(Text)
 		self:SetScript("OnEnter", function()
 			if not InCombatLockdown() then
-				GameTooltip:SetOwner(this, "ANCHOR_TOP", 0, TukuiDB:Scale(6));
+				GameTooltip:SetOwner(this, "ANCHOR_TOP", 0, TukuiDB.Scale(6));
 				GameTooltip:ClearAllPoints()
 				GameTooltip:SetPoint("BOTTOM", self, "TOP", 0, TukuiDB.mult)
 				GameTooltip:ClearLines()
@@ -218,7 +206,7 @@ if db.guild and db.guild > 0 then
 				local online, total, gmotd = 0, GetNumGuildMembers(true), GetGuildRosterMOTD()
 				for i = 0, total do if select(9, GetGuildRosterInfo(i)) then online = online + 1 end end
 				
-				GameTooltip:SetOwner(this, "ANCHOR_TOP", 0, TukuiDB:Scale(6));
+				GameTooltip:SetOwner(this, "ANCHOR_TOP", 0, TukuiDB.Scale(6));
 				GameTooltip:ClearAllPoints()
 				GameTooltip:SetPoint("BOTTOM", self, "TOP", 0, TukuiDB.mult)
 				GameTooltip:ClearLines()
@@ -305,7 +293,7 @@ if db.friends and db.friends > 0 then
 			local totalonline = online + BNonline
 			local totalfriends = total + BNtotal
 			if online > 0 or BNonline > 0 then
-				GameTooltip:SetOwner(this, "ANCHOR_TOP", 0, TukuiDB:Scale(6));
+				GameTooltip:SetOwner(this, "ANCHOR_TOP", 0, TukuiDB.Scale(6));
 				GameTooltip:ClearAllPoints()
 				GameTooltip:SetPoint("BOTTOM", self, "TOP", 0, TukuiDB.mult)
 				GameTooltip:ClearLines()
@@ -389,7 +377,7 @@ if db.dur and db.dur > 0 then
 		self:SetAllPoints(Text)
 		self:SetScript("OnEnter", function()
 			if not InCombatLockdown() then
-				GameTooltip:SetOwner(this, "ANCHOR_TOP", 0, TukuiDB:Scale(6));
+				GameTooltip:SetOwner(this, "ANCHOR_TOP", 0, TukuiDB.Scale(6));
 				GameTooltip:ClearAllPoints()
 				GameTooltip:SetPoint("BOTTOM", self, "TOP", 0, TukuiDB.mult)
 				GameTooltip:ClearLines()
@@ -478,7 +466,7 @@ if db.gold and db.gold > 0 then
 		self:SetScript("OnEnter", function()
 			if not InCombatLockdown() then
 				self.hovered = true 
-				GameTooltip:SetOwner(this, "ANCHOR_TOP", 0, TukuiDB:Scale(6));
+				GameTooltip:SetOwner(this, "ANCHOR_TOP", 0, TukuiDB.Scale(6));
 				GameTooltip:ClearAllPoints()
 				GameTooltip:SetPoint("BOTTOM", self, "TOP", 0, TukuiDB.mult)
 				GameTooltip:ClearLines()
@@ -649,7 +637,7 @@ if db.wowtime and db.wowtime > 0 then
 
 	Stat:SetScript("OnEnter", function(self)
 		OnLoad = function(self) RequestRaidInfo() end,
-		GameTooltip:SetOwner(this, "ANCHOR_TOP", 0, TukuiDB:Scale(6));
+		GameTooltip:SetOwner(this, "ANCHOR_TOP", 0, TukuiDB.Scale(6));
 		GameTooltip:ClearAllPoints()
 		GameTooltip:SetPoint("BOTTOM", self, "TOP", 0, TukuiDB.mult)
 		GameTooltip:ClearLines()
@@ -753,8 +741,8 @@ if db.dps_text and db.dps_text > 0 then
 	TukuiDB.PP(db.dps_text, dText)
 
 	DPS_FEED:EnableMouse(true)
-	DPS_FEED:SetHeight(TukuiDB:Scale(20))
-	DPS_FEED:SetWidth(TukuiDB:Scale(100))
+	DPS_FEED:SetHeight(TukuiDB.Scale(20))
+	DPS_FEED:SetWidth(TukuiDB.Scale(100))
 	DPS_FEED:SetAllPoints(dText)
 
 	DPS_FEED:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
@@ -843,8 +831,8 @@ if db.hps_text and db.hps_text > 0 then
 	TukuiDB.PP(db.hps_text, hText)
  
 	HPS_FEED:EnableMouse(true)
-	HPS_FEED:SetHeight(TukuiDB:Scale(20))
-	HPS_FEED:SetWidth(TukuiDB:Scale(100))
+	HPS_FEED:SetHeight(TukuiDB.Scale(20))
+	HPS_FEED:SetWidth(TukuiDB.Scale(100))
 	HPS_FEED:SetAllPoints(hText)
  
 	HPS_FEED:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
@@ -1109,7 +1097,7 @@ if db.avd and db.avd > 0 then
 		self:SetAllPoints(Text)
 		self:SetScript("OnEnter", function()
 			if not InCombatLockdown() then
-				GameTooltip:SetOwner(this, "ANCHOR_TOP", 0, TukuiDB:Scale(6));
+				GameTooltip:SetOwner(this, "ANCHOR_TOP", 0, TukuiDB.Scale(6));
 				GameTooltip:ClearAllPoints()
 				GameTooltip:SetPoint("BOTTOM", self, "TOP", 0, TukuiDB.mult)
 				GameTooltip:ClearLines()
@@ -1129,6 +1117,7 @@ if db.avd and db.avd > 0 then
 		end)
 		self:SetScript("OnLeave", function() GameTooltip:Hide() end)
 	end
+
 
 	Stat:RegisterEvent("UNIT_AURA")
 	Stat:RegisterEvent("UNIT_INVENTORY_CHANGED")
@@ -1156,7 +1145,7 @@ if db.armor and db.armor > 0 then
 		self:SetAllPoints(Text)
 		self:SetScript("OnEnter", function()
 			if not InCombatLockdown() then
-				GameTooltip:SetOwner(this, "ANCHOR_TOP", 0, TukuiDB:Scale(6));
+				GameTooltip:SetOwner(this, "ANCHOR_TOP", 0, TukuiDB.Scale(6));
 				GameTooltip:ClearAllPoints()
 				GameTooltip:SetPoint("BOTTOM", self, "TOP", 0, TukuiDB.mult)
 				GameTooltip:ClearLines()

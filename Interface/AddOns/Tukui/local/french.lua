@@ -1,4 +1,6 @@
 if TukuiDB.client == "frFR" then
+	tukuilocal.disband = "Disbanding group."
+
 	tukuilocal.datatext_guild = "Guilde"
 	tukuilocal.datatext_noguild = "Pas de Guilde"
 	tukuilocal.datatext_bags = "Sacs: "
@@ -78,7 +80,7 @@ if TukuiDB.client == "frFR" then
 	}
 
 	tukuilocal.popup_disableui = "Tukui ne fonctionne pas avec cette résolution, voulez-vous désactiver Tukui? (Annuler si vous souhaitez essayer une autre résolution)"
-	tukuilocal.popup_install = "Première fois sur Tukui V10.60+ avec ce personnage. Vous devez recharger l'interface utilisateur afin de configurer les barres d'action, les variables et les cadres de Chat."
+	tukuilocal.popup_install = "Première fois sur Tukui V11 BETA avec ce personnage. Vous devez recharger l'interface utilisateur afin de configurer les barres d'action, les variables et les cadres de Chat."
 	tukuilocal.popup_2raidactive = "2 modèles de raid sont activés, merci d'en choisir un."
 
 	tukuilocal.merchant_repairnomoney = "Vous n'avez pas assez d'argent pour réparer!"
@@ -126,6 +128,7 @@ if TukuiDB.client == "frFR" then
 	tukuilocal.bags_nothingsort= "Rien à trier."
 	tukuilocal.bags_bids = "Emplacements utilisés: "
 	tukuilocal.bags_stackend = "Empilage terminé."
+	tukuilocal.bags_rightclick_search = "Right-click to search."
 
 	tukuilocal.chat_invalidtarget = "Cible non valide"
 

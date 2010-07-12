@@ -20,6 +20,11 @@ end
 
 if TukuiDB.client == "ruRU" then
 	TukuiDB["media"].uffont = [[fonts\ARIALN.ttf]]
+elseif TukuiDB.client == "zhTW" then
+	TukuiDB["media"].uffont = [[fonts\bLEI00D.ttf]]
+	TukuiDB["media"].font = [[fonts\bLEI00D.ttf]]
+	TukuiDB["media"].dmgfont = [[fonts\bLEI00D.ttf]]
+	TukuiDB["chat"].font = [[fonts\bLEI00D.ttf]]
 end
 
 ------------------------------------------------------------------------

@@ -14,6 +14,7 @@
 --]]
 
 if not TukuiDB["unitframes"].enable == true then return end
+if not oUF then return end
 
 local function tooltip(self)
 	local name, id, min, max, value = GetWatchedFactionInfo()

@@ -1,22 +1,12 @@
 if not TukuiDB["map"].enable == true then return end
 
-if TukuiDB.lowversion then
-	WORLDMAP_RATIO_MINI = 0.56
-else
-	WORLDMAP_RATIO_MINI = 0.64
-end
-WORLDMAP_WINDOWED_SIZE = WORLDMAP_RATIO_MINI -- for a smooth transition 3.3.2 to 3.3.3
-
-local dummy = function() end
-local Kill = function(object)
-	object.Show = dummy
-	object:Hide()
-end
+local mapscale = WORLDMAP_WINDOWED_SIZE
 
 local glowt = TukuiDB["media"].glowTex
 local ft = TukuiDB["media"].uffont -- Map font
 local fontsize = 18 -- Map Font Size
-local mapbg = CreateFrame ("Frame", nil, WorldMapDetailFrame)
+
+local mapbg = CreateFrame("Frame", nil, WorldMapDetailFrame)
 	mapbg:SetBackdrop( { 
 	bgFile = TukuiDB["media"].blank, 
 	edgeFile = TukuiDB["media"].blank, 
@@ -25,9 +15,9 @@ local mapbg = CreateFrame ("Frame", nil, WorldMapDetailFrame)
 })
 
 local movebutton = CreateFrame ("Frame", nil, WorldMapFrameSizeUpButton)
-movebutton:SetHeight(TukuiDB:Scale(32))
-movebutton:SetWidth(TukuiDB:Scale(32))
-movebutton:SetPoint("TOP", WorldMapFrameSizeUpButton, "BOTTOM", TukuiDB:Scale(-1), TukuiDB:Scale(4))
+movebutton:SetHeight(TukuiDB.Scale(32))
+movebutton:SetWidth(TukuiDB.Scale(32))
+movebutton:SetPoint("TOP", WorldMapFrameSizeUpButton, "BOTTOM", TukuiDB.Scale(-1), TukuiDB.Scale(4))
 movebutton:SetBackdrop( { 
 	bgFile = "Interface\\AddOns\\Tukui\\media\\textures\\cross",
 })
@@ -53,7 +43,7 @@ end
 
 local SmallerMapSkin = function()
 	-- because it cause "action failed" when rescaling smaller map ...
-	Kill(WorldMapBlobFrame)
+	TukuiDB.Kill(WorldMapBlobFrame)
 	
 	-- new frame to put zone and title text in
 	local ald = CreateFrame ("Frame", nil, WorldMapButton)
@@ -63,17 +53,17 @@ local SmallerMapSkin = function()
 	local fb1 = CreateFrame("Frame", nil, mapbg )
 	fb1:SetFrameLevel(0)
 	fb1:SetFrameStrata("BACKGROUND")
-	fb1:SetPoint("TOPLEFT", mapbg , "TOPLEFT", TukuiDB:Scale(-3), TukuiDB:Scale(3))
-	fb1:SetPoint("BOTTOMRIGHT", mapbg , "BOTTOMRIGHT", TukuiDB:Scale(3), TukuiDB:Scale(-3))
+	fb1:SetPoint("TOPLEFT", mapbg , "TOPLEFT", TukuiDB.Scale(-3), TukuiDB.Scale(3))
+	fb1:SetPoint("BOTTOMRIGHT", mapbg , "BOTTOMRIGHT", TukuiDB.Scale(3), TukuiDB.Scale(-3))
 	fb1:SetBackdrop {edgeFile = glowt, edgeSize = 3, insets = {left = 0, right = 0, top = 0, bottom = 0}}
 	fb1:SetBackdropBorderColor(unpack(TukuiDB["media"].backdropcolor))
 	
 	-- map border and bg
 	mapbg:SetBackdropColor(unpack(TukuiDB["media"].backdropcolor))
 	mapbg:SetBackdropBorderColor(unpack(TukuiDB["media"].bordercolor))
-	mapbg:SetScale(1 / WORLDMAP_RATIO_MINI)
-	mapbg:SetPoint("TOPLEFT", WorldMapDetailFrame, TukuiDB:Scale(-2), TukuiDB:Scale(2))
-	mapbg:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, TukuiDB:Scale(2), TukuiDB:Scale(-2))
+	mapbg:SetScale(1 / mapscale)
+	mapbg:SetPoint("TOPLEFT", WorldMapDetailFrame, TukuiDB.Scale(-2), TukuiDB.Scale(2))
+	mapbg:SetPoint("BOTTOMRIGHT", WorldMapDetailFrame, TukuiDB.Scale(2), TukuiDB.Scale(-2))
 	mapbg:SetFrameStrata("MEDIUM")
 	mapbg:SetFrameLevel(20)
 	
@@ -87,20 +77,20 @@ local SmallerMapSkin = function()
 	WorldMapFrameMiniBorderRight:Hide()
 	WorldMapFrameSizeUpButton:Show()
 	WorldMapFrameSizeUpButton:ClearAllPoints()
-	WorldMapFrameSizeUpButton:SetPoint("TOPRIGHT", WorldMapButton, "TOPRIGHT", TukuiDB:Scale(3), TukuiDB:Scale(-18))
+	WorldMapFrameSizeUpButton:SetPoint("TOPRIGHT", WorldMapButton, "TOPRIGHT", TukuiDB.Scale(3), TukuiDB.Scale(-18))
 	WorldMapFrameSizeUpButton:SetFrameStrata("HIGH")
 	WorldMapFrameCloseButton:ClearAllPoints()
-	WorldMapFrameCloseButton:SetPoint("TOPRIGHT", WorldMapButton, "TOPRIGHT", TukuiDB:Scale(3), TukuiDB:Scale(3))
+	WorldMapFrameCloseButton:SetPoint("TOPRIGHT", WorldMapButton, "TOPRIGHT", TukuiDB.Scale(3), TukuiDB.Scale(3))
 	WorldMapFrameCloseButton:SetFrameStrata("HIGH")
-	WorldMapFrameSizeDownButton:SetPoint("TOPRIGHT", WorldMapFrameMiniBorderRight, "TOPRIGHT", TukuiDB:Scale(-66), TukuiDB:Scale(5))
+	WorldMapFrameSizeDownButton:SetPoint("TOPRIGHT", WorldMapFrameMiniBorderRight, "TOPRIGHT", TukuiDB.Scale(-66), TukuiDB.Scale(5))
 	WorldMapQuestShowObjectives:SetParent(ald)
 	WorldMapQuestShowObjectives:ClearAllPoints()
-	WorldMapQuestShowObjectives:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT", 0, TukuiDB:Scale(-1))
+	WorldMapQuestShowObjectives:SetPoint("BOTTOMRIGHT", WorldMapButton, "BOTTOMRIGHT", 0, TukuiDB.Scale(-1))
 	WorldMapQuestShowObjectivesText:SetFont(ft, fontsize, "OUTLINE")
 	WorldMapQuestShowObjectivesText:ClearAllPoints()
-	WorldMapQuestShowObjectivesText:SetPoint("RIGHT", WorldMapQuestShowObjectives, "LEFT", TukuiDB:Scale(-4), TukuiDB:Scale(1))
+	WorldMapQuestShowObjectivesText:SetPoint("RIGHT", WorldMapQuestShowObjectives, "LEFT", TukuiDB.Scale(-4), TukuiDB.Scale(1))
 	WorldMapFrameTitle:ClearAllPoints()
-	WorldMapFrameTitle:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, TukuiDB:Scale(9), TukuiDB:Scale(5));
+	WorldMapFrameTitle:SetPoint("BOTTOMLEFT", WorldMapDetailFrame, TukuiDB.Scale(9), TukuiDB.Scale(5));
 	WorldMapFrameTitle:SetFont(ft, fontsize, "OUTLINE")
 	WorldMapFrameTitle:SetParent(ald)		
 	WorldMapTitleButton:SetFrameStrata("TOOLTIP")
@@ -125,12 +115,14 @@ end
 hooksecurefunc("WorldMap_ToggleSizeUp", function() BiggerMapSkin() end)
 
 local function OnMouseDown()
+	if MoveMap ~= 1 then return end
 	WorldMapScreenAnchor:ClearAllPoints();
 	WorldMapFrame:ClearAllPoints();
 	WorldMapFrame:StartMoving(); 
 end
 
 local function OnMouseUp()
+	if MoveMap ~= 1 then return end
 	WorldMapFrame:StopMovingOrSizing();
 	WorldMapScreenAnchor:StartMoving();
 	WorldMapScreenAnchor:SetPoint("TOPLEFT", WorldMapFrame);
@@ -143,6 +135,7 @@ movebutton:SetScript("OnMouseUp", OnMouseUp)
 
 -- the classcolor function
 local function UpdateIconColor(self)
+	if not self.icon then return end
 	color = RAID_CLASS_COLORS[select(2, UnitClass(self.unit))]
 	self.icon:SetVertexColor(color.r, color.g, color.b)
 end
@@ -157,6 +150,7 @@ local OnEvent = function()
 		WorldMapFrameSizeUpButton:Enable()
 	elseif event == "RAID_ROSTER_UPDATE" or event == "PARTY_MEMBERS_CHANGED" then
 		for r=1, 40 do
+			if not _G["WorldMapRaid"..r] then return end
 			if UnitInParty(_G["WorldMapRaid"..r].unit) then
 				_G["WorldMapRaid"..r].icon:SetTexture("Interface\\AddOns\\Tukui\\media\\textures\\Party")
 			else
@@ -166,6 +160,7 @@ local OnEvent = function()
 		end
 
 		for p=1, 4 do
+			if not _G["WorldMapParty"..p] then return end
 			_G["WorldMapParty"..p].icon:SetTexture("Interface\\AddOns\\Tukui\\media\\textures\\Party")
 			_G["WorldMapParty"..p]:SetScript("OnUpdate", UpdateIconColor)
 		end

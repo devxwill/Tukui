@@ -1,4 +1,6 @@
-local menu = CreateFrame("Frame", "oUF_Tukz_DropDown")
+if not TukuiDB["unitframes"].enable == true then return end
+
+local menu = CreateFrame("Frame", "oUF_Tukui_DropDown")
 menu:RegisterEvent('PARTY_LOOT_METHOD_CHANGED')
 menu.displayMode = 'MENU'
 menu.info = {}

@@ -2,6 +2,8 @@
 -- Auto-Release when dead in Wintergrasp or Battleground.
 --------------------------------------------------------------------------
 
+if TukuiDB["others"].pvpautorelease ~= true then return end
+
 local WINTERGRASP
 WINTERGRASP = tukuilocal.mount_wintergrasp
 

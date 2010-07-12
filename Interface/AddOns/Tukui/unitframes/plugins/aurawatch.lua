@@ -1,5 +1,5 @@
-
 if not TukuiDB["unitframes"].enable == true then return end
+if not oUF then return end
 
 --[[------------------------------------------------------------------------------------------------------
 oUF_AuraWatch by Astromech
@@ -180,7 +180,6 @@ local function expireIcon(icon, frame)
 	else
 		if (icon.cd) then icon.cd:Hide() end
 		if (icon.count) then icon.count:SetText() end
-		icon.count:SetText()
 		icon:SetAlpha(frame.missingAlpha)
 		if icon.overlay then
 			icon.overlay:Show()

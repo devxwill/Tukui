@@ -1,4 +1,4 @@
-if (select(2, UnitClass("player")) ~= "HUNTER") then return end
+if (TukuiDB.myclass ~= "HUNTER") then return end
  
 local PetHappiness = CreateFrame("Frame")
 PetHappiness.happiness = GetPetHappiness()

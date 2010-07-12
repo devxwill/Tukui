@@ -1,6 +1,3 @@
--- disable micro button update
-AchievementMicroButton_Update = TukuiDB.dummy
-
 -- always show worldstate behind buffs
 WorldStateAlwaysUpFrame:SetFrameStrata("BACKGROUND")
 WorldStateAlwaysUpFrame:SetFrameLevel(0)
@@ -60,3 +57,23 @@ function SlashCmdList.LUAERROR(msg, editbox)
 	end
 end
 SLASH_LUAERROR1 = '/luaerror'
+
+SlashCmdList["GROUPDISBAND"] = function()
+		SendChatMessage(tukuilocal.disband, "RAID" or "PARTY")
+		if UnitInRaid("player") then
+			for i = 1, GetNumRaidMembers() do
+				local name, _, _, _, _, _, _, online = GetRaidRosterInfo(i)
+				if online and name ~= TukuiDB.myname then
+					UninviteUnit(name)
+				end
+			end
+		else
+			for i = MAX_PARTY_MEMBERS, 1, -1 do
+				if GetPartyMember(i) then
+					UninviteUnit(UnitName("party"..i))
+				end
+			end
+		end
+		LeaveParty()
+end
+SLASH_GROUPDISBAND1 = '/rd'

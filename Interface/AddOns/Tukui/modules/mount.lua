@@ -48,12 +48,6 @@ SlashCmdList['MOUNTER'] = function(text, editBox)
 		if groundMount then
 			local mount = (flyingMount and IsFlyableArea() and not inFlyableWintergrasp()) and flyingMount or groundMount
 			local success = mountCreatureName(mount)
-			
-			if not success then
-				print("No such mount: " .. mount)
-			end
-		else
-			print("Usage: /mounter <Ground mount>[, <Flying mount>]")
 		end
 	else
 		Dismount()

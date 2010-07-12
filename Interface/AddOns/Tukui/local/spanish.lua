@@ -1,4 +1,6 @@
 if TukuiDB.client == "esES" then
+	tukuilocal.disband = "Disbanding group."
+
 	tukuilocal.datatext_guild = "Hermandad"
 	tukuilocal.datatext_noguild = "Sin Hermandad"
 	tukuilocal.datatext_bags = "Bolsas: "
@@ -79,7 +81,7 @@ if TukuiDB.client == "esES" then
 	}
 
 	tukuilocal.popup_disableui = "Tukui no funciona con esta resolución, ¿Quieres desactivar Tukui? (Pulsa cancelar si quieres probar otra resolución)"
-	tukuilocal.popup_install = "Es la primera vez que usas Tukui V10.60+ con este personaje. Debes recargar la Interfaz para ajustar las barras de acción, las variables y los marcos de chat."
+	tukuilocal.popup_install = "Es la primera vez que usas Tukui V11 BETA con este personaje. Debes recargar la Interfaz para ajustar las barras de acción, las variables y los marcos de chat."
 	tukuilocal.popup_2raidactive = "Hay activos 2 estilos para banda, por favor selecciona uno."
 
 	tukuilocal.merchant_repairnomoney = "¡No tienes suficiente dinero para reparar!"
@@ -127,6 +129,7 @@ if TukuiDB.client == "esES" then
 	tukuilocal.bags_nothingsort= "No hay nada que ordenar."
 	tukuilocal.bags_bids = "Usando las bolsas: "
 	tukuilocal.bags_stackend = "Se ha acabado de amontonar."
+	tukuilocal.bags_rightclick_search = "Right-click to search."
 
 	tukuilocal.chat_invalidtarget = "Objetivo Invalido"
 

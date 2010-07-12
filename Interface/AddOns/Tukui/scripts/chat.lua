@@ -1,19 +1,45 @@
 if TukuiDB["chat"].enable ~= true then return end
 
-local AddOn = CreateFrame("Frame")
+local TukuiChat = CreateFrame("Frame")
 local OnEvent = function(self, event, ...) self[event](self, event, ...) end
-AddOn:SetScript("OnEvent", OnEvent)
+TukuiChat:SetScript("OnEvent", OnEvent)
 
-local _G = _G
-local replace = string.gsub
-local find = string.find
+-----------------------------------------------------------------------
+-- OVERWRITE GLOBAL FUNC & VAR FROM BLIZZARD
+-----------------------------------------------------------------------
+
+-- seconds to wait when chatframe fade, default is 2
+CHAT_FRAME_FADE_OUT_TIME = 0
+
+-- seconds to wait when tabs are not on mouseover, default is 1
+CHAT_TAB_HIDE_DELAY = 0
+
+-- alpha of the current tab, default in 3.3.5 are 1 for mouseover and 0.4 for nomouseover
+CHAT_FRAME_TAB_SELECTED_MOUSEOVER_ALPHA = 1
+CHAT_FRAME_TAB_SELECTED_NOMOUSE_ALPHA = 0
+
+-- alpha of non-selected and non-alert tabs, defaut on mouseover is 0.6 and on nomouseover, 0.2
+CHAT_FRAME_TAB_NORMAL_MOUSEOVER_ALPHA = 1
+CHAT_FRAME_TAB_NORMAL_NOMOUSE_ALPHA = 0
+
+-- alpha of alerts (example: whisper via another tab)
+CHAT_FRAME_TAB_ALERTING_MOUSEOVER_ALPHA = 1
+CHAT_FRAME_TAB_ALERTING_NOMOUSE_ALPHA = 0
 
 -- hide Blizzard Chat option that we don't need
 InterfaceOptionsSocialPanelChatStyle:Hide()
 InterfaceOptionsSocialPanelConversationMode:Hide()
 
--- disable some chat functions
+-- disable minimize system because we don't use this shit at all on classic chat.
 FCF_MinimizeFrame = TukuiDB.dummy
+
+-----------------------------------------------------------------------
+-- SETUP TUKUI CHATS
+-----------------------------------------------------------------------
+
+local _G = _G
+local replace = string.gsub
+local find = string.find
 
 local replaceschan = {
 	['Гильдия'] = '[Г]',
@@ -69,14 +95,6 @@ CHAT_FLAG_AFK = "[|cffff0000AFK|r] "
 CHAT_FLAG_DND = "[|cffff0000DND|r] "
 CHAT_FLAG_GM = "[|cffff0000GM|r] "
 
--- hide editbox colored round border
-for i = 1, 10 do
-	local x=({_G["ChatFrame"..i.."EditBox"]:GetRegions()})
-	x[9]:SetAlpha(0)
-	x[10]:SetAlpha(0)
-	x[11]:SetAlpha(0)
-end
-
 -- Hide friends micro button (added in 3.3.5)
 FriendsMicroButton:SetScript("OnShow", FriendsMicroButton.Hide)
 FriendsMicroButton:Hide()
@@ -84,62 +102,105 @@ FriendsMicroButton:Hide()
 GeneralDockManagerOverflowButton:SetScript("OnShow", GeneralDockManagerOverflowButton.Hide)
 GeneralDockManagerOverflowButton:Hide()
 
--- Player entering the world
-function TukuiDB.SetupChat()
+-- Setup chatframes 1 to 10 on login.
+function TukuiDB.SetupChat(self)
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 	ChatFrameMenuButton:Hide()
 	ChatFrameMenuButton:SetScript("OnShow", function(self) self:Hide() end)
 				
 	for i = 1, NUM_CHAT_WINDOWS do
-		local chatFrameId = _G["ChatFrame"..i]:GetID()
+		local frame = _G[format("ChatFrame%s", i)]
+		local editBox = _G[format("ChatFrame%sEditBox", i)]
+		local editBoxHeader = _G[format("ChatFrame%sEditBoxHeader", i)]
+		local tab = _G[format("ChatFrame%sTab", i)]
+		local tabFlash = _G[format("ChatFrame%sTabFlash", i)]
+		local chatFrameId = frame:GetID()
 		local chatName = FCF_GetChatWindowInfo(chatFrameId)
 		
 		-- yeah baby
-		_G["ChatFrame"..i]:SetClampRectInsets(0,0,0,0)
+		frame:SetClampRectInsets(0,0,0,0)
 		
 		-- Removes crap from the bottom of the chatbox so it can go to the bottom of the screen.
-		_G["ChatFrame"..i]:SetClampedToScreen(false)
-		
-		-- Hide or move chat buttons
-		_G["ChatFrame"..i.."ButtonFrameUpButton"]:Hide()
-		_G["ChatFrame"..i.."ButtonFrameDownButton"]:Hide()
-		_G["ChatFrame"..i.."ButtonFrameBottomButton"]:Hide()
-		_G["ChatFrame"..i.."ButtonFrameMinimizeButton"]:Hide()
-		_G["ChatFrame"..i.."ResizeButton"]:SetPoint("BOTTOMRIGHT",2,-3)
-		_G["ChatFrame"..i.."ButtonFrame"]:Hide()
-
-		_G["ChatFrame"..i.."ButtonFrameUpButton"]:SetScript("OnShow", function(self) self:Hide() end)
-		_G["ChatFrame"..i.."ButtonFrameDownButton"]:SetScript("OnShow", function(self) self:Hide() end)
-		_G["ChatFrame"..i.."ButtonFrameBottomButton"]:SetScript("OnShow", function(self) self:Hide() end)
-		_G["ChatFrame"..i.."ButtonFrameMinimizeButton"]:SetScript("OnShow", function(self) self:Hide() end)
-		_G["ChatFrame"..i.."ButtonFrame"]:SetScript("OnShow", function(self) self:Hide() end)
-		
-		-- Hide chat textures backdrop
-		for j = 1, #CHAT_FRAME_TEXTURES do
-			_G["ChatFrame"..i..CHAT_FRAME_TEXTURES[j]]:SetTexture(nil)
-		end
-
+		frame:SetClampedToScreen(false)
+				
 		-- Stop the chat frame from fading out
-		_G["ChatFrame"..i]:SetFading(false)
+		frame:SetFading(false)
 		
 		-- set strata to low
-		_G["ChatFrame"..i]:SetFrameStrata("LOW")
+		frame:SetFrameStrata("LOW")
 		
-		-- Texture and align the chat edit box
-		local editbox = _G["ChatFrame"..i.."EditBox"]
-		local left, mid, right = select(6, editbox:GetRegions())
-		left:Hide(); mid:Hide(); right:Hide()
-		editbox:ClearAllPoints();
-		editbox:SetPoint("TOPLEFT", TukuiInfoLeft, TukuiDB:Scale(2), TukuiDB:Scale(-2))
-		editbox:SetPoint("BOTTOMRIGHT", TukuiInfoLeft, TukuiDB:Scale(-2), TukuiDB:Scale(2))
+		-- move the chat edit box
+		editBox:ClearAllPoints();
+		editBox:SetPoint("TOPLEFT", TukuiInfoLeft, TukuiDB.Scale(2), TukuiDB.Scale(-2))
+		editBox:SetPoint("BOTTOMRIGHT", TukuiInfoLeft, TukuiDB.Scale(-2), TukuiDB.Scale(2))
 		
+		-- Removes hover over textures
+		TukuiDB.Kill(_G[format("ChatFrame%sBackground",i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sTopLeftTexture",i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sBottomLeftTexture",i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sBottomRightTexture",i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sTopRightTexture",i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sLeftTexture",i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sRightTexture",i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sBottomTexture",i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sTopTexture",i)])
+
+		-- Removes Default ChatFrame Tabs texture				
+		TukuiDB.Kill(_G[format("ChatFrame%sTabLeft", i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sTabMiddle", i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sTabRight", i)])
+
+		TukuiDB.Kill(_G[format("ChatFrame%sTabSelectedLeft", i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sTabSelectedMiddle", i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sTabSelectedRight", i)])
+		
+		TukuiDB.Kill(_G[format("ChatFrame%sTabHighlightLeft", i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sTabHighlightMiddle", i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sTabHighlightRight", i)])
+
+		-- Killing off the new chat tab selected feature
+		TukuiDB.Kill(_G[format("ChatFrame%sTabSelectedLeft", i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sTabSelectedMiddle", i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sTabSelectedRight", i)])
+
+		-- Kills off the new method of handling the Chat Frame scroll buttons as well as the resize button
+		-- Note: This also needs to include the actual frame textures for the ButtonFrame onHover
+		TukuiDB.Kill(_G[format("ChatFrame%sButtonFrameUpButton", i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sButtonFrameDownButton", i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sButtonFrameBottomButton", i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sButtonFrameMinimizeButton", i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sButtonFrame", i)])
+		TukuiDB.Kill(_G["ChatFrameMenuButton"])
+
+		-- Kills off the retarded new circle around the editbox
+		TukuiDB.Kill(_G[format("ChatFrame%sEditBoxFocusLeft", i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sEditBoxFocusMid", i)])
+		TukuiDB.Kill(_G[format("ChatFrame%sEditBoxFocusRight", i)])
+
+		-- Kill off editbox artwork
+		local a, b, c = select(6, editBox:GetRegions()); TukuiDB.Kill (a); TukuiDB.Kill (b); TukuiDB.Kill (c)
+				
 		-- set align to right if a any chatframe is found at right of your screen.
 		local point = GetChatWindowSavedPosition(chatFrameId)
 		if point == "BOTTOMRIGHT" or point == "RIGHT" or point == "TOPRIGHT" then 
-			_G["ChatFrame"..i]:SetJustifyH("RIGHT") 
+			frame:SetJustifyH("RIGHT") 
 		end
 		
 		-- Disable alt key usage
-		editbox:SetAltArrowKeyMode(false)		
+		editBox:SetAltArrowKeyMode(false)
+
+		-- no mouse over alpha
+		tab.noMouseAlpha = 0
+		
+		-- non-docked chat tabs is semi-transparent on login, need to set alpha to 0.
+		if tab.isDocked ~= 1 then
+			tab:SetAlpha(0)
+		end
+		
+		if i == 2 then
+			FCF_SetWindowName(frame, "Log")
+			frame:UnregisterEvent("COMBAT_LOG_EVENT")
+		end
 	end
 	
 	-- Remember last channel
@@ -149,8 +210,63 @@ function TukuiDB.SetupChat()
 	ChatTypeInfo.RAID_WARNING.sticky = 1
 	ChatTypeInfo.CHANNEL.sticky = 1
 end
-AddOn:RegisterEvent("PLAYER_ENTERING_WORLD")
-AddOn["PLAYER_ENTERING_WORLD"] = TukuiDB.SetupChat
+TukuiChat:RegisterEvent("PLAYER_ENTERING_WORLD")
+TukuiChat["PLAYER_ENTERING_WORLD"] = TukuiDB.SetupChat
+
+-- Setup temp chat (BN, WHISPER) when needed.
+function TukuiDB.SetupTempChat()
+	local chatFrame, chatTab
+	for _, chatFrameName in pairs(CHAT_FRAMES) do
+		local frame = _G[chatFrameName]
+		if frame.isTemporary then
+			chatFrame = frame
+			chatTab = _G[chatFrame:GetName().."Tab"]
+			
+			chatTab.noMouseAlpha = 0
+			
+			_G[chatFrame:GetName()]:SetClampRectInsets(0,0,0,0)
+
+			_G[chatFrame:GetName().."ButtonFrameUpButton"]:Hide()
+			_G[chatFrame:GetName().."ButtonFrameDownButton"]:Hide()
+			_G[chatFrame:GetName().."ButtonFrameBottomButton"]:Hide()
+			_G[chatFrame:GetName().."ButtonFrameMinimizeButton"]:Hide()
+			_G[chatFrame:GetName().."ResizeButton"]:Hide()
+			_G[chatFrame:GetName().."ButtonFrame"]:Hide()
+
+			_G[chatFrame:GetName().."ButtonFrameUpButton"]:SetScript("OnShow", function(self) self:Hide() end)
+			_G[chatFrame:GetName().."ButtonFrameDownButton"]:SetScript("OnShow", function(self) self:Hide() end)
+			_G[chatFrame:GetName().."ButtonFrameBottomButton"]:SetScript("OnShow", function(self) self:Hide() end)
+			_G[chatFrame:GetName().."ButtonFrameMinimizeButton"]:SetScript("OnShow", function(self) self:Hide() end)
+			_G[chatFrame:GetName().."ResizeButton"]:SetScript("OnShow", function(self) self:Hide() end)
+			_G[chatFrame:GetName().."ButtonFrame"]:SetScript("OnShow", function(self) self:Hide() end)
+
+			_G[chatFrame:GetName().."TabLeft"]:SetTexture(nil)
+			_G[chatFrame:GetName().."TabMiddle"]:SetTexture(nil)
+			_G[chatFrame:GetName().."TabRight"]:SetTexture(nil)
+			
+			_G[chatFrame:GetName().."TabSelectedLeft"]:SetTexture(nil)
+			_G[chatFrame:GetName().."TabSelectedMiddle"]:SetTexture(nil)
+			_G[chatFrame:GetName().."TabSelectedRight"]:SetTexture(nil)
+			
+			_G[chatFrame:GetName().."TabHighlightLeft"]:SetTexture(nil)
+			_G[chatFrame:GetName().."TabHighlightMiddle"]:SetTexture(nil)
+			_G[chatFrame:GetName().."TabHighlightRight"]:SetTexture(nil)
+
+			-- Stop the chat frame from fading out
+			_G[chatFrame:GetName()]:SetFading(false)
+			
+			-- Set random stuff
+			_G[chatFrame:GetName()]:SetFrameStrata("LOW")
+			
+			-- Hide tab texture
+			for j = 1, #CHAT_FRAME_TEXTURES do
+				_G[chatFrame:GetName()..CHAT_FRAME_TEXTURES[j]]:SetTexture(nil)
+			end
+			break
+		end
+	end
+end
+hooksecurefunc("FCF_OpenTemporaryWindow", TukuiDB.SetupTempChat)
 
 -- Get colors for player classes
 local function ClassColors(class)
@@ -205,8 +321,8 @@ function CHAT_MSG_SYSTEM(...)
 		ChatFrame1.AddMessage = AddMessageHook
 	end
 end
-AddOn:RegisterEvent("CHAT_MSG_SYSTEM")
-AddOn["CHAT_MSG_SYSTEM"] = CHAT_MSG_SYSTEM
+TukuiChat:RegisterEvent("CHAT_MSG_SYSTEM")
+TukuiChat["CHAT_MSG_SYSTEM"] = CHAT_MSG_SYSTEM
 
 local function AddMessageHook(frame, text, ...)
 	-- chan text smaller or hidden
@@ -256,7 +372,7 @@ for i = 1, 10 do
 end
 
 -----------------------------------------------------------------------------
--- copy url
+-- Copy URL
 -----------------------------------------------------------------------------
 
 local color = "BD0101"
@@ -315,7 +431,7 @@ function ChatFrame_OnHyperlinkShow(self, link, text, button)
             
 		button:ClearAllPoints()
            
-		button:SetPoint("CENTER", editbox, "CENTER", 0, TukuiDB:Scale(-30))
+		button:SetPoint("CENTER", editbox, "CENTER", 0, TukuiDB.Scale(-30))
 	else
 		f(self, link, text, button)
 	end
@@ -360,8 +476,9 @@ function TukuiDB.HyperlinkMouseover()
 	end
 end
 TukuiDB.HyperlinkMouseover()
+
 -----------------------------------------------------------------------------
--- Copy Chat (credit: shestak for this version)
+-- Copy on chatframes feature
 -----------------------------------------------------------------------------
 
 local lines = {}
@@ -380,19 +497,19 @@ local function CreatCopyFrame()
 	frame:SetBackdropColor(unpack(TukuiDB["media"].backdropcolor))
 	frame:SetBackdropBorderColor(unpack(TukuiDB["media"].bordercolor))
 	if TukuiDB.lowversion == true then
-		frame:SetWidth(TukuiDB:Scale(410))
+		frame:SetWidth(TukuiDB.Scale(410))
 	else
-		frame:SetWidth(TukuiDB:Scale(710))
+		frame:SetWidth(TukuiDB.Scale(710))
 	end
-	frame:SetHeight(TukuiDB:Scale(200))
+	frame:SetHeight(TukuiDB.Scale(200))
 	frame:SetScale(1)
-	frame:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, TukuiDB:Scale(10))
+	frame:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, TukuiDB.Scale(10))
 	frame:Hide()
 	frame:SetFrameStrata("DIALOG")
 
 	local scrollArea = CreateFrame("ScrollFrame", "CopyScroll", frame, "UIPanelScrollFrameTemplate")
-	scrollArea:SetPoint("TOPLEFT", frame, "TOPLEFT", TukuiDB:Scale(8), TukuiDB:Scale(-30))
-	scrollArea:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", TukuiDB:Scale(-30), TukuiDB:Scale(8))
+	scrollArea:SetPoint("TOPLEFT", frame, "TOPLEFT", TukuiDB.Scale(8), TukuiDB.Scale(-30))
+	scrollArea:SetPoint("BOTTOMRIGHT", frame, "BOTTOMRIGHT", TukuiDB.Scale(-30), TukuiDB.Scale(8))
 
 	editBox = CreateFrame("EditBox", "CopyBox", frame)
 	editBox:SetMultiLine(true)
@@ -401,11 +518,11 @@ local function CreatCopyFrame()
 	editBox:SetAutoFocus(false)
 	editBox:SetFontObject(ChatFontNormal)
 	if TukuiDB.lowversion == true then
-		editBox:SetWidth(TukuiDB:Scale(410))
+		editBox:SetWidth(TukuiDB.Scale(410))
 	else
-		editBox:SetWidth(TukuiDB:Scale(710))
+		editBox:SetWidth(TukuiDB.Scale(710))
 	end
-	editBox:SetHeight(TukuiDB:Scale(200))
+	editBox:SetHeight(TukuiDB.Scale(200))
 	editBox:SetScript("OnEscapePressed", function() frame:Hide() end)
 
 	scrollArea:SetScrollChild(editBox)
@@ -446,10 +563,10 @@ function TukuiDB.ChatCopyButtons()
 		local cf = _G[format("ChatFrame%d",  i)]
 		local button = CreateFrame("Button", format("ButtonCF%d", i), cf)
 		button:SetPoint("TOPRIGHT", 0, 0)
-		button:SetHeight(TukuiDB:Scale(20))
-		button:SetWidth(TukuiDB:Scale(20))
+		button:SetHeight(TukuiDB.Scale(20))
+		button:SetWidth(TukuiDB.Scale(20))
 		button:SetAlpha(0)
-		TukuiDB:SetTemplate(button)
+		TukuiDB.SetTemplate(button)
 		button:SetScript("OnClick", function() Copy(cf) end)
 		button:SetScript("OnEnter", function() 
 			button:SetAlpha(1) 
@@ -487,7 +604,6 @@ function FloatingChatFrame_OnMouseScroll(self, delta)
 		end
 	end
 end
-
 ------------------------------------------------------------------------
 --	Play sound files system
 ------------------------------------------------------------------------

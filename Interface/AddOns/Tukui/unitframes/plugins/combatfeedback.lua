@@ -1,4 +1,5 @@
 if not TukuiDB["unitframes"].enable == true then return end
+if not oUF then return end
 
 local damage_format = "-%d"
 local heal_format = "+%d"
@@ -58,6 +59,7 @@ end
 
 local function combat(self, event, unit, eventType, flags, amount, dtype)
 	if unit ~= self.unit then return end
+	if unit == "vehicle" then return end
 	local FeedbackText = self.CombatFeedbackText
 	local fColors = FeedbackText.colors
 	local font, fontHeight, fontFlags = FeedbackText:GetFont()

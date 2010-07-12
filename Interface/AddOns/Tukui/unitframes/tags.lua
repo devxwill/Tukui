@@ -1,54 +1,98 @@
 if not TukuiDB["unitframes"].enable == true then return end
 
-oUF.TagEvents['[DiffColor]'] = 'UNIT_LEVEL'
-if (not oUF.Tags['[DiffColor]']) then
-	oUF.Tags['[DiffColor]']  = function(unit)
-		local r, g, b
-		local level = UnitLevel(unit)
-		if (level < 1) then
-			r, g, b = 0.69, 0.31, 0.31
-		else
-			local DiffColor = UnitLevel('target') - UnitLevel('player')
-			if (DiffColor >= 5) then
-				r, g, b = 0.69, 0.31, 0.31
-			elseif (DiffColor >= 3) then
-				r, g, b = 0.71, 0.43, 0.27
-			elseif (DiffColor >= -2) then
-				r, g, b = 0.84, 0.75, 0.65
-			elseif (-DiffColor <= GetQuestGreenRange()) then
-				r, g, b = 0.33, 0.59, 0.33
-			else
-				r, g, b = 0.55, 0.57, 0.61
-			end
-		end
-		return string.format('|cff%02x%02x%02x', r * 255, g * 255, b * 255)
+------------------------------------------------------------------------
+--	Tags
+------------------------------------------------------------------------
+
+local function ShortenValue(value)
+	if(value >= 1e6) then
+		return ('%.2fm'):format(value / 1e6):gsub('%.?0+([km])$', '%1')
+	elseif(value >= 1e4) then
+		return ('%.1fk'):format(value / 1e3):gsub('%.?0+([km])$', '%1')
+	else
+		return value
 	end
 end
 
-local colors = setmetatable({
-	happiness = setmetatable({
-		[1] = {.69,.31,.31},
-		[2] = {.65,.63,.35},
-		[3] = {.33,.59,.33},
-	}, {__index = oUF.colors.happiness}),
-}, {__index = oUF.colors})
+oUF.TagEvents['Tukui:threat'] = 'UNIT_THREAT_LIST_UPDATE'
+oUF.Tags['Tukui:threat'] = function(unit)
+	local tanking, status, percent = UnitDetailedThreatSituation('player', 'target')
+	if(percent and percent > 0) then
+		return ('%s%d%%|r'):format(Hex(GetThreatStatusColor(status)), percent)
+	end
+end
 
-oUF.TagEvents['[GetNameColor]'] = 'UNIT_HAPPINESS'
-if (not oUF.Tags['[GetNameColor]']) then
-	oUF.Tags['[GetNameColor]'] = function(unit)
-		local reaction = UnitReaction(unit, 'player')
-		if (unit == 'pet' and GetPetHappiness()) then
-			local c = colors.happiness[GetPetHappiness()]
-			return string.format('|cff%02x%02x%02x', c[1] * 255, c[2] * 255, c[3] * 255)
-		elseif (UnitIsPlayer(unit)) then
-			return oUF.Tags['[raidcolor]'](unit)
-		elseif (reaction) then
-			local c =  colors.reaction[reaction]
-			return string.format('|cff%02x%02x%02x', c[1] * 255, c[2] * 255, c[3] * 255)
+oUF.Tags['Tukui:health'] = function(unit)
+	local min, max = UnitHealth(unit), UnitHealthMax(unit)
+	local status = not UnitIsConnected(unit) and 'Offline' or UnitIsGhost(unit) and 'Ghost' or UnitIsDead(unit) and 'Dead'
+
+	if(status) then
+		return status
+	elseif(unit == 'target' and UnitCanAttack('player', unit)) then
+		return ('%s (%d|cff0090ff%%|r)'):format(ShortenValue(min), min / max * 100)
+	elseif(unit == 'player' and min ~= max) then
+		return ('|cffff8080%d|r %d|cff0090ff%%|r'):format(min - max, min / max * 100)
+	elseif(min ~= max) then
+		return ('%s |cff0090ff/|r %s'):format(ShortenValue(min), ShortenValue(max))
+	else
+		return max
+	end
+end
+
+oUF.Tags['Tukui:power'] = function(unit)
+	local power = UnitPower(unit)
+	if(power > 0 and not UnitIsDeadOrGhost(unit)) then
+		local _, type = UnitPowerType(unit)
+		local colors = _COLORS.power
+		return ('%s%d|r'):format(Hex(colors[type] or colors['RUNES']), power)
+	end
+end
+
+oUF.Tags['Tukui:druid'] = function(unit)
+	local min, max = UnitPower(unit, 0), UnitPowerMax(unit, 0)
+	if(UnitPowerType(unit) ~= 0 and min ~= max) then
+		return ('|cff0090ff%d%%|r'):format(min / max * 100)
+	end
+end
+
+oUF.TagEvents['Tukui:diffcolor'] = 'UNIT_LEVEL'
+oUF.Tags['Tukui:diffcolor'] = function(unit)
+	local r, g, b
+	local level = UnitLevel(unit)
+	if (level < 1) then
+		r, g, b = 0.69, 0.31, 0.31
+	else
+		local DiffColor = UnitLevel('target') - UnitLevel('player')
+		if (DiffColor >= 5) then
+			r, g, b = 0.69, 0.31, 0.31
+		elseif (DiffColor >= 3) then
+			r, g, b = 0.71, 0.43, 0.27
+		elseif (DiffColor >= -2) then
+			r, g, b = 0.84, 0.75, 0.65
+		elseif (-DiffColor <= GetQuestGreenRange()) then
+			r, g, b = 0.33, 0.59, 0.33
 		else
-			r, g, b = .84,.75,.65
-			return string.format('|cff%02x%02x%02x', r * 255, g * 255, b * 255)
+			r, g, b = 0.55, 0.57, 0.61
 		end
+	end
+	return string.format('|cff%02x%02x%02x', r * 255, g * 255, b * 255)
+end
+
+
+oUF.TagEvents['Tukui:getnamecolor'] = 'UNIT_HAPPINESS'
+oUF.Tags['Tukui:getnamecolor'] = function(unit)
+	local reaction = UnitReaction(unit, 'player')
+	if (unit == 'pet' and GetPetHappiness()) then
+		local c = TukuiDB.oUF_colors.happiness[GetPetHappiness()]
+		return string.format('|cff%02x%02x%02x', c[1] * 255, c[2] * 255, c[3] * 255)
+	elseif (UnitIsPlayer(unit)) then
+		return _TAGS['raidcolor'](unit)
+	elseif (reaction) then
+		local c = TukuiDB.oUF_colors.reaction[reaction]
+		return string.format('|cff%02x%02x%02x', c[1] * 255, c[2] * 255, c[3] * 255)
+	else
+		r, g, b = .84,.75,.65
+		return string.format('|cff%02x%02x%02x', r * 255, g * 255, b * 255)
 	end
 end
 
@@ -81,57 +125,24 @@ local utf8sub = function(string, i, dots)
 	end
 end
 
-oUF.TagEvents['[NameShort]'] = 'UNIT_NAME_UPDATE'
-if (not oUF.Tags['[NameShort]']) then
-	oUF.Tags['[NameShort]'] = function(unit)
-		local name = UnitName(unit)
-		return utf8sub(name, 10, false)
+oUF.TagEvents['Tukui:namelong'] = 'UNIT_NAME_UPDATE'
+oUF.Tags['Tukui:namelong'] = function(unit)
+	local name = UnitName(unit)
+	return utf8sub(name, 20, true)
+end
+
+oUF.TagEvents['Tukui:namemedium]'] = 'UNIT_NAME_UPDATE'
+oUF.Tags['Tukui:namemedium'] = function(unit)
+	local name = UnitName(unit)
+	if (unit == 'pet' and name == 'Unknown') then
+		return 'Pet'
+	else
+		return utf8sub(name, 18, true)
 	end
 end
 
-oUF.TagEvents['[NameMedium]'] = 'UNIT_NAME_UPDATE'
-if (not oUF.Tags['[NameMedium]']) then
-	oUF.Tags['[NameMedium]'] = function(unit)
-		local name = UnitName(unit)
-		if (unit == 'pet' and name == 'Unknown') then
-			return 'Pet'
-		else
-			return utf8sub(name, 18, true)
-		end
-	end
+oUF.TagEvents['Tukui:nameshort'] = 'UNIT_NAME_UPDATE'
+oUF.Tags['Tukui:nameshort'] = function(unit)
+	local name = UnitName(unit)
+	return utf8sub(name, 10, false)
 end
-
-oUF.TagEvents['[NameLong]'] = 'UNIT_NAME_UPDATE'
-if (not oUF.Tags['[NameLong]']) then
-	oUF.Tags['[NameLong]'] = function(unit)
-
-			local name = UnitName(unit)
-			return utf8sub(name, 20, true)
-
-	end
-end
-
-oUF.Tags['[smarthp]'] = function(u)
-	local min, max = UnitHealth(u), UnitHealthMax(u)
-	return UnitIsDeadOrGhost(u) and oUF.Tags['[dead]'](u) or (min~=max) and format('|cffff8080%d|r|cff0090ff %.0f|r%%', min-max, min/max*100) or max
-end
-
-oUF.Tags['[smartpp]'] = function(u)
-	local min, max = UnitPower(u), UnitPowerMax(u)
-	return (UnitPowerType(u) == 0 and min > 0) and format('|cff%02x%02x%02x%.0f|r%%', 0, 144, 255, min/max*100)
-end
-
-oUF.Tags['[offline]'] = function(u)
-	if not UnitIsConnected(u) then
-		return ("|cffB1071E"..tukuilocal.unitframes_ouf_offlinedps.."|r")
-	end
-end
-	
-oUF.Tags['[dead]'] = function(u) return UnitIsDeadOrGhost(u) and tukuilocal.unitframes_ouf_deaddps end
-oUF.Tags['[afk]'] = function(u) return UnitIsAFK(u) and ' AFK' end
-
-oUF.TagEvents['[smarthp]'] = 'UNIT_HEALTH'
-oUF.TagEvents['[smartpp]'] = 'UNIT_MANA UNIT_DISPLAYPOWER'
-
-oUF.TagEvents['[afk]'] = 'PLAYER_FLAGS_CHANGED'
-

@@ -2,7 +2,7 @@
 		original code by alza, edited by tukz for tukui
 --]]
 
-local menuFrame = CreateFrame("Frame", "aSettingsMarkingFrame", UIParent, "UIDropDownMenuTemplate")
+local menuFrame = CreateFrame("Frame", "TukuiMarkingFrame", UIParent, "UIDropDownMenuTemplate")
 local menuList = {
     {text = tukuilocal.symbol_CLEAR,
     func = function() SetRaidTarget("target", 0) end},

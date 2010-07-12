@@ -3,18 +3,18 @@
 --------------------------------------------------------------------
 
 local p = CreateFrame("Frame", "TukuiMinimap", Minimap)
-TukuiDB:CreatePanel(p, 144, 144, "CENTER", Minimap, "CENTER", -0, 0)
+TukuiDB.CreatePanel(p, 144, 144, "CENTER", Minimap, "CENTER", -0, 0)
 p:ClearAllPoints()
-p:SetPoint("TOPLEFT", TukuiDB:Scale(-2), TukuiDB:Scale(2))
-p:SetPoint("BOTTOMRIGHT", TukuiDB:Scale(2), TukuiDB:Scale(-2))
+p:SetPoint("TOPLEFT", TukuiDB.Scale(-2), TukuiDB.Scale(2))
+p:SetPoint("BOTTOMRIGHT", TukuiDB.Scale(2), TukuiDB.Scale(-2))
 
 --------------------------------------------------------------------
 -- MINIMAP ROUND TO SQUARE AND MINIMAP SETTING
 --------------------------------------------------------------------
 
 Minimap:ClearAllPoints()
-Minimap:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", TukuiDB:Scale(-24), TukuiDB:Scale(-24))
-Minimap:SetSize(TukuiDB:Scale(144), TukuiDB:Scale(144))
+Minimap:SetPoint("TOPRIGHT", UIParent, "TOPRIGHT", TukuiDB.Scale(-24), TukuiDB.Scale(-24))
+Minimap:SetSize(TukuiDB.Scale(144), TukuiDB.Scale(144))
 
 -- Hide Border
 MinimapBorder:Hide()
@@ -38,13 +38,14 @@ MiniMapTracking:Hide()
 
 -- Hide Mail Button
 MiniMapMailFrame:ClearAllPoints()
-MiniMapMailFrame:SetPoint("TOPRIGHT", Minimap, TukuiDB:Scale(3), TukuiDB:Scale(4))
+MiniMapMailFrame:SetPoint("TOPRIGHT", Minimap, TukuiDB.Scale(3), TukuiDB.Scale(4))
 MiniMapMailBorder:Hide()
 MiniMapMailIcon:SetTexture("Interface\\AddOns\\Tukui\\media\\textures\\mail")
 
 -- Move battleground icon
 MiniMapBattlefieldFrame:ClearAllPoints()
-MiniMapBattlefieldFrame:SetPoint("BOTTOMRIGHT", Minimap, TukuiDB:Scale(3), 0)
+MiniMapBattlefieldFrame:SetPoint("BOTTOMRIGHT", Minimap, TukuiDB.Scale(3), 0)
+MiniMapBattlefieldBorder:Hide()
 
 -- Hide world map button
 MiniMapWorldMapButton:Hide()
@@ -56,7 +57,8 @@ MiniMapInstanceDifficulty:SetPoint("TOPLEFT", Minimap, "TOPLEFT", 0, 0)
 
 local function UpdateLFG()
 	MiniMapLFGFrame:ClearAllPoints()
-	MiniMapLFGFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", TukuiDB:Scale(2), TukuiDB:Scale(1))
+	MiniMapLFGFrame:SetPoint("BOTTOMRIGHT", Minimap, "BOTTOMRIGHT", TukuiDB.Scale(2), TukuiDB.Scale(1))
+	MiniMapLFGFrameBorder:Hide()
 end
 hooksecurefunc("MiniMapLFG_UpdateIsShown", UpdateLFG)
 
@@ -118,3 +120,6 @@ Minimap:SetMaskTexture('Interface\\ChatFrame\\ChatFrameBackground')
 
 -- For others mods with a minimap button, set minimap buttons position in square mode.
 function GetMinimapShape() return 'SQUARE' end
+
+-- reskin LFG dropdown
+TukuiDB.SetTemplate(LFDSearchStatus)

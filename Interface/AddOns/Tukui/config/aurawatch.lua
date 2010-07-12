@@ -9,7 +9,7 @@
 		That's it, That's all! 
 		
 		Tukz
-]]-- 
+--]]
 
 --------------------------------------------------------------------------------------------
 -- PVP! Enemy cooldown tracker or Spell Alert list
@@ -41,11 +41,10 @@ if TukuiDB["arena"].spelltracker == true then
 end
 
 --------------------------------------------------------------------------------------------
--- New Aurawatch by Foof
+-- Aurawatch for Healer Layout, Grid style.
 --------------------------------------------------------------------------------------------
 
 if TukuiDB["unitframes"].raidunitdebuffwatch == true then
-
 	-- Classbuffs { spell ID, position [, {r,g,b,a}][, anyUnit] }
 	TukuiDB.buffids = {
 		PRIEST = {
@@ -156,6 +155,6 @@ if TukuiDB["unitframes"].raidunitdebuffwatch == true then
 		-- Other debuff
 		6215, -- Fear
 		67479, -- Impale
-		552, -- test with abolish disease
+		-- 552, -- test with abolish disease
 	}
 end

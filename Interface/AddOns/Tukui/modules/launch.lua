@@ -4,7 +4,7 @@
 
 local function install()
 	-- because we don't really need to set cVar multiple time.
-	if TukuiData.SetCVar ~= true then
+	if TukuiData.SetCVar ~= true then		
 		SetCVar("buffDurations", 1)
 		SetCVar("lootUnderMouse", 1)
 		SetCVar("autoSelfCast", 1)
@@ -26,7 +26,7 @@ local function install()
 		SetCVar("cameraDistanceMax", 50)
 		SetCVar("cameraDistanceMaxFactor", 3.4)
 		SetCVar("showClock", 0)
-		SetCVar("nameplateAllowOverlap", 1)
+		SetCVar("nameplateAllowOverlap", 0)
 		SetCVar("chatMouseScroll", 1)
 		SetCVar("chatStyle", "classic")
 		SetCVar("WholeChatWindowClickable", 0)
@@ -60,8 +60,8 @@ local function install()
 		SetCVar("UberTooltips", 1)
 		SetCVar("removeChatDelay", 1)
 		
+		-- setting this the creator or tukui only, because a lot of people don't like this change.		
 		if TukuiDB.myname == "Tukz" then	
-			-- setting this the creator or tukui only, because a lot of people don't like this change.
 			SetCVar("secureAbilityToggle", 0)
 		end
 	end
@@ -71,41 +71,44 @@ local function install()
 	FCF_SetLocked(ChatFrame1, 1)
 	FCF_DockFrame(ChatFrame2)
 	FCF_SetLocked(ChatFrame2, 1)
-	FCF_OpenNewWindow("Spam")
+	FCF_OpenNewWindow("General")
 	FCF_SetLocked(ChatFrame3, 1)
 	FCF_DockFrame(ChatFrame3)
 
 	FCF_OpenNewWindow("Loot")
 	FCF_UnDockFrame(ChatFrame4)
 	FCF_SetLocked(ChatFrame4, 1)
-	ChatFrame4:Show()
-	
+	ChatFrame4:Show();
+
 	for i = 1, NUM_CHAT_WINDOWS do
-		local chatFrameId = _G["ChatFrame"..i]:GetID()
+		local frame = _G[format("ChatFrame%s", i)]
+		local chatFrameId = frame:GetID()
 		local chatName = FCF_GetChatWindowInfo(chatFrameId)
 		
-		_G["ChatFrame"..i]:SetSize(TukuiDB:Scale(TukuiDB["panels"].tinfowidth + 1), TukuiDB:Scale(111))
+		_G["ChatFrame"..i]:SetSize(TukuiDB.Scale(TukuiDB["panels"].tinfowidth + 1), TukuiDB.Scale(111))
 		
 		-- this is the default width and height of tukui chats.
-		SetChatWindowSavedDimensions(chatFrameId, TukuiDB:Scale(TukuiDB["panels"].tinfowidth + 1), TukuiDB:Scale(111))
+		SetChatWindowSavedDimensions(chatFrameId, TukuiDB.Scale(TukuiDB["panels"].tinfowidth + 1), TukuiDB.Scale(111))
 		
 		-- move general bottom left or Loot (if found) on right.
 		if i == 1 then
-			_G["ChatFrame"..i]:ClearAllPoints()
-			_G["ChatFrame"..i]:SetPoint("BOTTOMLEFT", TukuiInfoLeft, "TOPLEFT", TukuiDB:Scale(-1), TukuiDB:Scale(6))
-		elseif i == 4 then
-			_G["ChatFrame"..i]:ClearAllPoints()
-			_G["ChatFrame"..i]:SetPoint("BOTTOMRIGHT", TukuiInfoRight, "TOPRIGHT", 0, TukuiDB:Scale(6))
-			_G["ChatFrame"..i]:SetJustifyH("RIGHT")
+			frame:ClearAllPoints()
+			frame:SetPoint("BOTTOMLEFT", TukuiInfoLeft, "TOPLEFT", TukuiDB.Scale(-1), TukuiDB.Scale(6))
+		elseif i == 4 and chatName == "Loot" then
+			frame:ClearAllPoints()
+			frame:SetPoint("BOTTOMRIGHT", TukuiInfoRight, "TOPRIGHT", 0, TukuiDB.Scale(6))
 		end
 				
 		-- save new default position and dimension
-		FCF_SavePositionAndDimensions(_G["ChatFrame"..i])
+		FCF_SavePositionAndDimensions(frame)
 		
 		-- set default tukui font size
-		FCF_SetChatWindowFontSize(nil, _G["ChatFrame"..i], 12)
+		FCF_SetChatWindowFontSize(nil, frame, 12)
+		
+		-- rename windows general because moved to chat #3
+		if i == 1 then FCF_SetWindowName(frame, "G, S & W") end
 	end
-			
+	
 	ChatFrame_RemoveAllMessageGroups(ChatFrame1)
 	ChatFrame_RemoveChannel(ChatFrame1, "Trade")
 	ChatFrame_RemoveChannel(ChatFrame1, "General")
@@ -182,7 +185,7 @@ local function install()
 	ToggleChatColorNamesByClassGroup(true, "CHANNEL4")
 	ToggleChatColorNamesByClassGroup(true, "CHANNEL5")
 		   
-	TukuiInstallv1060 = true
+	TukuiInstallv11beta = true
 	TukuiData.SetCVar = true
 			
 	ReloadUI()
@@ -211,7 +214,7 @@ StaticPopupDialogs["INSTALL_UI"] = {
 	button1 = ACCEPT,
 	button2 = CANCEL,
     OnAccept = install,
-	OnCancel = function() TukuiInstallv1060 = true TukuiData.SetcVar = true end,
+	OnCancel = function() TukuiInstallv11beta = true TukuiData.SetcVar = true end,
     timeout = 0,
     whileDead = 1,
 }
@@ -232,79 +235,77 @@ StaticPopupDialogs["DISABLE_RAID"] = {
 
 local TukuiOnLogon = CreateFrame("Frame")
 TukuiOnLogon:RegisterEvent("PLAYER_ENTERING_WORLD")
-TukuiOnLogon:SetScript("OnEvent", function()
-        TukuiOnLogon:UnregisterEvent("PLAYER_ENTERING_WORLD")
-        TukuiOnLogon:SetScript("OnEvent", nil)
-		
-		--set tukui action bar
-		if TukuiDB["actionbar"].enable == true then
-			SetActionBarToggles( 1, 1, 1, 1, 0 )
-			SetCVar("alwaysShowActionBars", 0)
-			
-			if TukuiDB["actionbar"].showgrid == true then
-				ActionButton_HideGrid = function() end
-				for i = 1, 12 do
-					local button = _G[format("ActionButton%d", i)]
-					button:SetAttribute("showgrid", 1)
-					ActionButton_ShowGrid(button)
+TukuiOnLogon:SetScript("OnEvent", function(self, event)
+	self:UnregisterEvent("PLAYER_ENTERING_WORLD")
+	--set tukui action bar
+	if TukuiDB["actionbar"].enable == true then
+		SetActionBarToggles(1, 1, 1, 1, 0)
+		SetCVar("alwaysShowActionBars", 0)	
+		if TukuiDB["actionbar"].showgrid == true then
+			ActionButton_HideGrid = function() end
+			for i = 1, 12 do
+				local button = _G[format("ActionButton%d", i)]
+				button:SetAttribute("showgrid", 1)
+				ActionButton_ShowGrid(button)
 
-					button = _G[format("BonusActionButton%d", i)]
-					button:SetAttribute("showgrid", 1)
-					ActionButton_ShowGrid(button)
-					
-					button = _G[format("MultiBarRightButton%d", i)]
-					button:SetAttribute("showgrid", 1)
-					ActionButton_ShowGrid(button)
-
-					button = _G[format("MultiBarBottomRightButton%d", i)]
-					button:SetAttribute("showgrid", 1)
-					ActionButton_ShowGrid(button)
-					
-					button = _G[format("MultiBarLeftButton%d", i)]
-					button:SetAttribute("showgrid", 1)
-					ActionButton_ShowGrid(button)
-					
-					button = _G[format("MultiBarBottomLeftButton%d", i)]
-					button:SetAttribute("showgrid", 1)
-					ActionButton_ShowGrid(button)
-				end
-			end
-		end
-	
-		if TukuiDB.getscreenresolution == "800x600"
-			or TukuiDB.getscreenresolution == "1024x768"
-			or TukuiDB.getscreenresolution == "720x576"
-			or TukuiDB.getscreenresolution == "1024x600" -- eeepc reso
-			or TukuiDB.getscreenresolution == "1152x864" then
-				SetCVar("useUiScale", 0)
-				StaticPopup_Show("DISABLE_UI")
-		else
-			SetCVar("useUiScale", 1)
-			if TukuiDB["general"].multisampleprotect == true then
-				SetMultisampleFormat(1)
-			end
-			SetCVar("uiScale", TukuiDB["general"].uiscale)
-			if not TukuiInstallv1060 == true then
-				StaticPopup_Show("INSTALL_UI")
-			end
-		end
-		
-		if (IsAddOnLoaded("Tukui_Dps_Layout") and IsAddOnLoaded("Tukui_Heal_Layout")) then
-			StaticPopup_Show("DISABLE_RAID")
-		end
-		
-		SetCVar("showArenaEnemyFrames", 0)
-		
-		-- force lua error enable for PTR
-		-- SetCVar("scriptErrors", 1)
-		
-		-- force chat CVar to be applied
-		SetCVar("chatStyle", "classic")
-		SetCVar("WholeChatWindowClickable", 0)
-		SetCVar("ConversationMode", "inline")
+				button = _G[format("BonusActionButton%d", i)]
+				button:SetAttribute("showgrid", 1)
+				ActionButton_ShowGrid(button)
 				
-		print(tukuilocal.core_welcome1..TukuiDB.version)
-		print(tukuilocal.core_welcome2)
+				button = _G[format("MultiBarRightButton%d", i)]
+				button:SetAttribute("showgrid", 1)
+				ActionButton_ShowGrid(button)
+
+				button = _G[format("MultiBarBottomRightButton%d", i)]
+				button:SetAttribute("showgrid", 1)
+				ActionButton_ShowGrid(button)
+				
+				button = _G[format("MultiBarLeftButton%d", i)]
+				button:SetAttribute("showgrid", 1)
+				ActionButton_ShowGrid(button)
+				
+				button = _G[format("MultiBarBottomLeftButton%d", i)]
+				button:SetAttribute("showgrid", 1)
+				ActionButton_ShowGrid(button)
+			end
+		end
+	end
+
+	if TukuiDB.getscreenresolution == "800x600"
+		or TukuiDB.getscreenresolution == "1024x768"
+		or TukuiDB.getscreenresolution == "720x576"
+		or TukuiDB.getscreenresolution == "1024x600" -- eeepc reso
+		or TukuiDB.getscreenresolution == "1152x864" then
+			SetCVar("useUiScale", 0)
+			StaticPopup_Show("DISABLE_UI")
+	else
+		SetCVar("useUiScale", 1)
+		if TukuiDB["general"].multisampleprotect == true then
+			SetMultisampleFormat(1)
+		end
+		SetCVar("uiScale", TukuiDB["general"].uiscale)
+		if TukuiInstallv11beta ~= true then
+			TukuiData.SetCVar = false -- resetting CVar.
+			StaticPopup_Show("INSTALL_UI")
+		end
+	end
+	
+	if (IsAddOnLoaded("Tukui_Dps_Layout") and IsAddOnLoaded("Tukui_Heal_Layout")) then
+		StaticPopup_Show("DISABLE_RAID")
+	end
+	
+	SetCVar("showArenaEnemyFrames", 0)
+	
+	-- force lua error enable for BETA
+	SetCVar("scriptErrors", 1)
+	
+	-- force chat CVar to be applied
+	SetCVar("chatStyle", "classic")
+	SetCVar("WholeChatWindowClickable", 0)
+	SetCVar("ConversationMode", "inline")
+			
+	print(tukuilocal.core_welcome1..TukuiDB.version)
+	print(tukuilocal.core_welcome2)
 end)
 
 ------------------------------------------------------------------------

@@ -32,8 +32,8 @@ function tCooldownTracker.CreateIcon()
 	local i = (#tCooldownTracker.Icons)+1
    
 	tCooldownTracker.Icons[i] = CreateFrame("frame","tCooldownTrackerIcon"..i,UIParent)
-	tCooldownTracker.Icons[i]:SetHeight(TukuiDB:Scale(28))
-	tCooldownTracker.Icons[i]:SetWidth(TukuiDB:Scale(28))
+	tCooldownTracker.Icons[i]:SetHeight(TukuiDB.Scale(28))
+	tCooldownTracker.Icons[i]:SetWidth(TukuiDB.Scale(28))
 	tCooldownTracker.Icons[i]:SetFrameStrata("BACKGROUND")
 	tCooldownTracker.Icons[i]:SetFrameLevel(20)
 	  
@@ -41,11 +41,11 @@ function tCooldownTracker.CreateIcon()
 
 	tCooldownTracker.Icons[i].Texture = tCooldownTracker.Icons[i]:CreateTexture(nil,"LOW")
 	tCooldownTracker.Icons[i].Texture:SetTexture("Interface\\Icons\\Spell_Nature_Cyclone.blp")
-	tCooldownTracker.Icons[i].Texture:SetPoint("TOPLEFT", tCooldownTracker.Icons[i], TukuiDB:Scale(2), TukuiDB:Scale(-2))
-	tCooldownTracker.Icons[i].Texture:SetPoint("BOTTOMRIGHT", tCooldownTracker.Icons[i], TukuiDB:Scale(-2), TukuiDB:Scale(2))
+	tCooldownTracker.Icons[i].Texture:SetPoint("TOPLEFT", tCooldownTracker.Icons[i], TukuiDB.Scale(2), TukuiDB.Scale(-2))
+	tCooldownTracker.Icons[i].Texture:SetPoint("BOTTOMRIGHT", tCooldownTracker.Icons[i], TukuiDB.Scale(-2), TukuiDB.Scale(2))
 	tCooldownTracker.Icons[i].Texture:SetTexCoord(.08, .92, .08, .92)
 	
-	TukuiDB:SetTemplate(tCooldownTracker.Icons[i])
+	TukuiDB.SetTemplate(tCooldownTracker.Icons[i])
 
 	tCooldownTracker.Icons[i].TimerText = tCooldownTracker.Icons[i]:CreateFontString("tCooldownTrackerTimerText","OVERLAY")
 	tCooldownTracker.Icons[i].TimerText:SetFont(STANDARD_TEXT_FONT,14,"Outline")
@@ -165,10 +165,10 @@ function tCooldownTracker.StartTimer(icon, duration, texture, spellID)
 	UIFrameFadeIn(tCooldownTracker.Icons[icon],0.2,0.0,1.0)
 	if (texture) then
 		tCooldownTracker.Icons[(active or icon)].Texture:SetTexture(texture)
-		tCooldownTracker.Icons[(active or icon)].Texture:SetPoint("TOPLEFT", tCooldownTracker.Icons[(active or icon)], TukuiDB:Scale(2), TukuiDB:Scale(-2))
-		tCooldownTracker.Icons[(active or icon)].Texture:SetPoint("BOTTOMRIGHT", tCooldownTracker.Icons[(active or icon)], TukuiDB:Scale(-2), TukuiDB:Scale(2))
+		tCooldownTracker.Icons[(active or icon)].Texture:SetPoint("TOPLEFT", tCooldownTracker.Icons[(active or icon)], TukuiDB.Scale(2), TukuiDB.Scale(-2))
+		tCooldownTracker.Icons[(active or icon)].Texture:SetPoint("BOTTOMRIGHT", tCooldownTracker.Icons[(active or icon)], TukuiDB.Scale(-2), TukuiDB.Scale(2))
 		tCooldownTracker.Icons[(active or icon)].Texture:SetTexCoord(.08, .92, .08, .92)
-		TukuiDB:SetTemplate(tCooldownTracker.Icons[(active or icon)])
+		TukuiDB.SetTemplate(tCooldownTracker.Icons[(active or icon)])
 	end
 	tCooldownTracker.Reposition()
 	tCooldownTracker:SetScript("OnUpdate", function(this, arg1) tCooldownTracker.OnUpdate(arg1) end)

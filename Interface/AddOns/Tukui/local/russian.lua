@@ -1,4 +1,6 @@
 if TukuiDB.client == "ruRU" then
+	tukuilocal.disband = "Disbanding group."
+
 	tukuilocal.datatext_guild = "Гильдия"
 	tukuilocal.datatext_noguild = "Не в Гильдии"
 	tukuilocal.datatext_bags = "Сумки: "
@@ -79,7 +81,7 @@ if TukuiDB.client == "ruRU" then
 	}
 
 	tukuilocal.popup_disableui = "Tukui не работает на этом разрешении, хотите отключить Tukui? (Отмена если хотите попробовать другое разрешение)"
-	tukuilocal.popup_install = "Это первый запуск Tukui V10.60+ для этого персонажа. Необходимо перезагрузить интерфейс для настройки Панелей, Переменных и Окон Чата."
+	tukuilocal.popup_install = "Это первый запуск Tukui V11 BETA для этого персонажа. Необходимо перезагрузить интерфейс для настройки Панелей, Переменных и Окон Чата."
 	tukuilocal.popup_2raidactive = "Обе рейдовые раскладки активны, пожалуйста, выберите одну."
 
 	tukuilocal.merchant_repairnomoney = "Не достаточно денег на починку!"
@@ -127,6 +129,7 @@ if TukuiDB.client == "ruRU" then
 	tukuilocal.bags_nothingsort= "Нечего сортировать."
 	tukuilocal.bags_bids = "Использование сумок: "
 	tukuilocal.bags_stackend = "Заполнение завершено."
+	tukuilocal.bags_rightclick_search = "Right-click to search."
 
 	tukuilocal.chat_invalidtarget = "Неверная цель"
 

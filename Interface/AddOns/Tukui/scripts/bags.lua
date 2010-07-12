@@ -8,8 +8,6 @@
 
 if not TukuiDB["bags"].enable == true then return end
 
--- texture used to skin buttons, when skinning is enabled.
-
 local bags_BACKPACK = {0, 1, 2, 3, 4}
 local bags_BANK = {-1, 5, 6, 7, 8, 9, 10, 11}
 local BAGSFONT = TukuiDB["media"].font
@@ -18,8 +16,11 @@ local ST_SOULBAG = 2
 local ST_SPECIAL = 3
 local ST_QUIVER = 4
 local bag_bars = 0
-local hide_soulbag = 0
 local quest_glow = 1
+local hide_soulbag = TukuiDB.bags.soulbag
+
+-- hide bags options in default interface
+InterfaceOptionsDisplayPanelShowFreeBagSpace:Hide()
 
 Stuffing = CreateFrame ("Frame", nil, UIParent)
 Stuffing:RegisterEvent("ADDON_LOADED")
@@ -163,6 +164,8 @@ function Stuffing:SlotUpdate(b)
 			else
 				b.qitem = nil
 			end
+			
+
 
 	else
 		b.name, b.rarity, b.qitem = nil, nil, nil
@@ -171,20 +174,16 @@ function Stuffing:SlotUpdate(b)
 	SetItemButtonTexture(b.frame, texture)
 	SetItemButtonCount(b.frame, count)
 	SetItemButtonDesaturated(b.frame, locked, 0.5, 0.5, 0.5)
+	
 
-	if b.Glow then
-		b.Glow:Hide()
-		if b.rarity then
-			if b.rarity > 1 then
-				b.Glow:SetVertexColor(GetItemQualityColor(b.rarity))
-				b.Glow:Show()
-			elseif b.qitem and quest_glow == 1 then
-				b.Glow:SetVertexColor(1.0, 0.3, 0.3)
-				b.Glow:Show()
-			end
-		end
-	end
-
+	if ( clink and b.rarity > 1 ) then
+		b.frame:SetBackdropBorderColor(GetItemQualityColor(b.rarity))
+	elseif clink and b.qitem and quest_glow == 1 then
+		b.frame:SetBackdropBorderColor(1.0, 0.3, 0.3)
+	else
+		b.frame:SetBackdropBorderColor(unpack(TukuiDB.media.bordercolor))
+	end	
+	
 	b.frame:Show()
 end
 
@@ -284,16 +283,6 @@ function Stuffing:SlotNew (bag, slot)
 	ret.slot = slot
 	ret.frame:SetID(slot)
 
-	if 1 == 1 and not ret.Glow then
-		-- from carg.bags_Aurora
-		local glow = ret.frame:CreateTexture(nil, "OVERLAY")
-		glow:SetTexture("Interface\\Buttons\\UI-ActionButton-Border")
-		glow:SetBlendMode("ADD")
-		glow:SetAlpha(.8)
-		glow:SetPoint("CENTER", ret.frame)
-		ret.Glow = glow
-	end
-
 	ret.Cooldown = _G[ret.frame:GetName() .. "Cooldown"]
 	ret.Cooldown:Show()
 
@@ -368,15 +357,8 @@ function Stuffing:SearchUpdate(str)
 		if b.name then
 			if not string.find (string.lower(b.name), str) then
 				SetItemButtonDesaturated(b.frame, 1, 1, 1, 1)
-				if b.Glow then
-					b.Glow:Hide()
-				end
 			else
 				SetItemButtonDesaturated(b.frame, 0, 1, 1, 1)
-				if b.Glow then
-					b.Glow:Show()
-					b.Glow:SetVertexColor(0.8, 0.8, 0.3)
-				end
 			end
 		end
 	end
@@ -386,18 +368,6 @@ end
 function Stuffing:SearchReset()
 	for _, b in ipairs(self.buttons) do
 		SetItemButtonDesaturated(b.frame, 0, 1, 1, 1)
-		if b.Glow then
-			b.Glow:Hide()
-			if b.rarity then
-				if b.rarity > 1 then
-					b.Glow:SetVertexColor(GetItemQualityColor(b.rarity))
-					b.Glow:Show()
-				elseif b.qitem and quest_glow == 1 then
-					b.Glow:SetVertexColor(1.0, 0.3, 0.3)
-					b.Glow:Show()
-				end
-			end
-		end
 	end
 end
 
@@ -421,16 +391,16 @@ function Stuffing:CreateBagFrame(w)
 	f:SetFrameLevel(20)
 
 	if w == "Bank" then
-		f:SetPoint("BOTTOMLEFT", TukuiInfoLeft, "TOPLEFT", 0, TukuiDB:Scale(5))
+		f:SetPoint("BOTTOMLEFT", TukuiInfoLeft, "TOPLEFT", 0, TukuiDB.Scale(5))
 	else
-		f:SetPoint("BOTTOMRIGHT", TukuiInfoRight, "TOPRIGHT", 0, TukuiDB:Scale(5))
+		f:SetPoint("BOTTOMRIGHT", TukuiInfoRight, "TOPRIGHT", 0, TukuiDB.Scale(5))
 	end
 	
 	-- close button
 	f.b_close = CreateFrame("Button", "Stuffing_CloseButton" .. w, f, "UIPanelCloseButton")
-	f.b_close:SetWidth(TukuiDB:Scale(32))
-	f.b_close:SetHeight(TukuiDB:Scale(32))
-	f.b_close:SetPoint("TOPRIGHT", TukuiDB:Scale(-3), TukuiDB:Scale(-3))
+	f.b_close:SetWidth(TukuiDB.Scale(32))
+	f.b_close:SetHeight(TukuiDB.Scale(32))
+	f.b_close:SetPoint("TOPRIGHT", TukuiDB.Scale(-3), TukuiDB.Scale(-3))
 	f.b_close:SetScript("OnClick", function(self, btn)
 		if self:GetParent():GetName() == "StuffingFrameBags" and btn == "RightButton" then
 			if Stuffing_DDMenu.initialize ~= Stuffing.Menu then
@@ -447,7 +417,7 @@ function Stuffing:CreateBagFrame(w)
 
 	-- create the bags frame
 	local fb = CreateFrame ("Frame", n .. "BagsFrame", f)
-	fb:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, TukuiDB:Scale(2))
+	fb:SetPoint("BOTTOMLEFT", f, "TOPLEFT", 0, TukuiDB.Scale(2))
 	fb:SetFrameStrata("HIGH")
 	f.bags_frame = fb
 
@@ -493,26 +463,8 @@ function Stuffing:InitBags()
 	local editbox = CreateFrame("EditBox", nil, f)
 	editbox:Hide()
 	editbox:SetAutoFocus(true)
-	editbox:SetHeight(TukuiDB:Scale(32))
-
-	local left = editbox:CreateTexture(nil, "BACKGROUND")
-	left:SetWidth(TukuiDB:Scale(8)) left:SetHeight(TukuiDB:Scale(20))
-	left:SetPoint("LEFT", TukuiDB:Scale(-5), 0)
-	left:SetTexture("Interface\\Common\\Common-Input-Border")
-	left:SetTexCoord(0, 0.0625, 0, 0.625)
-
-	local right = editbox:CreateTexture(nil, "BACKGROUND")
-	right:SetWidth(TukuiDB:Scale(8)) right:SetHeight(TukuiDB:Scale(20))
-	right:SetPoint("RIGHT", 0, 0)
-	right:SetTexture("Interface\\Common\\Common-Input-Border")
-	right:SetTexCoord(0.9375, 1, 0, 0.625)
-
-	local center = editbox:CreateTexture(nil, "BACKGROUND")
-	center:SetHeight(TukuiDB:Scale(20))
-	center:SetPoint("RIGHT", right, "LEFT", 0, 0)
-	center:SetPoint("LEFT", left, "RIGHT", 0, 0)
-	center:SetTexture("Interface\\Common\\Common-Input-Border")
-	center:SetTexCoord(0.0625, 0.9375, 0, 0.625)
+	editbox:SetHeight(TukuiDB.Scale(32))
+	TukuiDB.SetTemplate(editbox)
 
 	local resetAndClear = function (self)
 		self:GetParent().detail:Show()
@@ -536,15 +488,15 @@ function Stuffing:InitBags()
 
 
 	local detail = f:CreateFontString(nil, "ARTWORK", "GameFontHighlightLarge")
-	detail:SetPoint("TOPLEFT", f, TukuiDB:Scale(12), TukuiDB:Scale(-10))
-	detail:SetPoint("RIGHT", TukuiDB:Scale(-(16 + 24)), 0)
+	detail:SetPoint("TOPLEFT", f, TukuiDB.Scale(12), TukuiDB.Scale(-10))
+	detail:SetPoint("RIGHT", TukuiDB.Scale(-(16 + 24)), 0)
 	detail:SetJustifyH("LEFT")
 	detail:SetText("|cff9999ff" .. "Search")
 	editbox:SetAllPoints(detail)
 
 	local gold = f:CreateFontString(nil, "ARTWORK", "GameFontHighlightLarge")
 	gold:SetJustifyH("RIGHT")
-	gold:SetPoint("RIGHT", f.b_close, "LEFT", TukuiDB:Scale(-3), 0)
+	gold:SetPoint("RIGHT", f.b_close, "LEFT", TukuiDB.Scale(-3), 0)
 
 	f:SetScript("OnEvent", function (self, e)
 		self.gold:SetText (GetCoinTextureString(GetMoney(), 12))
@@ -641,8 +593,8 @@ function Stuffing:Layout(lb)
 		f.gold:SetFont(BAGSFONT, 12)
 
 		f.detail:ClearAllPoints()
-		f.detail:SetPoint("TOPLEFT", f, TukuiDB:Scale(12), TukuiDB:Scale(-10))
-		f.detail:SetPoint("RIGHT", TukuiDB:Scale(-(16 + 24)), 0)
+		f.detail:SetPoint("TOPLEFT", f, TukuiDB.Scale(12), TukuiDB.Scale(-10))
+		f.detail:SetPoint("RIGHT", TukuiDB.Scale(-(16 + 24)), 0)
 	end
 
 	f:SetClampedToScreen(1)
@@ -676,8 +628,8 @@ function Stuffing:Layout(lb)
 		w = w + ((#bs - 1) * bsize)
 		w = w + (12 * (#bs - 2))
 
-		fb:SetHeight(TukuiDB:Scale(2 * 12 + bsize))
-		fb:SetWidth(TukuiDB:Scale(w))
+		fb:SetHeight(TukuiDB.Scale(2 * 12 + bsize))
+		fb:SetWidth(TukuiDB.Scale(w))
 		fb:Show()
 	else
 		fb:Hide()
@@ -699,7 +651,7 @@ function Stuffing:Layout(lb)
 			xoff = xoff + (idx * 4)
 
 			b.frame:ClearAllPoints()
-			b.frame:SetPoint("LEFT", fb, "LEFT", TukuiDB:Scale(xoff), 0)
+			b.frame:SetPoint("LEFT", fb, "LEFT", TukuiDB.Scale(xoff), 0)
 			b.frame:Show()
 
 
@@ -715,7 +667,7 @@ function Stuffing:Layout(lb)
 				self.bags[i] = self:BagNew(i, f)
 			end
 
-			if not (hide_soulbag == 1 and self.bags[i].bagType == ST_SOULBAG) then
+			if not (hide_soulbag ~= true and self.bags[i].bagType == ST_SOULBAG) then
 				slots = slots + GetContainerNumSlots(i)
 			end
 		end
@@ -727,8 +679,8 @@ function Stuffing:Layout(lb)
 		rows = rows + 1
 	end
 
-	f:SetWidth(TukuiDB:Scale(cols * 31 + (cols - 1) * 4 + 12 * 2)) 
-	f:SetHeight(TukuiDB:Scale(rows * 31 + (rows - 1) * 4 + off + 12 * 2))
+	f:SetWidth(TukuiDB.Scale(cols * 31 + (cols - 1) * 4 + 12 * 2)) 
+	f:SetHeight(TukuiDB.Scale(rows * 31 + (rows - 1) * 4 + off + 12 * 2))
 
 
 	local idx = 0
@@ -739,7 +691,7 @@ function Stuffing:Layout(lb)
 			self.bags[i] = self:BagNew(i, f)
 			local bagType = self.bags[i].bagType
 
-			if not (hide_soulbag == 1 and bagType == ST_SOULBAG) then
+			if not (hide_soulbag ~= true and bagType == ST_SOULBAG) then
 				self.bags[i]:Show()
 				--print (i .. ": " .. GetContainerNumSlots(i) .. " slots.")
 				for j = 1, bag_cnt do
@@ -761,37 +713,29 @@ function Stuffing:Layout(lb)
 					yoff = yoff * -1
 
 					b.frame:ClearAllPoints()
-					b.frame:SetPoint("TOPLEFT", f, "TOPLEFT", TukuiDB:Scale(xoff), TukuiDB:Scale(yoff))
-					b.frame:SetHeight(TukuiDB:Scale(31))
-					b.frame:SetWidth(TukuiDB:Scale(31))
+					b.frame:SetPoint("TOPLEFT", f, "TOPLEFT", TukuiDB.Scale(xoff), TukuiDB.Scale(yoff))
+					b.frame:SetHeight(TukuiDB.Scale(31))
+					b.frame:SetWidth(TukuiDB.Scale(31))
+					b.frame:SetPushedTexture("")
+					b.frame:SetNormalTexture("")
 					b.frame:Show()
-
-					local normalTex = _G[b.frame:GetName() .. "NormalTexture"]
-					normalTex:SetHeight(TukuiDB:Scale(31 / 37 * 64))
-					normalTex:SetWidth(TukuiDB:Scale(31 / 37 * 64))
-					normalTex:Show()
-					b.normalTex = normalTex
-
-					if bagType == ST_QUIVER then
-						normalTex:SetVertexColor(0.8, 0.8, 0.2, 1)
-					elseif bagType == ST_SOULBAG then
-						normalTex:SetVertexColor(0.8, 0.2, 0.2, 1)
-					elseif bagType == ST_SPECIAL then
-						normalTex:SetVertexColor(0.2, 0.2, 0.8, 1)
-					elseif bagType == ST_NORMAL then
-						normalTex:SetVertexColor(1, 1, 1, 1)
+					TukuiDB.SetTemplate(b.frame)
+					
+					local clink = GetContainerItemLink
+					if ( clink and b.rarity and b.rarity > 1) then
+						b.frame:SetBackdropBorderColor(GetItemQualityColor(b.rarity))
+					else
+						b.frame:SetBackdropBorderColor(unpack(TukuiDB.media.bordercolor))
 					end
 
 					local iconTex = _G[b.frame:GetName() .. "IconTexture"]
+					iconTex:SetTexCoord(.08, .92, .08, .92)
+					iconTex:SetPoint("TOPLEFT", b.frame, TukuiDB.Scale(2), TukuiDB.Scale(-2))
+					iconTex:SetPoint("BOTTOMRIGHT", b.frame, TukuiDB.Scale(-2), TukuiDB.Scale(2))
 
 					iconTex:Show()
 					b.iconTex = iconTex
-
-					if b.Glow then
-						b.Glow:SetWidth(TukuiDB:Scale(31 / 37 * 65))
-						b.Glow:SetHeight(TukuiDB:Scale(31 / 37 * 65))
-					end
-
+					
 					idx = idx + 1
 				end
 			else
@@ -1013,12 +957,7 @@ function Stuffing:BAG_CLOSED(id)
 		for i, v in ipairs(self.buttons) do
 			if v.bag == id then
 				v.frame:Hide()
-				v.normalTex:Hide()
 				v.iconTex:Hide()
-
-				if v.Glow then
-					v.Glow:Hide()
-				end
 
 				table.insert (trashButton, #trashButton + 1, v.frame)
 				table.remove(self.buttons, i)

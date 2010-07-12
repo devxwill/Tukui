@@ -13,6 +13,7 @@
 
 if not TukuiDB["unitframes"].enable == true then return end
 if not TukuiDB["unitframes"].showthreat == true then return end
+if not oUF then return end
 
 local ThreatNumParty = 0
 local ThreatNumRaid = 0
@@ -69,12 +70,11 @@ local function enable(self)
 		
 		self:RegisterEvent("PLAYER_ENTERING_WORLD", function() UpdateGroup() end)
 		self:RegisterEvent("PLAYER_LOGIN", function() UpdateGroup() end)
+		self:RegisterEvent("PLAYER_REGEN_ENABLED", function(self) self.ThreatBar:Hide() end)
+		self:RegisterEvent("PLAYER_REGEN_DISABLED", function(self) self.ThreatBar:Show() end)
 		self:RegisterEvent("PARTY_MEMBERS_CHANGED", function() UpdateGroup() end)
 		self:RegisterEvent("RAID_ROSTER_UPDATE", function() UpdateGroup() end)
 		self:RegisterEvent("UNIT_PET", function() UpdateGroup() end)
-		self:RegisterEvent("PLAYER_REGEN_ENABLED", function(self) self.ThreatBar:Hide() end)
-		self:RegisterEvent("PLAYER_REGEN_DISABLED", function(self) self.ThreatBar:Show() end)
-
 		
 		bar:SetScript("OnUpdate", update)
 		

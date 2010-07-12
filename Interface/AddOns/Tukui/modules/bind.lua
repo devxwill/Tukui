@@ -1,4 +1,4 @@
-local bind = CreateFrame("Frame", "tHoverBind", UIParent)
+local bind = CreateFrame("Frame", "TukuiHoverBind", UIParent)
 -- SLASH COMMAND
 SlashCmdList.MOUSEOVERBIND = function()
 	if InCombatLockdown() then print(tukuilocal.bind_combat) return end

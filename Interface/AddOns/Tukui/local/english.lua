@@ -1,5 +1,7 @@
 -- localization for enUS and enGB
 
+tukuilocal.disband = "Disbanding group."
+
 tukuilocal.datatext_guild = "Guild"
 tukuilocal.datatext_noguild = "No Guild"
 tukuilocal.datatext_bags = "Bags: "
@@ -79,7 +81,7 @@ tukuilocal.Slots = {
 }
 
 tukuilocal.popup_disableui = "Tukui doesn't work for this resolution, do you want to disable Tukui? (Cancel if you want to try another resolution)"
-tukuilocal.popup_install = "First time on Tukui V10.60+ with this Character. You must reload UI to set Action Bars, Variables and Chat Frames."
+tukuilocal.popup_install = "First time on Tukui V11 BETA with this Character. You must reload UI to set Action Bars, Variables and Chat Frames."
 tukuilocal.popup_2raidactive = "2 raid layouts are active, please select a layout."
 
 tukuilocal.merchant_repairnomoney = "You don't have enough money for repair!"
@@ -127,6 +129,7 @@ tukuilocal.bags_sortingbags = "Sorting finished."
 tukuilocal.bags_nothingsort= "Nothing to sort."
 tukuilocal.bags_bids = "Using bags: "
 tukuilocal.bags_stackend = "Restacking finished."
+tukuilocal.bags_rightclick_search = "Right-click to search."
 
 tukuilocal.chat_invalidtarget = "Invalid Target"
 

@@ -1,8 +1,7 @@
 -- some shit plugins i need for priest, it require tukz unitframes.
-if TukuiDB["unitframes"].enable ~= true then return end
-if select(2, UnitClass("Player")) ~= "PRIEST" then return end
+if TukuiDB["unitframes"].enable ~= true or TukuiDB.myclass ~= "PRIEST" then return end
 
-local FONT = TukuiDB["media"].font
+local font = TukuiDB["media"].font
 
 local function BarPanel(height, width, x, y, anchorPoint, anchorPointRel, anchor, level, parent, strata)
 	local Panel = CreateFrame("Frame", _, parent)
@@ -51,7 +50,7 @@ local function ConfigureBar(f)
 	f.Time:SetPoint("LEFT", 2, 1)
 	f.Time:SetShadowOffset(1, -1)
 	f.Time:SetShadowColor(0.1, 0.1, 0.1, 1)
-	f.Time:SetFont(FONT, 10)
+	f.Time:SetFont(font, 10)
 	f.Time:SetJustifyH("LEFT")
 
 	if TukuiDB["unitframes"].ws_show_time == true then
@@ -70,15 +69,15 @@ if (TukuiDB["unitframes"].ws_show_target) then
 	local WeakenedTargetFrame = CreateFrame("Frame", _, oUF_Tukz_target)
 	if TukuiDB.lowversion == true then
 		if TukuiDB["unitframes"].charportrait == true then
-			WeakenedTargetFrame.Panel = BarPanel(TukuiDB:Scale(8), TukuiDB:Scale(186-34), 0, TukuiDB:Scale(30), "TOPLEFT", "BOTTOMLEFT", oUF_Tukz_target, 1, WeakenedTargetFrame, "HIGH")
+			WeakenedTargetFrame.Panel = BarPanel(TukuiDB.Scale(8), TukuiDB.Scale(186-34), 0, TukuiDB.Scale(30), "TOPLEFT", "BOTTOMLEFT", oUF_Tukz_target, 1, WeakenedTargetFrame, "HIGH")
 		else
-			WeakenedTargetFrame.Panel = BarPanel(TukuiDB:Scale(8), TukuiDB:Scale(186), 0, TukuiDB:Scale(30), "TOPLEFT", "BOTTOMLEFT", oUF_Tukz_target, 1, WeakenedTargetFrame, "HIGH")
+			WeakenedTargetFrame.Panel = BarPanel(TukuiDB.Scale(8), TukuiDB.Scale(186), 0, TukuiDB.Scale(30), "TOPLEFT", "BOTTOMLEFT", oUF_Tukz_target, 1, WeakenedTargetFrame, "HIGH")
 		end   
 	else
 		if TukuiDB["unitframes"].charportrait == true then
-			WeakenedTargetFrame.Panel = BarPanel(TukuiDB:Scale(8), TukuiDB:Scale(217), 0, TukuiDB:Scale(30), "TOPLEFT", "BOTTOMLEFT", oUF_Tukz_target, 1, WeakenedTargetFrame, "HIGH")
+			WeakenedTargetFrame.Panel = BarPanel(TukuiDB.Scale(8), TukuiDB.Scale(217), 0, TukuiDB.Scale(30), "TOPLEFT", "BOTTOMLEFT", oUF_Tukz_target, 1, WeakenedTargetFrame, "HIGH")
 		else
-			WeakenedTargetFrame.Panel = BarPanel(TukuiDB:Scale(8), TukuiDB:Scale(250), 0, TukuiDB:Scale(30), "TOPLEFT", "BOTTOMLEFT", oUF_Tukz_target, 1, WeakenedTargetFrame, "HIGH")
+			WeakenedTargetFrame.Panel = BarPanel(TukuiDB.Scale(8), TukuiDB.Scale(250), 0, TukuiDB.Scale(30), "TOPLEFT", "BOTTOMLEFT", oUF_Tukz_target, 1, WeakenedTargetFrame, "HIGH")
 		end
 	end
 	WeakenedTargetFrame.Panel:SetFrameLevel(10)
@@ -111,15 +110,15 @@ if (TukuiDB["unitframes"].ws_show_player) then
 	local WeakenedPlayerFrame = CreateFrame("Frame", _, oUF_Tukz_player)
 	if TukuiDB.lowversion == true then
 		if TukuiDB["unitframes"].charportrait == true then
-			WeakenedPlayerFrame.Panel = BarPanel(TukuiDB:Scale(8), TukuiDB:Scale(186-34), TukuiDB:Scale(34), TukuiDB:Scale(30), "TOPLEFT", "BOTTOMLEFT", oUF_Tukz_player, 1, WeakenedPlayerFrame, "HIGH")
+			WeakenedPlayerFrame.Panel = BarPanel(TukuiDB.Scale(8), TukuiDB.Scale(186-34), TukuiDB.Scale(34), TukuiDB.Scale(30), "TOPLEFT", "BOTTOMLEFT", oUF_Tukz_player, 1, WeakenedPlayerFrame, "HIGH")
 		else
-			WeakenedPlayerFrame.Panel = BarPanel(TukuiDB:Scale(8), TukuiDB:Scale(186), 0, TukuiDB:Scale(30), "TOPLEFT", "BOTTOMLEFT", oUF_Tukz_player, 1, WeakenedPlayerFrame, "HIGH")
+			WeakenedPlayerFrame.Panel = BarPanel(TukuiDB.Scale(8), TukuiDB.Scale(186), 0, TukuiDB.Scale(30), "TOPLEFT", "BOTTOMLEFT", oUF_Tukz_player, 1, WeakenedPlayerFrame, "HIGH")
 		end
 	else
 		if TukuiDB["unitframes"].charportrait == true then
-			WeakenedPlayerFrame.Panel = BarPanel(TukuiDB:Scale(8), TukuiDB:Scale(217), TukuiDB:Scale(34), TukuiDB:Scale(30), "TOPLEFT", "BOTTOMLEFT", oUF_Tukz_player, 1, WeakenedPlayerFrame, "HIGH")
+			WeakenedPlayerFrame.Panel = BarPanel(TukuiDB.Scale(8), TukuiDB.Scale(217), TukuiDB.Scale(34), TukuiDB.Scale(30), "TOPLEFT", "BOTTOMLEFT", oUF_Tukz_player, 1, WeakenedPlayerFrame, "HIGH")
 		else
-			WeakenedPlayerFrame.Panel = BarPanel(TukuiDB:Scale(8), TukuiDB:Scale(250), 0, TukuiDB:Scale(30), "TOPLEFT", "BOTTOMLEFT", oUF_Tukz_player, 1, WeakenedPlayerFrame, "HIGH")
+			WeakenedPlayerFrame.Panel = BarPanel(TukuiDB.Scale(8), TukuiDB.Scale(250), 0, TukuiDB.Scale(30), "TOPLEFT", "BOTTOMLEFT", oUF_Tukz_player, 1, WeakenedPlayerFrame, "HIGH")
 		end
 	end
 

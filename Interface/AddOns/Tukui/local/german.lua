@@ -1,4 +1,6 @@
 if TukuiDB.client == "deDE" then
+	tukuilocal.disband = "Disbanding group."
+
 	tukuilocal.datatext_guild = "Gilde"
 	tukuilocal.datatext_noguild = "Keine Gilde"
 	tukuilocal.datatext_bags = "Tasche: "
@@ -79,7 +81,7 @@ if TukuiDB.client == "deDE" then
 	}
 
 	tukuilocal.popup_disableui = "Tukui funktioniert nicht mit deiner Auflösung, möchtest du Tukui ausschalten? (Drücke Abbrechen, falls du eine andere Auflösung testen willst.)"
-	tukuilocal.popup_install = "Dies ist das erste mal mit Tukui V10.60+ mit diesem Charakter.Du musst dein UI neuladen um Aktionsleisten, Variabeln und den Chat einzustellen."
+	tukuilocal.popup_install = "Dies ist das erste mal mit Tukui V11 BETA mit diesem Charakter.Du musst dein UI neuladen um Aktionsleisten, Variabeln und den Chat einzustellen."
 
 	tukuilocal.merchant_repairnomoney = "Du hast nicht genügend Gold zum reparieren!"
 	tukuilocal.merchant_repaircost = "Deine Rüstung wurde repariert für"
@@ -126,6 +128,7 @@ if TukuiDB.client == "deDE" then
 	tukuilocal.bags_nothingsort= "Nichts zu sortieren."
 	tukuilocal.bags_bids = "Benutze Taschen: "
 	tukuilocal.bags_stackend = "Neu stapeln fertig."
+	tukuilocal.bags_rightclick_search = "Right-click to search."
 
 	tukuilocal.chat_invalidtarget = "Falsches Ziel"
 
@@ -188,5 +191,5 @@ if TukuiDB.client == "deDE" then
 	
 	tukuilocal.hunter_unhappy = "Dein Begleiter ist unzufrieden!"
 	tukuilocal.hunter_content = "Dein Begleiter ist zufrieden!"
-	tukuilocal.hunter_happy = "Dein Begleiter ist glücklich!" 
+	tukuilocal.hunter_happy = "Dein Begleiter ist zufrieden!" 
 end

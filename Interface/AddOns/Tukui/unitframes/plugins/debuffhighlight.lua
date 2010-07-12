@@ -1,4 +1,5 @@
 if not TukuiDB["unitframes"].enable == true then return end
+if not oUF then return end
 
 local playerClass = select(2,UnitClass("player"))
 local CanDispel = {

@@ -3,7 +3,9 @@
 ------------------------------------------------------------------------
 
 TicketStatusFrame:ClearAllPoints()
-TicketStatusFrame:SetPoint("TOPLEFT", 0, 0)
+TicketStatusFrame:SetPoint("TOPLEFT", TukuiDB.Scale(4), TukuiDB.Scale(-4))
+TicketStatusFrame:SetHeight(40)
+TukuiDB.SetTemplate(TicketStatusFrame)
 
 ------------------------------------------------------------------------
 --	GM toggle command

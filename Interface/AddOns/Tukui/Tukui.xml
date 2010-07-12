@@ -14,6 +14,9 @@
 	<Script file="config\media.lua"/>
 	<Script file="config\aurawatch.lua"/>
 	
+	<Script file="unitframes\colors.lua"/>
+	
+	<Script file="modules\autodisable.lua"/>
 	<Script file="modules\functions.lua"/>
 	<Script file="modules\launch.lua"/>
 	<Script file="modules\watchframe.lua"/>
@@ -22,19 +25,17 @@
 	<Script file="modules\capturebar.lua"/>
 	<Script file="modules\gm.lua"/>
 	<Script file="modules\misc.lua"/>
-	<Script file="modules\disband.lua"/>
 	<Script file="modules\quests.lua"/>
 	<Script file="modules\mount.lua"/>
 	<Script file="modules\invite.lua"/>
-	<Script file="modules\autodisable.lua"/>
 	<Script file="modules\autodez.lua"/>
 	<Script file="modules\autorelease.lua"/>
 	<Script file="modules\symbol.lua"/>
 	<Script file="modules\merchant.lua"/>
 	<Script file="modules\error.lua"/>
 	<Script file="modules\bind.lua"/>
-	<Script file="modules\skin.lua"/>
-		
+
+	<Script file="scripts\font.lua"/>	
 	<Script file="scripts\minimap.lua"/>
 	<Script file="scripts\buffs.lua"/>
 	<Script file="scripts\panels.lua"/>
@@ -42,10 +43,8 @@
 	<Script file="scripts\actionbar.lua"/>
 	<Script file="scripts\buttonstyler.lua"/>
 	<Script file="scripts\chat.lua"/>
-	<Script file="scripts\chattabs.lua"/>
 	<Script file="scripts\tooltip.lua"/>
 	<Script file="scripts\cooldown.lua"/>
-	<Script file="scripts\combatfont.lua"/>
 	<Script file="scripts\nameplates.lua"/>
 	<Script file="scripts\bags.lua"/>
 	<Script file="scripts\arenatrack.lua"/>
@@ -54,28 +53,23 @@
 	<Script file="scripts\map.lua"/>
 	<Script file="scripts\mirror.lua"/>
 	<Script file="scripts\reminder.lua"/>
-	<Script file="scripts\broker.lua"/>
 	
 	<Script file="unitframes\plugins\smooth.lua"/>
 	<Script file="unitframes\plugins\aurawatch.lua"/>
 	<Script file="unitframes\plugins\debuffhighlight.lua"/>
 	<Script file="unitframes\plugins\experience.lua"/>
-	<Script file="unitframes\plugins\moveframe.lua"/>
+	<Script file="unitframes\plugins\moveframes.lua"/>
 	<Script file="unitframes\plugins\reputation.lua"/>
 	<Script file="unitframes\plugins\threat.lua"/>
 	<Script file="unitframes\plugins\totem.lua"/>
 	<Script file="unitframes\plugins\readycheck.lua"/>
 	<Script file="unitframes\plugins\combatfeedback.lua"/>
 	<Script file="unitframes\plugins\trinkets.lua"/>
+	<Script file="unitframes\functions.lua"/>
 	<Script file="unitframes\tags.lua"/>
 	<Script file="unitframes\menu.lua"/>
-	<Script file="unitframes\unitframes.high.lua"/>
-	<Script file="unitframes\unitframes.low.lua"/>
-	
+	<Script file="unitframes\unitframes.lua"/>
+		
 	<Script file="class\priest.lua"/>
 	<Script file="class\hunter.lua"/>
-	
-	<Script file="skins\clique.lua"/>
-	<Script file="skins\skada.lua"/>
-	<Script file="skins\quartz.lua"/>
 </Ui>

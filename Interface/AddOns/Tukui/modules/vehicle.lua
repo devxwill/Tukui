@@ -4,11 +4,11 @@
 
 hooksecurefunc(VehicleSeatIndicator,"SetPoint",function(_,_,parent) -- vehicle seat indicator
     if (parent == "MinimapCluster") or (parent == _G["MinimapCluster"]) then
-		VehicleSeatIndicator:ClearAllPoints();
+		VehicleSeatIndicator:ClearAllPoints()
 		if TukuiDB["actionbar"].bottomrows == true then
-			VehicleSeatIndicator:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, TukuiDB:Scale(228));
+			VehicleSeatIndicator:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, TukuiDB.Scale(228))
 		else
-			VehicleSeatIndicator:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, TukuiDB:Scale(200));
+			VehicleSeatIndicator:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, TukuiDB.Scale(200))
 		end
     end
 end)
@@ -17,7 +17,7 @@ end)
 -- vehicule on mouseover because this shit take too much space on screen
 --------------------------------------------------------------------------
 
-function TukuiDB:VehicleNumSeatIndicator()
+local function VehicleNumSeatIndicator()
 	if VehicleSeatIndicatorButton1 then
 		TukuiDB.numSeat = 1
 	elseif VehicleSeatIndicatorButton2 then
@@ -45,7 +45,7 @@ local function vehmouse()
 		VehicleSeatIndicator:SetAlpha(0)
 		VehicleSeatIndicator:EnableMouse(true)
 		
-		TukuiDB:VehicleNumSeatIndicator()
+		VehicleNumSeatIndicator()
 		
 		VehicleSeatIndicator:HookScript("OnEnter", function() VehicleSeatIndicator:SetAlpha(1) vehmousebutton(1) end)
 		VehicleSeatIndicator:HookScript("OnLeave", function() VehicleSeatIndicator:SetAlpha(0) vehmousebutton(0) end)

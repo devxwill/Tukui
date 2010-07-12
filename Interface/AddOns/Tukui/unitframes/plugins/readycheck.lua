@@ -11,6 +11,7 @@
 --]]
 
 if not TukuiDB["unitframes"].enable == true then return end
+if not oUF then return end
 
 local GetReadyCheckStatus = GetReadyCheckStatus
 
@@ -20,7 +21,7 @@ local statusTexture = {
 	waiting = [=[Interface\RAIDFRAME\ReadyCheck-Waiting]=],
 }
 
-function onUpdate(self, elapsed)
+local function onUpdate(self, elapsed)
 	if(self.finish) then
 		self.finish = self.finish - elapsed
 		if(self.finish <= 0) then

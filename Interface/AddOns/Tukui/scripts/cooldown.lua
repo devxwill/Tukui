@@ -4,31 +4,15 @@
                 This version should work on absolutely everything, but I've removed pretty much all of the options
 --]]
 local db = TukuiDB["cooldown"]
-if IsAddOnLoaded("OmniCC") or db.enable ~= true then return end
+if IsAddOnLoaded("OmniCC") or IsAddOnLoaded("ncCooldown") or db.enable ~= true then return end
 
 local TEXT_FONT = TukuiDB["media"].font
 local FONT_SIZE = 15
 local MIN_SCALE = 0.5
 local MIN_DURATION = 3
-local R, G, B = 1, 1, 1
 
-local i
+--local i
 local _G = getfenv(0)
-local ClassColors = {}
-local strformat, strfind = string.format, string.find
-
-for k, v in pairs(RAID_CLASS_COLORS) do
-	ClassColors[k] = strformat("%2x%2x%2x", v.r*255, v.g*255, v.b*255)
-end
-
-local function classHexColor(unit)
-	_, v = UnitClass(unit)
-	if v and ClassColors[v] then
-		return ClassColors[v]
-	else
-		return "FFFFFF"
-	end
-end
 
 local format = string.format
 local floor = math.floor
@@ -36,15 +20,15 @@ local min = math.min
 
 local function GetFormattedTime(s)
 	if s >= 86400 then
-		return format("%dd", floor(s/86400 + 0.5)), s % 86400
+		return format("%dd", ceil(s / 86400)), s % 86400
 	elseif s >= 3600 then
-		return format("%dh", floor(s/3600 + 0.5)), s % 3600
+		return format("%dh", ceil(s / 3600)), s % 3600
 	elseif s >= 60 then
-		return format("%dm", floor(s/60 + 0.5)), s % 60
+		return format("%dm", ceil(s / 60)), s % 60
 	elseif s <= db.treshold then
 		return format("%.1f", s), s - format("%.1f", s)
 	end
-	return floor(s + 0.5), s - floor(s)
+	return floor(s), s - floor(s)
 end
 
 local function Timer_OnUpdate(self, elapsed)
@@ -57,11 +41,11 @@ local function Timer_OnUpdate(self, elapsed)
 				self.nextUpdate = 0.5
 			else
 				local remain = self.duration - (GetTime() - self.start)
-				if floor(remain + 0.5) > 0 then
+				if ceil(remain) > 0 then
 					local time, nextUpdate = GetFormattedTime(remain)
 					self.text:SetText(time)
 					self.nextUpdate = nextUpdate
-					if floor(remain + 0.5) > db.treshold then 
+					if ceil(remain) > db.treshold then 
 						self.text:SetTextColor(1,1,1) 
 					else
 						self.text:SetTextColor(1,0,0) 
@@ -75,14 +59,14 @@ local function Timer_OnUpdate(self, elapsed)
 end
 
 local function Timer_Create(self)
-	local scale = min(self:GetParent():GetWidth() / TukuiDB:Scale(25), 1)
+	local scale = min(self:GetParent():GetWidth() / TukuiDB.Scale(25), 1)
 	if scale < MIN_SCALE then
 		self.noOCC = true
 	else
 		local text = self:CreateFontString(nil, "OVERLAY")
 		text:SetPoint("CENTER", 0, 0)
 		text:SetFont(TEXT_FONT, (FONT_SIZE * scale), "THINOUTLINE")
-		text:SetTextColor(R, G, B)
+		text:SetTextColor(1, 1, 1)
 
 		self.text = text
 		self:SetScript("OnUpdate", Timer_OnUpdate)
