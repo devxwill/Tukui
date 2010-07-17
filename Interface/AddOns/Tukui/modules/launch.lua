@@ -66,124 +66,126 @@ local function install()
 		end
 	end
 	
-	-- Var ok, now setting chat frames.					
-	FCF_ResetChatWindows()
-	FCF_SetLocked(ChatFrame1, 1)
-	FCF_DockFrame(ChatFrame2)
-	FCF_SetLocked(ChatFrame2, 1)
-	FCF_OpenNewWindow("General")
-	FCF_SetLocked(ChatFrame3, 1)
-	FCF_DockFrame(ChatFrame3)
+	-- Var ok, now setting chat frames if using Tukui chats.	
+	if (TukuiDB.chat.enable == true) and (not IsAddOnLoaded("Prat") or not IsAddOnLoaded("Chatter")) then					
+		FCF_ResetChatWindows()
+		FCF_SetLocked(ChatFrame1, 1)
+		FCF_DockFrame(ChatFrame2)
+		FCF_SetLocked(ChatFrame2, 1)
+		FCF_OpenNewWindow("General")
+		FCF_SetLocked(ChatFrame3, 1)
+		FCF_DockFrame(ChatFrame3)
 
-	FCF_OpenNewWindow("Loot")
-	FCF_UnDockFrame(ChatFrame4)
-	FCF_SetLocked(ChatFrame4, 1)
-	ChatFrame4:Show();
+		FCF_OpenNewWindow("Loot")
+		FCF_UnDockFrame(ChatFrame4)
+		FCF_SetLocked(ChatFrame4, 1)
+		ChatFrame4:Show();
 
-	for i = 1, NUM_CHAT_WINDOWS do
-		local frame = _G[format("ChatFrame%s", i)]
-		local chatFrameId = frame:GetID()
-		local chatName = FCF_GetChatWindowInfo(chatFrameId)
-		
-		_G["ChatFrame"..i]:SetSize(TukuiDB.Scale(TukuiDB["panels"].tinfowidth + 1), TukuiDB.Scale(111))
-		
-		-- this is the default width and height of tukui chats.
-		SetChatWindowSavedDimensions(chatFrameId, TukuiDB.Scale(TukuiDB["panels"].tinfowidth + 1), TukuiDB.Scale(111))
-		
-		-- move general bottom left or Loot (if found) on right.
-		if i == 1 then
-			frame:ClearAllPoints()
-			frame:SetPoint("BOTTOMLEFT", TukuiInfoLeft, "TOPLEFT", TukuiDB.Scale(-1), TukuiDB.Scale(6))
-		elseif i == 4 and chatName == "Loot" then
-			frame:ClearAllPoints()
-			frame:SetPoint("BOTTOMRIGHT", TukuiInfoRight, "TOPRIGHT", 0, TukuiDB.Scale(6))
+		for i = 1, NUM_CHAT_WINDOWS do
+			local frame = _G[format("ChatFrame%s", i)]
+			local chatFrameId = frame:GetID()
+			local chatName = FCF_GetChatWindowInfo(chatFrameId)
+			
+			_G["ChatFrame"..i]:SetSize(TukuiDB.Scale(TukuiDB["panels"].tinfowidth + 1), TukuiDB.Scale(111))
+			
+			-- this is the default width and height of tukui chats.
+			SetChatWindowSavedDimensions(chatFrameId, TukuiDB.Scale(TukuiDB["panels"].tinfowidth + 1), TukuiDB.Scale(111))
+			
+			-- move general bottom left or Loot (if found) on right.
+			if i == 1 then
+				frame:ClearAllPoints()
+				frame:SetPoint("BOTTOMLEFT", TukuiInfoLeft, "TOPLEFT", TukuiDB.Scale(-1), TukuiDB.Scale(6))
+			elseif i == 4 and chatName == "Loot" then
+				frame:ClearAllPoints()
+				frame:SetPoint("BOTTOMRIGHT", TukuiInfoRight, "TOPRIGHT", 0, TukuiDB.Scale(6))
+			end
+					
+			-- save new default position and dimension
+			FCF_SavePositionAndDimensions(frame)
+			
+			-- set default tukui font size
+			FCF_SetChatWindowFontSize(nil, frame, 12)
+			
+			-- rename windows general because moved to chat #3
+			if i == 1 then FCF_SetWindowName(frame, "G, S & W") end
 		end
+		
+		ChatFrame_RemoveAllMessageGroups(ChatFrame1)
+		ChatFrame_RemoveChannel(ChatFrame1, "Trade")
+		ChatFrame_RemoveChannel(ChatFrame1, "General")
+		ChatFrame_RemoveChannel(ChatFrame1, "LocalDefense")
+		ChatFrame_RemoveChannel(ChatFrame1, "GuildRecruitment")
+		ChatFrame_RemoveChannel(ChatFrame1, "LookingForGroup")
+		ChatFrame_AddMessageGroup(ChatFrame1, "SAY")
+		ChatFrame_AddMessageGroup(ChatFrame1, "EMOTE")
+		ChatFrame_AddMessageGroup(ChatFrame1, "YELL")
+		ChatFrame_AddMessageGroup(ChatFrame1, "GUILD")
+		ChatFrame_AddMessageGroup(ChatFrame1, "OFFICER")
+		ChatFrame_AddMessageGroup(ChatFrame1, "GUILD_ACHIEVEMENT")
+		ChatFrame_AddMessageGroup(ChatFrame1, "WHISPER")
+		ChatFrame_AddMessageGroup(ChatFrame1, "MONSTER_SAY")
+		ChatFrame_AddMessageGroup(ChatFrame1, "MONSTER_EMOTE")
+		ChatFrame_AddMessageGroup(ChatFrame1, "MONSTER_YELL")
+		ChatFrame_AddMessageGroup(ChatFrame1, "MONSTER_WHISPER")
+		ChatFrame_AddMessageGroup(ChatFrame1, "MONSTER_BOSS_EMOTE")
+		ChatFrame_AddMessageGroup(ChatFrame1, "MONSTER_BOSS_WHISPER")
+		ChatFrame_AddMessageGroup(ChatFrame1, "PARTY")
+		ChatFrame_AddMessageGroup(ChatFrame1, "PARTY_LEADER")
+		ChatFrame_AddMessageGroup(ChatFrame1, "RAID")
+		ChatFrame_AddMessageGroup(ChatFrame1, "RAID_LEADER")
+		ChatFrame_AddMessageGroup(ChatFrame1, "RAID_WARNING")
+		ChatFrame_AddMessageGroup(ChatFrame1, "BATTLEGROUND")
+		ChatFrame_AddMessageGroup(ChatFrame1, "BATTLEGROUND_LEADER")
+		ChatFrame_AddMessageGroup(ChatFrame1, "BG_HORDE")
+		ChatFrame_AddMessageGroup(ChatFrame1, "BG_ALLIANCE")
+		ChatFrame_AddMessageGroup(ChatFrame1, "BG_NEUTRAL")
+		ChatFrame_AddMessageGroup(ChatFrame1, "SYSTEM")
+		ChatFrame_AddMessageGroup(ChatFrame1, "ERRORS")
+		ChatFrame_AddMessageGroup(ChatFrame1, "AFK")
+		ChatFrame_AddMessageGroup(ChatFrame1, "DND")
+		ChatFrame_AddMessageGroup(ChatFrame1, "IGNORED")
+		ChatFrame_AddMessageGroup(ChatFrame1, "ACHIEVEMENT")
+		ChatFrame_AddMessageGroup(ChatFrame1, "BN_WHISPER")
+		ChatFrame_AddMessageGroup(ChatFrame1, "BN_CONVERSATION")
+					
+		-- Setup the spam chat frame
+		ChatFrame_RemoveAllMessageGroups(ChatFrame3)
+		ChatFrame_AddChannel(ChatFrame3, "Trade")
+		ChatFrame_AddChannel(ChatFrame3, "General")
+		ChatFrame_AddChannel(ChatFrame3, "LocalDefense")
+		ChatFrame_AddChannel(ChatFrame3, "GuildRecruitment")
+		ChatFrame_AddChannel(ChatFrame3, "LookingForGroup")
 				
-		-- save new default position and dimension
-		FCF_SavePositionAndDimensions(frame)
-		
-		-- set default tukui font size
-		FCF_SetChatWindowFontSize(nil, frame, 12)
-		
-		-- rename windows general because moved to chat #3
-		if i == 1 then FCF_SetWindowName(frame, "G, S & W") end
+		-- Setup the right chat
+		ChatFrame_RemoveAllMessageGroups(ChatFrame4);
+		ChatFrame_AddMessageGroup(ChatFrame4, "COMBAT_XP_GAIN")
+		ChatFrame_AddMessageGroup(ChatFrame4, "COMBAT_HONOR_GAIN")
+		ChatFrame_AddMessageGroup(ChatFrame4, "COMBAT_FACTION_CHANGE")
+		ChatFrame_AddMessageGroup(ChatFrame4, "LOOT")
+		ChatFrame_AddMessageGroup(ChatFrame4, "MONEY")
+				
+		-- enable classcolor automatically on login and on each character without doing /configure each time.
+		ToggleChatColorNamesByClassGroup(true, "SAY")
+		ToggleChatColorNamesByClassGroup(true, "EMOTE")
+		ToggleChatColorNamesByClassGroup(true, "YELL")
+		ToggleChatColorNamesByClassGroup(true, "GUILD")
+		ToggleChatColorNamesByClassGroup(true, "OFFICER")
+		ToggleChatColorNamesByClassGroup(true, "GUILD_ACHIEVEMENT")
+		ToggleChatColorNamesByClassGroup(true, "ACHIEVEMENT")
+		ToggleChatColorNamesByClassGroup(true, "WHISPER")
+		ToggleChatColorNamesByClassGroup(true, "PARTY")
+		ToggleChatColorNamesByClassGroup(true, "PARTY_LEADER")
+		ToggleChatColorNamesByClassGroup(true, "RAID")
+		ToggleChatColorNamesByClassGroup(true, "RAID_LEADER")
+		ToggleChatColorNamesByClassGroup(true, "RAID_WARNING")
+		ToggleChatColorNamesByClassGroup(true, "BATTLEGROUND")
+		ToggleChatColorNamesByClassGroup(true, "BATTLEGROUND_LEADER")	
+		ToggleChatColorNamesByClassGroup(true, "CHANNEL1")
+		ToggleChatColorNamesByClassGroup(true, "CHANNEL2")
+		ToggleChatColorNamesByClassGroup(true, "CHANNEL3")
+		ToggleChatColorNamesByClassGroup(true, "CHANNEL4")
+		ToggleChatColorNamesByClassGroup(true, "CHANNEL5")
 	end
-	
-	ChatFrame_RemoveAllMessageGroups(ChatFrame1)
-	ChatFrame_RemoveChannel(ChatFrame1, "Trade")
-	ChatFrame_RemoveChannel(ChatFrame1, "General")
-	ChatFrame_RemoveChannel(ChatFrame1, "LocalDefense")
-	ChatFrame_RemoveChannel(ChatFrame1, "GuildRecruitment")
-	ChatFrame_RemoveChannel(ChatFrame1, "LookingForGroup")
-	ChatFrame_AddMessageGroup(ChatFrame1, "SAY")
-	ChatFrame_AddMessageGroup(ChatFrame1, "EMOTE")
-	ChatFrame_AddMessageGroup(ChatFrame1, "YELL")
-	ChatFrame_AddMessageGroup(ChatFrame1, "GUILD")
-	ChatFrame_AddMessageGroup(ChatFrame1, "OFFICER")
-	ChatFrame_AddMessageGroup(ChatFrame1, "GUILD_ACHIEVEMENT")
-	ChatFrame_AddMessageGroup(ChatFrame1, "WHISPER")
-	ChatFrame_AddMessageGroup(ChatFrame1, "MONSTER_SAY")
-	ChatFrame_AddMessageGroup(ChatFrame1, "MONSTER_EMOTE")
-	ChatFrame_AddMessageGroup(ChatFrame1, "MONSTER_YELL")
-	ChatFrame_AddMessageGroup(ChatFrame1, "MONSTER_WHISPER")
-	ChatFrame_AddMessageGroup(ChatFrame1, "MONSTER_BOSS_EMOTE")
-	ChatFrame_AddMessageGroup(ChatFrame1, "MONSTER_BOSS_WHISPER")
-	ChatFrame_AddMessageGroup(ChatFrame1, "PARTY")
-	ChatFrame_AddMessageGroup(ChatFrame1, "PARTY_LEADER")
-	ChatFrame_AddMessageGroup(ChatFrame1, "RAID")
-	ChatFrame_AddMessageGroup(ChatFrame1, "RAID_LEADER")
-	ChatFrame_AddMessageGroup(ChatFrame1, "RAID_WARNING")
-	ChatFrame_AddMessageGroup(ChatFrame1, "BATTLEGROUND")
-	ChatFrame_AddMessageGroup(ChatFrame1, "BATTLEGROUND_LEADER")
-	ChatFrame_AddMessageGroup(ChatFrame1, "BG_HORDE")
-	ChatFrame_AddMessageGroup(ChatFrame1, "BG_ALLIANCE")
-	ChatFrame_AddMessageGroup(ChatFrame1, "BG_NEUTRAL")
-	ChatFrame_AddMessageGroup(ChatFrame1, "SYSTEM")
-	ChatFrame_AddMessageGroup(ChatFrame1, "ERRORS")
-	ChatFrame_AddMessageGroup(ChatFrame1, "AFK")
-	ChatFrame_AddMessageGroup(ChatFrame1, "DND")
-	ChatFrame_AddMessageGroup(ChatFrame1, "IGNORED")
-	ChatFrame_AddMessageGroup(ChatFrame1, "ACHIEVEMENT")
-	ChatFrame_AddMessageGroup(ChatFrame1, "BN_WHISPER")
-	ChatFrame_AddMessageGroup(ChatFrame1, "BN_CONVERSATION")
-				
-	-- Setup the spam chat frame
-	ChatFrame_RemoveAllMessageGroups(ChatFrame3)
-	ChatFrame_AddChannel(ChatFrame3, "Trade")
-	ChatFrame_AddChannel(ChatFrame3, "General")
-	ChatFrame_AddChannel(ChatFrame3, "LocalDefense")
-	ChatFrame_AddChannel(ChatFrame3, "GuildRecruitment")
-	ChatFrame_AddChannel(ChatFrame3, "LookingForGroup")
-			
-	-- Setup the right chat
-	ChatFrame_RemoveAllMessageGroups(ChatFrame4);
-	ChatFrame_AddMessageGroup(ChatFrame4, "COMBAT_XP_GAIN")
-	ChatFrame_AddMessageGroup(ChatFrame4, "COMBAT_HONOR_GAIN")
-	ChatFrame_AddMessageGroup(ChatFrame4, "COMBAT_FACTION_CHANGE")
-	ChatFrame_AddMessageGroup(ChatFrame4, "LOOT")
-	ChatFrame_AddMessageGroup(ChatFrame4, "MONEY")
-			
-	-- enable classcolor automatically on login and on each character without doing /configure each time.
-	ToggleChatColorNamesByClassGroup(true, "SAY")
-	ToggleChatColorNamesByClassGroup(true, "EMOTE")
-	ToggleChatColorNamesByClassGroup(true, "YELL")
-	ToggleChatColorNamesByClassGroup(true, "GUILD")
-	ToggleChatColorNamesByClassGroup(true, "OFFICER")
-	ToggleChatColorNamesByClassGroup(true, "GUILD_ACHIEVEMENT")
-	ToggleChatColorNamesByClassGroup(true, "ACHIEVEMENT")
-	ToggleChatColorNamesByClassGroup(true, "WHISPER")
-	ToggleChatColorNamesByClassGroup(true, "PARTY")
-	ToggleChatColorNamesByClassGroup(true, "PARTY_LEADER")
-	ToggleChatColorNamesByClassGroup(true, "RAID")
-	ToggleChatColorNamesByClassGroup(true, "RAID_LEADER")
-	ToggleChatColorNamesByClassGroup(true, "RAID_WARNING")
-	ToggleChatColorNamesByClassGroup(true, "BATTLEGROUND")
-	ToggleChatColorNamesByClassGroup(true, "BATTLEGROUND_LEADER")	
-	ToggleChatColorNamesByClassGroup(true, "CHANNEL1")
-	ToggleChatColorNamesByClassGroup(true, "CHANNEL2")
-	ToggleChatColorNamesByClassGroup(true, "CHANNEL3")
-	ToggleChatColorNamesByClassGroup(true, "CHANNEL4")
-	ToggleChatColorNamesByClassGroup(true, "CHANNEL5")
 		   
 	TukuiInstallv11beta = true
 	TukuiData.SetCVar = true

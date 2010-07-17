@@ -10,11 +10,11 @@ TukuiDB["unitframes"] = {
 	["enable"] = true,                     -- do i really need to explain this?
 	["enemyhcolor"] = false,               -- enemy target color by hostility, very useful for healer.
 	["unitcastbar"] = true,                -- enable tukui castbar
-	["cblatency"] = true,                 -- enable castbar latency
+	["cblatency"] = false,                 -- enable castbar latency
 	["cbicons"] = true,                    -- enable icons on castbar
 	["auratimer"] = true,                  -- enable timers on buffs/debuffs
 	["auratextscale"] = 11,                -- the font size of buffs/debuffs timers on unitframes
-	["playerauras"] = false,               -- enable auras on target unit frame
+	["playerauras"] = true,                -- enable auras
 	["targetauras"] = true,                -- enable auras on target unit frame
 	["highThreshold"] = 80,                -- hunter high threshold
 	["lowThreshold"] = 20,                 -- global low threshold, for low mana warning.
@@ -30,7 +30,7 @@ TukuiDB["unitframes"] = {
 	-- NOT DONE YET ["t_mt_power"] = false,-- enable power bar on maintank and mainassist because it's not show by default.
 	["combatfeedback"] = true,             -- enable combattext on player and target.
 	-- NOT DONE YET ["classcolor"] = true, -- if set to false, use foof color theme. 
-	-- NOT DONE YET["playeraggro"] = false.-- glow border of player frame change color according to your current aggro.
+	["playeraggro"] = true,                -- color player border to red if you have aggro on current target.
 	["positionbychar"] = false,            -- save X, Y position with /uf (movable frame) per character instead of per account.
 
 	-- raid layout
@@ -38,17 +38,17 @@ TukuiDB["unitframes"] = {
 	["raidalphaoor"] = 0.3,                -- alpha of unitframes when unit is out of range
 	["gridposX"] = 18,                     -- horizontal position starting from left
 	["gridposY"] = -250,                   -- vertical position starting from top
-	["gridposZ"] = "CENTER",              -- if we want to change the starting position zone
-	["gridonly"] = true,                  -- enable grid only mode for all healer mode raid layout.
+	["gridposZ"] = "TOPLEFT",              -- if we want to change the starting position zone
+	["gridonly"] = false,                  -- enable grid only mode for all healer mode raid layout.
 	["showsymbols"] = true,	               -- show symbol.
 	["aggro"] = true,                      -- show aggro on all raids layouts
 	["raidunitdebuffwatch"] = true,        -- track important spell to watch in pve for grid mode.
 	["gridhealthvertical"] = true,         -- enable vertical grow on health bar for grid mode.
-	["showplayerinparty"] = true,          -- show my player frame in party
+	["showplayerinparty"] = false,          -- show my player frame in party
 	["gridscale"] = 1,                     -- set the healing grid scaling
 	
 	-- boss frames
-	["showboss"] = false,                   -- enable boss unit frames for PVELOL encounters.
+	["showboss"] = true,                   -- enable boss unit frames for PVELOL encounters.
 
 	-- priest only plugin
 	["ws_show_time"] = false,              -- show time on weakened soul bar
@@ -73,8 +73,8 @@ TukuiDB["actionbar"] = {
 	["rightbarmouseover"] = false,         -- enable right bars on mouse over
 	["shapeshiftmouseover"] = false,       -- enable shapeshift or totembar on mouseover
 	["hideshapeshift"] = false,            -- hide shapeshift or totembar because it was a lot requested.
-	["bottomrows"] = 1,                    -- numbers of row you want to show at the bottom (select between 1 and 2 only)
-	["rightbars"] = 1,                     -- numbers of right bar you want
+	["bottomrows"] = 2,                    -- numbers of row you want to show at the bottom (select between 1 and 2 only)
+	["rightbars"] = 3,                     -- numbers of right bar you want
 	["showgrid"] = true,                   -- show grid on empty button
 }
 
@@ -121,7 +121,7 @@ TukuiDB["datatext"] = {
 	["armor"] = 0,                         -- show your armor value against the level mob you are currently targeting
 
 	["battleground"] = true,               -- enable 3 stats in battleground only that replace stat1,stat2,stat3.
-	["time24"] = false,                     -- set time to 24h format.
+	["time24"] = true,                     -- set time to 24h format.
 	["localtime"] = false,                 -- set time to local time instead of server time.
 	["fontsize"] = 12,                     -- font size for panels.
 	
@@ -155,7 +155,7 @@ TukuiDB["merchant"] = {
 }
 
 TukuiDB["error"] = {
-	["enable"] = false,                     -- true to enable this mod, false to disable
+	["enable"] = true,                     -- true to enable this mod, false to disable
 	filter = {                             -- what messages to not hide
 		["Inventory is full."] = true,     -- inventory is full will not be hidden by default
 	},

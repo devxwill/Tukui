@@ -37,7 +37,6 @@
 
 	<Script file="scripts\font.lua"/>	
 	<Script file="scripts\minimap.lua"/>
-	<Script file="scripts\buffs.lua"/>
 	<Script file="scripts\panels.lua"/>
 	<Script file="scripts\datatext.lua"/>
 	<Script file="scripts\actionbar.lua"/>

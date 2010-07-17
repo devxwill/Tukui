@@ -20,6 +20,7 @@ local function style(self)
 	Flash:SetTexture("")
 
 	Button:SetPushedTexture(media.buttonhover)
+	Button:SetCheckedTexture("") -- TO DO, SET A TEXTURE HERE
 	Button:SetNormalTexture("")
 	
 	Border:Hide()
@@ -185,11 +186,30 @@ local function updatehotkey(self, actionButtonType)
 	text = replace(text, '(Page Down)', 'PD')
 	text = replace(text, '(Spacebar)', 'SpB')
 	text = replace(text, '(Insert)', 'Ins')
+	text = replace(text, '(Home)', 'Hm')
 	
 	if hotkey:GetText() == _G['RANGE_INDICATOR'] then
 		hotkey:SetText('')
 	else
 		hotkey:SetText(text)
+	end
+end
+
+-- rescale cooldown spiral to fix texture.
+local buttonNames = { "ActionButton", "MultiBarBottomLeftButton", "MultiBarBottomRightButton", "MultiBarLeftButton", "MultiBarRightButton", "ShapeshiftButton", "PetActionButton" }
+for _, name in ipairs( buttonNames ) do
+	for index = 1, 20 do
+		local buttonName = name .. tostring(index)
+		local button = _G[buttonName]
+		local cooldown = _G[buttonName .. "Cooldown"]
+ 
+		if ( button == nil or cooldown == nil ) then
+			break;
+		end
+ 
+		cooldown:ClearAllPoints()
+		cooldown:SetPoint("TOPLEFT", button, "TOPLEFT", 2, -2)
+		cooldown:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
 	end
 end
 

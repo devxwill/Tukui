@@ -10,7 +10,7 @@ WINTERGRASP = tukuilocal.mount_wintergrasp
 local autoreleasepvp = CreateFrame("frame")
 autoreleasepvp:RegisterEvent("PLAYER_DEAD")
 autoreleasepvp:SetScript("OnEvent", function(self, event)
-	if TukuiDB.myclass ~= "SHAMAN" then
+	if TukuiDB.myclass ~= "SHAMAN" or TukuiDB.myclass ~= "WARLOCK" then
 		if (tostring(GetZoneText()) == WINTERGRASP) then
 			RepopMe()
 		end

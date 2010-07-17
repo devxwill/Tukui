@@ -81,6 +81,7 @@ local OnTooltipSetUnit = function(self)
 	local level = UnitLevel(unit)
 	local levelColor = GetQuestDifficultyColor(level)
 	local race	= UnitRace(unit)
+	local class = UnitClass(unit)
 	local title = UnitPVPName(unit)
 	local unitName, unitRealm = UnitName(unit)
 	local Dead = UnitIsDead(unit)
@@ -100,13 +101,13 @@ local OnTooltipSetUnit = function(self)
 
 	if UnitIsPlayer(unit) then		
 		if GetGuildInfo(unit) then
-			_G["GameTooltipTextLeft2"]:SetFormattedText("<%s>", GetGuildInfo(unit))
+			_G["GameTooltipTextLeft2"]:SetFormattedText("<%s <--> %s>", GetGuildInfo(unit))
 		end
 
 		local n = GetGuildInfo(unit) and 3 or 2
 		--  thx TipTac for the fix above with color blind enabled
 		if GetCVar("colorblindMode") == "1" then n = n + 1 end
-		_G["GameTooltipTextLeft"..n]:SetFormattedText("|cff%02x%02x%02x%s|r %s", levelColor.r*255, levelColor.g*255, levelColor.b*255, level, race)
+		_G["GameTooltipTextLeft"..n]:SetFormattedText("|cff%02x%02x%02x%s|r %s |cff%02x%02x%02x%s|r", levelColor.r*255, levelColor.g*255, levelColor.b*255, level, race, r*255, g*255, b*255, class)
 	else
 		local classification = UnitClassification(unit)
 		local creatureType = UnitCreatureType(unit)
@@ -271,6 +272,10 @@ local OnShow = function(self)
 end
 
 ItemRefTooltip:HookScript("OnShow", OnShow)
+ShoppingTooltip1:HookScript("OnShow", OnShow)
+ShoppingTooltip2:HookScript("OnShow", OnShow)
+ShoppingTooltip3:HookScript("OnShow", OnShow)
+
 GameTooltip:HookScript("OnShow", OnShow)
 GameTooltip:HookScript("OnTooltipCleared", OnTooltipCleared)
 GameTooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
@@ -297,9 +302,6 @@ if db.hidebuttons == true then
 	hooksecurefunc(GameTooltip, "SetPetAction", CombatHideActionButtonsTooltip)
 	hooksecurefunc(GameTooltip, "SetShapeshift", CombatHideActionButtonsTooltip)
 end
-
--- Seriously, I sooooooo fucking hate comparison ...
-GameTooltip_ShowCompareItem = TukuiDB.dummy -- shut the fuck up
 
 -- Reskin Consolidated Buffs Tooltip to be pixel perfect
 -- Creating a frame because original scale > 1

@@ -321,5 +321,4 @@ local function Disable(self)
 		end
 	end
 end
-
 oUF:AddElement("AuraWatch", Update, Enable, Disable)

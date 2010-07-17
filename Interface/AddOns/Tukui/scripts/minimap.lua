@@ -27,6 +27,9 @@ MinimapZoomOut:Hide()
 -- Hide Voice Chat Frame
 MiniMapVoiceChatFrame:Hide()
 
+-- Hide North texture at top
+MinimapNorthTag:SetTexture(nil)
+
 -- Hide Game Time
 GameTimeFrame:Hide()
 

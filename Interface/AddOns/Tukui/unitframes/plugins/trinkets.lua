@@ -54,9 +54,9 @@ local Update = function(self, event, ...)
 			if ( UnitExists(unit) and UnitIsPlayer(unit) and arenaUnits[unit].Trinket ) then
 				arenaGUID[UnitGUID(unit)] = unit
 				if ( UnitFactionGroup(unit) == "Horde" ) then
-					arenaUnits[unit].Trinket.Icon:SetTexture(UnitLevel(unit) == 80 and "Interface\\AddOns\\Tukui\\media\\textures\\Inv_jewelry_necklace_38" or "Interface\\AddOns\\Tukui\\media\\textures\\Inv_jewelry_trinketpvp_02")
+					arenaUnits[unit].Trinket.Icon:SetTexture(UnitLevel(unit) == 80 and "Interface\\AddOns\\Tukui\\media\\textures\\necklace1" or "Interface\\AddOns\\Tukui\\media\\textures\\necklace2")
 				else
-					arenaUnits[unit].Trinket.Icon:SetTexture(UnitLevel(unit) == 80 and "Interface\\AddOns\\Tukui\\media\\textures\\Inv_jewelry_necklace_37" or "Interface\\AddOns\\Tukui\\media\\textures\\Inv_jewelry_trinketpvp_01")
+					arenaUnits[unit].Trinket.Icon:SetTexture(UnitLevel(unit) == 80 and "Interface\\AddOns\\Tukui\\media\\textures\\trinket1" or "Interface\\AddOns\\Tukui\\media\\textures\\trinket2")
 				end
 			end
 		end

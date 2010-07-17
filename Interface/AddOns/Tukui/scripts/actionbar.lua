@@ -56,7 +56,7 @@ for i=2, 12 do
 	b:SetPoint("LEFT", b2, "RIGHT", TukuiDB.buttonspacing, 0)
 end
 
--- shapeshift or totem bar
+-- shapeshift
 ShapeshiftBarFrame:SetParent(TukuiShift)
 ShapeshiftBarFrame:SetWidth(0.00001)
 ShapeshiftButton1:ClearAllPoints()
@@ -113,6 +113,9 @@ if TukuiDB.level >= 30 and TukuiDB.myclass == "SHAMAN" then
 end
 
 -- possess bar, we don't care about this one, we just hide it.
+PossessBarFrame:SetParent(TukuiShift)
+PossessBarFrame:SetScale(0.0001)
+PossessBarFrame:SetAlpha(0)
 
 -- pet action bar.
 PetActionBarFrame:SetParent(TukuiPet)
@@ -275,9 +278,9 @@ vehicle:SetPoint("TOPRIGHT", Minimap, "BOTTOMRIGHT", TukuiDB.Scale(2), TukuiDB.S
 vehicle:RegisterForClicks("AnyUp")
 vehicle:SetScript("OnClick", function() VehicleExit() end)
 
-vehicle:SetNormalTexture("Interface\\Vehicles\\UI-Vehicles-Button-Exit-Up")
-vehicle:SetPushedTexture("Interface\\Vehicles\\UI-Vehicles-Button-Exit-Down")
-vehicle:SetHighlightTexture("Interface\\Vehicles\\UI-Vehicles-Button-Exit-Down")
+vehicle:SetNormalTexture("Interface\\AddOns\\Tukui\\media\\textures\\vehicleexit")
+vehicle:SetPushedTexture("Interface\\AddOns\\Tukui\\media\\textures\\vehicleexit")
+vehicle:SetHighlightTexture("Interface\\AddOns\\Tukui\\media\\textures\\vehicleexit")
 TukuiDB.SetTemplate(vehicle)
 
 vehicle:RegisterEvent("UNIT_ENTERING_VEHICLE")
@@ -455,24 +458,6 @@ end
 -- option to hide shapeshift or totem bar.
 if db.hideshapeshift == true then
 	TukuiShift:Hide()
-end
-
--- rescale cooldown spiral to fix texture.
-local buttonNames = { "ActionButton", "MultiBarBottomLeftButton", "MultiBarBottomRightButton", "MultiBarLeftButton", "MultiBarRightButton", "ShapeshiftButton", "PetActionButton" }
-for _, name in ipairs( buttonNames ) do
-	for index = 1, 20 do
-		local buttonName = name .. tostring( index )
-		local button = _G[ buttonName ]
-		local cooldown = _G[ buttonName .. "Cooldown" ]		
- 
-		if ( button == nil or cooldown == nil ) then
-			break;
-		end
- 
-		cooldown:ClearAllPoints()
-		cooldown:SetPoint( "TOPLEFT", button, "TOPLEFT", 2, -2 )
-		cooldown:SetPoint( "BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2 )
-	end
 end
 
 -- Hide options for action bar in default interface option.

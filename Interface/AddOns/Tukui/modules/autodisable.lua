@@ -50,6 +50,10 @@ if (IsAddOnLoaded("Mapster")) then
 	TukuiDB["map"].enable = false
 end
 
+if (IsAddOnLoaded("Prat") or IsAddOnLoaded("Chatter")) then
+	TukuiDB["chat"].enable = false
+end
+
 if (IsAddOnLoaded("Quartz") or IsAddOnLoaded("AzCastBar") or IsAddOnLoaded("eCastingBar")) then
 	TukuiDB["unitframes"].unitcastbar = false
 end

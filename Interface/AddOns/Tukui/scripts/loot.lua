@@ -237,7 +237,7 @@ do
 			LootFrame.selectedQuality = self.quality
 			LootFrame.selectedItemName = self.name:GetText()
 
-			LootSlot(self:GetID())
+			LootSlot(LootFrame.selectedSlot)
 		end
 	end
 

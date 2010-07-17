@@ -16,7 +16,6 @@ local ST_SOULBAG = 2
 local ST_SPECIAL = 3
 local ST_QUIVER = 4
 local bag_bars = 0
-local quest_glow = 1
 local hide_soulbag = TukuiDB.bags.soulbag
 
 -- hide bags options in default interface
@@ -164,9 +163,6 @@ function Stuffing:SlotUpdate(b)
 			else
 				b.qitem = nil
 			end
-			
-
-
 	else
 		b.name, b.rarity, b.qitem = nil, nil, nil
 	end
@@ -178,7 +174,7 @@ function Stuffing:SlotUpdate(b)
 
 	if ( clink and b.rarity > 1 ) then
 		b.frame:SetBackdropBorderColor(GetItemQualityColor(b.rarity))
-	elseif clink and b.qitem and quest_glow == 1 then
+	elseif clink and b.qitem then
 		b.frame:SetBackdropBorderColor(1.0, 0.3, 0.3)
 	else
 		b.frame:SetBackdropBorderColor(unpack(TukuiDB.media.bordercolor))
@@ -722,8 +718,10 @@ function Stuffing:Layout(lb)
 					TukuiDB.SetTemplate(b.frame)
 					
 					local clink = GetContainerItemLink
-					if ( clink and b.rarity and b.rarity > 1) then
+					if (clink and b.rarity and b.rarity > 1) then
 						b.frame:SetBackdropBorderColor(GetItemQualityColor(b.rarity))
+					elseif (clink and b.qitem) then
+						b.frame:SetBackdropBorderColor(1.0, 0.3, 0.3)				
 					else
 						b.frame:SetBackdropBorderColor(unpack(TukuiDB.media.bordercolor))
 					end
