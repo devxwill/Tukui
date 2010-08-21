@@ -17,8 +17,8 @@ local function install()
 	SetCVar("nameplateShowFriendlyTotems", 0)
 	SetCVar("nameplateShowEnemies", 1)
 	SetCVar("nameplateShowEnemyPets", 1)
-	SetCVar("nameplateShowEnemyGuardians", 1)
-	SetCVar("nameplateShowEnemyTotems", 1)
+	SetCVar("nameplateShowEnemyGuardians", 0)
+	SetCVar("nameplateShowEnemyTotems", 0)
 	SetCVar("ShowClassColorInNameplate", 1)
 	SetCVar("screenshotQuality", 8)
 	SetCVar("cameraDistanceMax", 50)
@@ -34,20 +34,20 @@ local function install()
 	SetCVar("showTutorials", 0)
 	SetCVar("showNewbieTips", 0)
 	SetCVar("hidePartyInRaid", 1)
-	SetCVar("Maxfps", 120)
-	SetCVar("autoDismountFlying", 1)
+	SetCVar("Maxfps", 30)
+	SetCVar("autoDismountFlying", 0)
 	SetCVar("autoQuestWatch", 1)
 	SetCVar("autoQuestProgress", 1)
 	SetCVar("showLootSpam", 1)
 	SetCVar("guildMemberNotify", 1)
-	SetCVar("chatBubblesParty", 0)
+	SetCVar("chatBubblesParty", 1)
 	SetCVar("chatBubbles", 0)	
-	SetCVar("UnitNameOwn", 0)
+	SetCVar("UnitNameOwn", 1)
 	SetCVar("UnitNameNPC", 0)
 	SetCVar("UnitNameNonCombatCreatureName", 0)
 	SetCVar("UnitNamePlayerGuild", 1)
 	SetCVar("UnitNamePlayerPVPTitle", 1)
-	SetCVar("UnitNameFriendlyPlayerName", 0)
+	SetCVar("UnitNameFriendlyPlayerName", 1)
 	SetCVar("UnitNameFriendlyPetName", 0)
 	SetCVar("UnitNameFriendlyGuardianName", 0)
 	SetCVar("UnitNameFriendlyTotemName", 0)
@@ -70,51 +70,51 @@ local function install()
 		FCF_SetLocked(ChatFrame1, 1)
 		FCF_DockFrame(ChatFrame2)
 		FCF_SetLocked(ChatFrame2, 1)
-		FCF_OpenNewWindow("General")
-		FCF_SetLocked(ChatFrame3, 1)
-		FCF_DockFrame(ChatFrame3)
+		--FCF_OpenNewWindow("General")
+		--FCF_SetLocked(ChatFrame3, 1)
+		--FCF_DockFrame(ChatFrame3)
 
 		FCF_OpenNewWindow("Loot")
-		FCF_UnDockFrame(ChatFrame4)
-		FCF_SetLocked(ChatFrame4, 1)
-		ChatFrame4:Show();
+		FCF_UnDockFrame(ChatFrame3)
+		FCF_SetLocked(ChatFrame3, 1)
+		ChatFrame3:Show();
 
 		for i = 1, NUM_CHAT_WINDOWS do
 			local frame = _G[format("ChatFrame%s", i)]
 			local chatFrameId = frame:GetID()
 			local chatName = FCF_GetChatWindowInfo(chatFrameId)
 			
-			frame:SetSize(TukuiDB.Scale(TukuiCF["panels"].tinfowidth + 1), TukuiDB.Scale(111))
+			frame:SetSize(TukuiDB.Scale(TukuiCF["panels"].tinfowidth - 7), TukuiDB.Scale(120))
 			
 			-- this is the default width and height of tukui chats.
-			SetChatWindowSavedDimensions(chatFrameId, TukuiDB.Scale(TukuiCF["panels"].tinfowidth + 1), TukuiDB.Scale(111))
+			SetChatWindowSavedDimensions(chatFrameId, TukuiDB.Scale(TukuiCF["panels"].tinfowidth - 7), TukuiDB.Scale(120))
 			
 			-- move general bottom left or Loot (if found) on right.
 			if i == 1 then
 				frame:ClearAllPoints()
-				frame:SetPoint("BOTTOMLEFT", TukuiInfoLeft, "TOPLEFT", TukuiDB.Scale(-1), TukuiDB.Scale(6))
-			elseif i == 4 and chatName == "Loot" then
+				frame:SetPoint("BOTTOMLEFT", TukuiInfoLeft, "TOPLEFT", TukuiDB.Scale(3), TukuiDB.Scale(6)) -- dyzcypul - indent for bg
+			elseif i == 3 and chatName == "Loot" then
 				frame:ClearAllPoints()
-				frame:SetPoint("BOTTOMRIGHT", TukuiInfoRight, "TOPRIGHT", 0, TukuiDB.Scale(6))
+				frame:SetPoint("BOTTOMRIGHT", TukuiInfoRight, "TOPRIGHT", -TukuiDB.Scale(2), TukuiDB.Scale(6)) -- dyzcypul - indent for bg
 			end
 					
 			-- save new default position and dimension
 			FCF_SavePositionAndDimensions(frame)
 			
 			-- set default tukui font size
-			FCF_SetChatWindowFontSize(nil, frame, 12)
+			FCF_SetChatWindowFontSize(nil, frame, 13)
 			
 			-- rename windows general and combat log
-			if i == 1 then FCF_SetWindowName(frame, "G, S & W") end
-			if i == 2 then FCF_SetWindowName(frame, "Log") end
+			--if i == 1 then FCF_SetWindowName(frame, "G, S & W") end
+			--if i == 2 then FCF_SetWindowName(frame, "Log") end
 		end
 		
 		ChatFrame_RemoveAllMessageGroups(ChatFrame1)
-		ChatFrame_RemoveChannel(ChatFrame1, "Trade")
-		ChatFrame_RemoveChannel(ChatFrame1, "General")
-		ChatFrame_RemoveChannel(ChatFrame1, "LocalDefense")
-		ChatFrame_RemoveChannel(ChatFrame1, "GuildRecruitment")
-		ChatFrame_RemoveChannel(ChatFrame1, "LookingForGroup")
+		ChatFrame_AddChannel(ChatFrame1, "Trade")
+		ChatFrame_AddChannel(ChatFrame1, "General")
+		ChatFrame_AddChannel(ChatFrame1, "LocalDefense")
+		ChatFrame_AddChannel(ChatFrame1, "GuildRecruitment")
+		ChatFrame_AddChannel(ChatFrame1, "LookingForGroup")
 		ChatFrame_AddMessageGroup(ChatFrame1, "SAY")
 		ChatFrame_AddMessageGroup(ChatFrame1, "EMOTE")
 		ChatFrame_AddMessageGroup(ChatFrame1, "YELL")
@@ -148,20 +148,20 @@ local function install()
 		ChatFrame_AddMessageGroup(ChatFrame1, "BN_CONVERSATION")
 					
 		-- Setup the spam chat frame
-		ChatFrame_RemoveAllMessageGroups(ChatFrame3)
-		ChatFrame_AddChannel(ChatFrame3, "Trade")
-		ChatFrame_AddChannel(ChatFrame3, "General")
-		ChatFrame_AddChannel(ChatFrame3, "LocalDefense")
-		ChatFrame_AddChannel(ChatFrame3, "GuildRecruitment")
-		ChatFrame_AddChannel(ChatFrame3, "LookingForGroup")
+		--ChatFrame_RemoveAllMessageGroups(ChatFrame3)
+		--ChatFrame_AddChannel(ChatFrame3, "Trade")
+		--ChatFrame_AddChannel(ChatFrame3, "General")
+		--ChatFrame_AddChannel(ChatFrame3, "LocalDefense")
+		--ChatFrame_AddChannel(ChatFrame3, "GuildRecruitment")
+		--ChatFrame_AddChannel(ChatFrame3, "LookingForGroup")
 				
 		-- Setup the right chat
-		ChatFrame_RemoveAllMessageGroups(ChatFrame4);
-		ChatFrame_AddMessageGroup(ChatFrame4, "COMBAT_XP_GAIN")
-		ChatFrame_AddMessageGroup(ChatFrame4, "COMBAT_HONOR_GAIN")
-		ChatFrame_AddMessageGroup(ChatFrame4, "COMBAT_FACTION_CHANGE")
-		ChatFrame_AddMessageGroup(ChatFrame4, "LOOT")
-		ChatFrame_AddMessageGroup(ChatFrame4, "MONEY")
+		ChatFrame_RemoveAllMessageGroups(ChatFrame3);
+		ChatFrame_AddMessageGroup(ChatFrame3, "COMBAT_XP_GAIN")
+		ChatFrame_AddMessageGroup(ChatFrame3, "COMBAT_HONOR_GAIN")
+		ChatFrame_AddMessageGroup(ChatFrame3, "COMBAT_FACTION_CHANGE")
+		ChatFrame_AddMessageGroup(ChatFrame3, "LOOT")
+		ChatFrame_AddMessageGroup(ChatFrame3, "MONEY")
 				
 		-- enable classcolor automatically on login and on each character without doing /configure each time.
 		ToggleChatColorNamesByClassGroup(true, "SAY")

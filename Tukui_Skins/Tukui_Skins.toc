@@ -1,0 +1,11 @@
+## Interface: 30300
+## Author: devxwill (Mankar - Runetotem)
+## Version: 1.0
+## Title: |cffC495DDTukui|r (Skins)
+## Notes: Addon Skins for Tukui
+## X-Email: devxwill@gmail.com
+## X-Category: UnitFrame
+## RequiredDeps: Tukui
+
+Tukui_Skins.lua
+skins.xml

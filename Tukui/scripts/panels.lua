@@ -17,7 +17,7 @@ if TukuiDB.lowversion == true then
 		barbg:SetHeight(TukuiDB.buttonsize + (TukuiDB.buttonspacing * 2))
 	end
 else
-	barbg:SetWidth((TukuiDB.buttonsize * 22) + (TukuiDB.buttonspacing * 23))
+	barbg:SetWidth((TukuiDB.buttonsize * 24) + (TukuiDB.buttonspacing * 25))
 	if TukuiCF["actionbar"].bottomrows == 2 then
 		barbg:SetHeight((TukuiDB.buttonsize * 2) + (TukuiDB.buttonspacing * 3))
 	else
@@ -112,6 +112,42 @@ if TukuiCF["actionbar"].enable == true or not (IsAddOnLoaded("Dominos") or IsAdd
 	ltpetbg1:SetFrameLevel(0)
 	ltpetbg1:SetAlpha(.8)
 end
+
+-- CHAT LEFT
+local chatleft = CreateFrame("Frame", "ChatLeft", TukuiInfoLeft)
+TukuiDB.CreatePanel(chatleft, TukuiCF["panels"].tinfowidth, TukuiDB.Scale(125), "BOTTOM", TukuiInfoLeft, "TOP", 0, TukuiDB.Scale(3))
+chatleft:SetFrameLevel(2)
+chatleft:SetBackdropColor(.075,.075,.075,.7)
+chatleft:SetBackdropBorderColor(unpack(TukuiCF["media"].bordercolor))
+ 
+leftborder = CreateFrame("Frame", nil, UIParent)
+leftborder:SetPoint("TOPLEFT", ChatLeft, "TOPLEFT", -1, 1)
+leftborder:SetFrameStrata("BACKGROUND")
+leftborder:SetBackdrop {
+	edgeFile = TukuiCF["media"].blank, edgeSize = 3,
+	insets = {left = 0, right = 0, top = 0, bottom = 0}
+}
+leftborder:SetBackdropColor(unpack(TukuiCF["media"].backdropcolor))
+leftborder:SetBackdropBorderColor(unpack(TukuiCF["media"].backdropcolor))
+leftborder:SetPoint("BOTTOMRIGHT", ChatLeft, "BOTTOMRIGHT", 1, -1)
+ 
+-- CHAT RIGHT
+local chatright = CreateFrame("Frame", "ChatRight", TukuiInfoRight)
+TukuiDB.CreatePanel(chatright, TukuiCF["panels"].tinfowidth, TukuiDB.Scale(125), "BOTTOM", TukuiInfoRight, "TOP", 0, TukuiDB.Scale(3))
+chatright:SetFrameLevel(2)
+chatright:SetBackdropColor(.075,.075,.075,.7)
+chatright:SetBackdropBorderColor(unpack(TukuiCF["media"].bordercolor))
+ 
+rightborder = CreateFrame("Frame", nil, UIParent)
+rightborder:SetPoint("TOPLEFT", ChatRight, "TOPLEFT", -1, 1)
+rightborder:SetFrameStrata("BACKGROUND")
+rightborder:SetBackdrop {
+edgeFile = TukuiCF["media"].blank, edgeSize = 3,
+insets = {left = 0, right = 0, top = 0, bottom = 0}
+}
+rightborder:SetBackdropColor(unpack(TukuiCF["media"].backdropcolor))
+rightborder:SetBackdropBorderColor(unpack(TukuiCF["media"].backdropcolor))
+rightborder:SetPoint("BOTTOMRIGHT", ChatRight, "BOTTOMRIGHT", 1, -1)
 
 --BATTLEGROUND STATS FRAME
 if TukuiCF["datatext"].battleground == true then

@@ -1,3 +1,5 @@
+local classcolor = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[select(2,UnitClass("player"))]
+
 TukuiCF["media"] = {
 	-- fonts
 	["font"] = [=[Interface\Addons\Tukui\media\fonts\arial.ttf]=], -- general font of tukui
@@ -9,7 +11,7 @@ TukuiCF["media"] = {
 	["glowTex"] = [[Interface\AddOns\Tukui\media\textures\glowTex]], -- the glow text around some frame.
 	["bubbleTex"] = [[Interface\AddOns\Tukui\media\textures\bubbleTex]], -- unitframes combo points
 	["blank"] = [[Interface\AddOns\Tukui\media\textures\blank]], -- the main texture for all borders/panels
-	["bordercolor"] = { .6,.6,.6,1 }, -- border color of tukui panels
+	["bordercolor"] = { classcolor.r,classcolor.g,classcolor.b,1 }, -- border color of tukui panels
 	["altbordercolor"] = { .4,.4,.4,1 }, -- alternative border color, mainly for unitframes text panels.
 	["backdropcolor"] = { .1,.1,.1,1 }, -- background color of tukui panels
 	["buttonhover"] = [[Interface\AddOns\Tukui\media\textures\button_hover]],

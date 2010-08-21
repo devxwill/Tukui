@@ -177,9 +177,9 @@ local function SetChatStyle(frame)
 	end
 
 	-- rename combag log to log
-	if _G[chat] == _G["ChatFrame2"] then
-		FCF_SetWindowName(_G[chat], "Log")
-	end
+	--if _G[chat] == _G["ChatFrame2"] then --dyzcypul - leave the name alone
+	--	FCF_SetWindowName(_G[chat], "Log")
+	--end
 	
 	-- create our own texture for edit box
 	TukuiChatchatEditBox = _G[chat.."EditBox"]
@@ -250,7 +250,7 @@ local function SetupChatPosAndFont(self)
 		end
 		
 		-- set font align to right if a any chat is found at right of your screen.		
-		if i == 4 and name == "Loot" and point == "BOTTOMRIGHT" or point == "RIGHT" or point == "TOPRIGHT" then 
+		if i == 3 and name == "Loot" and point == "BOTTOMRIGHT" or point == "RIGHT" or point == "TOPRIGHT" then -- dyzcypul - loot is now 3
 			chat:SetJustifyH("RIGHT") 
 		end
 		
@@ -259,11 +259,11 @@ local function SetupChatPosAndFont(self)
 		-- doing resize of chat also here for users that hit "cancel" when default installation is show.
 		if i == 1 then
 			chat:ClearAllPoints()
-			chat:SetPoint("BOTTOMLEFT", TukuiInfoLeft, "TOPLEFT", TukuiDB.Scale(-1), TukuiDB.Scale(6))
+			chat:SetPoint("BOTTOMLEFT", TukuiInfoLeft, "TOPLEFT", TukuiDB.Scale(3), TukuiDB.Scale(6)) --dyzcypul - mod for background
 			FCF_SavePositionAndDimensions(chat)
-		elseif i == 4 and name == "Loot" then
+		elseif i == 3 and name == "Loot" then -- dyzcypul - loot is now 3
 			chat:ClearAllPoints()
-			chat:SetPoint("BOTTOMRIGHT", TukuiInfoRight, "TOPRIGHT", 0, TukuiDB.Scale(6))
+			chat:SetPoint("BOTTOMRIGHT", TukuiInfoRight, "TOPRIGHT", -TukuiDB.Scale(2), TukuiDB.Scale(6)) --dyzcypul - mod for background
 			FCF_SavePositionAndDimensions(chat)
 		end
 	end
@@ -271,7 +271,7 @@ local function SetupChatPosAndFont(self)
 	-- reposition battle.net popup over chat #1
 	BNToastFrame:HookScript("OnShow", function(self)
 		self:ClearAllPoints()
-		self:SetPoint("BOTTOMLEFT", ChatFrame1, "TOPLEFT", 0, TukuiDB.Scale(5))
+		self:SetPoint("BOTTOMLEFT", ChatRight, "TOPLEFT", 0, TukuiDB.Scale(3)) -- dyzcypul - move toast frame near tooltips
 	end)
 end
 

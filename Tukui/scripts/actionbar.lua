@@ -190,11 +190,7 @@ else
 		local b2 = _G["MultiBarBottomLeftButton"..i-1]
 		b:ClearAllPoints()
 		b:SetPoint("LEFT", b2, "RIGHT", TukuiDB.buttonspacing, 0)
-	end
-	MultiBarBottomLeftButton11:SetAlpha(0)
-	MultiBarBottomLeftButton11:SetScale(0.0001)
-	MultiBarBottomLeftButton12:SetAlpha(0)
-	MultiBarBottomLeftButton12:SetScale(0.0001)   
+	end  
 	if db.bottomrows == 2 then
 		TukuiBar5:Show()
 		MultiBarBottomRightButton1:ClearAllPoints()
@@ -214,10 +210,6 @@ else
 			b:ClearAllPoints()
 			b:SetPoint("LEFT", b2, "RIGHT", TukuiDB.buttonspacing, 0)
 		end
-		MultiBarLeftButton11:SetScale(0.0001)
-		MultiBarLeftButton11:SetAlpha(0)
-		MultiBarLeftButton12:SetScale(0.0001)
-		MultiBarLeftButton12:SetAlpha(0)
 	end
 end
 

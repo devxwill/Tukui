@@ -1,4 +1,4 @@
-﻿TukuiCF["general"] = {
+TukuiCF["general"] = {
 	["autoscale"] = true,                  -- mainly enabled for users that don't want to mess with the config file
 	["uiscale"] = 0.71,                    -- set your value (between 0.64 and 1) of your uiscale if autoscale is off
 	["overridelowtohigh"] = false,         -- EXPERIMENTAL ONLY! override lower version to higher version on a lower reso.
@@ -10,10 +10,10 @@ TukuiCF["unitframes"] = {
 	["enable"] = true,                     -- do i really need to explain this?
 	["enemyhcolor"] = false,               -- enemy target (players) color by hostility, very useful for healer.
 	["unitcastbar"] = true,                -- enable tukui castbar
-	["cblatency"] = false,                 -- enable castbar latency
+	["cblatency"] = true,                  -- enable castbar latency
 	["cbicons"] = true,                    -- enable icons on castbar
 	["auratimer"] = true,                  -- enable timers on buffs/debuffs
-	["auratextscale"] = 11,                -- the font size of buffs/debuffs timers on unitframes
+	["auratextscale"] = 12,                -- the font size of buffs/debuffs timers on unitframes
 	["playerauras"] = false,               -- enable auras
 	["targetauras"] = true,                -- enable auras on target unit frame
 	["highThreshold"] = 80,                -- hunter high threshold
@@ -21,7 +21,7 @@ TukuiCF["unitframes"] = {
 	["targetpowerpvponly"] = true,         -- enable power text on pvp target only
 	["totdebuffs"] = false,                -- enable tot debuffs (high reso only)
 	["focusdebuffs"] = false,              -- enable focus debuffs 
-	["showfocustarget"] = false,           -- show focus target
+	["showfocustarget"] = true,           -- show focus target
 	["showtotalhpmp"] = false,             -- change the display of info text on player and target with XXXX/Total.
 	["showsmooth"] = true,                 -- enable smooth bar
 	["showthreat"] = true,                 -- enable the threat bar anchored to info left panel.
@@ -35,18 +35,18 @@ TukuiCF["unitframes"] = {
 
 	-- raid layout
 	["showrange"] = true,                  -- show range opacity on raidframes
-	["healcomm"] = false,                  -- enable healcomm4 support on healer layout.
+	["healcomm"] = true,                   -- enable healcomm4 support on healer layout.
 	["raidalphaoor"] = 0.3,                -- alpha of unitframes when unit is out of range
-	["gridonly"] = false,                  -- enable grid only mode for all healer mode raid layout.
+	["gridonly"] = true,                   -- enable grid only mode for all healer mode raid layout.
 	["showsymbols"] = true,	               -- show symbol.
 	["aggro"] = true,                      -- show aggro on all raids layouts
-	["raidunitdebuffwatch"] = false,       -- track important spell to watch in pve for grid mode.
+	["raidunitdebuffwatch"] = true,        -- track important spell to watch in pve for grid mode.
 	["gridhealthvertical"] = true,         -- enable vertical grow on health bar for grid mode.
-	["showplayerinparty"] = false,         -- show my player frame in party
+	["showplayerinparty"] = true,          -- show my player frame in party
 	["gridscale"] = 1,                     -- set the healing grid scaling
 	
 	-- boss frames
-	["showboss"] = true,                   -- enable boss unit frames for PVELOL encounters.
+	["showboss"] = false,                  -- enable boss unit frames for PVELOL encounters.
 
 	-- priest only plugin
 	["ws_show_time"] = false,              -- show time on weakened soul bar
@@ -71,8 +71,8 @@ TukuiCF["actionbar"] = {
 	["rightbarmouseover"] = false,         -- enable right bars on mouse over
 	["shapeshiftmouseover"] = false,       -- enable shapeshift or totembar on mouseover
 	["hideshapeshift"] = false,            -- hide shapeshift or totembar because it was a lot requested.
-	["bottomrows"] = 2,                    -- numbers of row you want to show at the bottom (select between 1 and 2 only)
-	["rightbars"] = 3,                     -- numbers of right bar you want
+	["bottomrows"] = 1,                    -- numbers of row you want to show at the bottom (select between 1 and 2 only)
+	["rightbars"] = 1,                     -- numbers of right bar you want
 	["showgrid"] = true,                   -- show grid on empty button
 }
 
@@ -119,9 +119,9 @@ TukuiCF["datatext"] = {
 	["armor"] = 0,                         -- show your armor value against the level mob you are currently targeting
 
 	["battleground"] = true,               -- enable 3 stats in battleground only that replace stat1,stat2,stat3.
-	["time24"] = true,                     -- set time to 24h format.
+	["time24"] = false,                    -- set time to 24h format.
 	["localtime"] = false,                 -- set time to local time instead of server time.
-	["fontsize"] = 12,                     -- font size for panels.
+	["fontsize"] = 13,                     -- font size for panels.
 }
 
 TukuiCF["chat"] = {
@@ -143,7 +143,7 @@ TukuiCF["merchant"] = {
 }
 
 TukuiCF["error"] = {
-	["enable"] = true,                     -- true to enable this mod, false to disable
+	["enable"] = false,                     -- true to enable this mod, false to disable
 	filter = {                             -- what messages to not hide
 		["Inventory is full."] = true,     -- inventory is full will not be hidden by default
 	},
